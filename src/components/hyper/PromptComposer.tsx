@@ -216,7 +216,7 @@ export function PromptComposer() {
   const [results, setResults] = useState<GenResult[]>([]);
   const [generating, setGenerating] = useState(false);
   // Video settings
-  const [videoDuration, setVideoDuration] = useState<number>(VIDEO_DURATIONS[2] ?? 8);
+  const [videoDuration, setVideoDuration] = useState<number>(MAX_SELECTABLE_VIDEO_DURATION);
   const [videoFps, setVideoFps] = useState<number>(VIDEO_FPS[0] ?? 24);
   const [videoRes, setVideoRes] = useState<string>(VIDEO_RESOLUTIONS[1] ?? "720p");
   const [videoNegative, setVideoNegative] = useState("");
