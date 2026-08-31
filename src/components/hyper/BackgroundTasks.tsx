@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, Loader2, ListChecks, XCircle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -6,8 +8,28 @@ import { listJobs } from "@/lib/jobs.functions";
 import { kickWorker } from "@/lib/jobs-runner";
 import { jobKindLabel, type JobRecord } from "@/lib/jobs.shared";
 
-function useJobsQuery() {
+/** Tasks are per-account, so only poll once a session exists. */
+function useSignedIn() {
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    let active = true;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (active) setSignedIn(Boolean(data.session));
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSignedIn(Boolean(session));
+    });
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+  return signedIn;
+}
+
+function useJobsQuery(enabled: boolean) {
   return useQuery({
+    enabled,
     queryKey: ["jobs"],
     queryFn: () => listJobs({ data: { limit: 20 } }),
     refetchInterval: (query) => {
@@ -31,7 +53,8 @@ function StatusIcon({ status }: { status: JobRecord["status"] }) {
  * progress after a reload and shows results that finished while away.
  */
 export function BackgroundTasks() {
-  const { data: jobs } = useJobsQuery();
+  const signedIn = useSignedIn();
+  const { data: jobs } = useJobsQuery(signedIn);
   const queryClient = useQueryClient();
   const list = jobs ?? [];
   const active = list.filter((j) => j.status === "queued" || j.status === "running");
