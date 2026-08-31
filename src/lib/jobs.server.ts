@@ -336,7 +336,7 @@ export async function runCharacterImage(userId: string, data: Record<string, unk
 
   const { data: model, error } = await supabaseAdmin
     .from("virtual_models")
-    .select("id, identity_prompt, seed, headshot_path, images")
+    .select("id, identity_prompt, seed, headshot_path, images, description")
     .eq("id", modelId)
     .eq("user_id", userId)
     .single();
@@ -356,6 +356,8 @@ export async function runCharacterImage(userId: string, data: Record<string, unk
     detail: asNumber(data["detail"]),
     faceLock: asBool(data["faceLock"]),
     variation: asNumber(data["variation"]),
+    // The render style is stored as the last segment of the description.
+    style: (model.description ?? "").split("·").pop()?.trim() || undefined,
   });
 }
 
@@ -390,6 +392,7 @@ export async function runJobStep(job: JobRow): Promise<StepOutcome> {
         identityPrompt: asString(input["identityPrompt"]) ?? "",
         seed: asNumber(input["seed"]),
         consistency: asNumber(input["consistency"]),
+        style: asString(input["style"]),
       });
       return { done: true, result: { id: res.id, kind: "virtual-model" } };
     }
