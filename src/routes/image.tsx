@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
-import { Chips, Panel, RatioBlocks, Segment, SliderRow, SwitchRow, TextRow } from "@/components/hyper/StudioControls";
+import { Chips, Panel, RatioBlocks, Segment, SliderRow, TextRow } from "@/components/hyper/StudioControls";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
 
 export const Route = createFileRoute("/image")({
