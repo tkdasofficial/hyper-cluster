@@ -65,10 +65,6 @@ function ImageStudio() {
           </div>
         </div>
 
-        <Panel title="Model" summary={model}>
-          <Segment options={models} value={model} onChange={setModel} />
-        </Panel>
-
         <Panel title="Canvas" summary={`${ratio} · ${res}`}>
           <RatioBlocks label="Aspect ratio" options={ratios} value={ratio} onChange={setRatio} />
           <Segment label="Resolution" options={resolutions} value={res} onChange={setRes} />
@@ -88,17 +84,8 @@ function ImageStudio() {
           <SliderRow label="Reference influence" value={refWeight} onChange={setRefWeight} suffix="%" />
         </Panel>
 
-        <Panel title="Sampling" summary={`${sampler} · ${steps} steps · CFG ${guidance}`}>
-          <Segment label="Sampler" options={samplers} value={sampler} onChange={setSampler} />
-          <SliderRow label="Steps" value={steps} onChange={setSteps} min={8} max={80} />
-          <SliderRow label="Guidance" value={guidance} onChange={setGuidance} min={1} max={20} />
-          <SwitchRow label="Lock seed" checked={seedLock} onCheckedChange={setSeedLock} />
-        </Panel>
-
-        <Panel title="Output" summary={`${count} variations${upscale ? " · upscaled" : ""}`}>
+        <Panel title="Output" summary={`${count} variations`}>
           <SliderRow label="Variations" value={count} onChange={setCount} min={1} max={8} />
-          <SwitchRow label="Auto upscale" checked={upscale} onCheckedChange={setUpscale} />
-          <SwitchRow label="Transparent background" checked={transparent} onCheckedChange={setTransparent} />
         </Panel>
 
         <button
