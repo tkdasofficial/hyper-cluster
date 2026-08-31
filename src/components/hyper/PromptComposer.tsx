@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { RatioTile } from "@/components/hyper/StudioControls";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -23,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { uploadReference } from "@/lib/generation.functions";
 import { runJob } from "@/lib/jobs-runner";
 import {
+  MAX_SELECTABLE_VIDEO_DURATION,
   SPEECH_TONES,
   TTS_MODELS,
   VIDEO_DURATIONS,
@@ -214,7 +216,7 @@ export function PromptComposer() {
   const [results, setResults] = useState<GenResult[]>([]);
   const [generating, setGenerating] = useState(false);
   // Video settings
-  const [videoDuration, setVideoDuration] = useState<number>(VIDEO_DURATIONS[2] ?? 8);
+  const [videoDuration, setVideoDuration] = useState<number>(MAX_SELECTABLE_VIDEO_DURATION);
   const [videoFps, setVideoFps] = useState<number>(VIDEO_FPS[0] ?? 24);
   const [videoRes, setVideoRes] = useState<string>(VIDEO_RESOLUTIONS[1] ?? "720p");
   const [videoNegative, setVideoNegative] = useState("");
@@ -561,42 +563,17 @@ export function PromptComposer() {
                     <p className="pb-2 text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
                       Aspect ratio
                     </p>
-                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                      {activeRatios.map((r) => {
-                        const selected = r.label === ratio.label;
-                        return (
-                          <button
+                    <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                      <div className="flex w-max snap-x snap-mandatory gap-2">
+                        {activeRatios.map((r) => (
+                          <RatioTile
                             key={r.label}
-                            type="button"
+                            ratio={r.label}
+                            active={r.label === ratio.label}
                             onClick={() => setRatio(r)}
-                            title={r.note}
-                            className={cn(
-                              "flex flex-col items-center gap-1.5 rounded-xl border p-2 transition-colors",
-                              selected
-                                ? "border-border-strong bg-surface-2"
-                                : "border-border hover:bg-surface-2",
-                            )}
-                          >
-                            <span className="grid h-9 w-full place-items-center">
-                              <span
-                                className={cn(
-                                  "rounded-[4px] border-2",
-                                  selected
-                                    ? "border-primary bg-primary/15"
-                                    : "border-border-strong",
-                                )}
-                                style={{
-                                  width: `${(r.w / Math.max(r.w, r.h)) * 34}px`,
-                                  height: `${(r.h / Math.max(r.w, r.h)) * 34}px`,
-                                }}
-                              />
-                            </span>
-                            <span className="text-[11px] font-bold leading-none text-foreground">
-                              {r.label}
-                            </span>
-                          </button>
-                        );
-                      })}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </PopoverContent>
                 </Popover>
@@ -665,22 +642,30 @@ export function PromptComposer() {
                     <div className="space-y-3">
                       <div>
                         <p className="mb-1.5 text-[12px] font-semibold">Duration</p>
-                        <div className="grid grid-cols-4 gap-1.5">
-                          {VIDEO_DURATIONS.map((d) => (
-                            <button
-                              key={d}
-                              type="button"
-                              onClick={() => setVideoDuration(d)}
-                              className={cn(
-                                "rounded-xl border px-2 py-1.5 text-[12px] font-semibold transition-colors",
-                                videoDuration === d
-                                  ? "border-border-strong bg-surface-2"
-                                  : "border-border hover:bg-surface-2",
-                              )}
-                            >
-                              {d}s
-                            </button>
-                          ))}
+                        <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                          <div className="flex w-max gap-1.5">
+                            {VIDEO_DURATIONS.map((d) => {
+                              const locked = d > MAX_SELECTABLE_VIDEO_DURATION;
+                              return (
+                                <button
+                                  key={d}
+                                  type="button"
+                                  disabled={locked}
+                                  onClick={() => !locked && setVideoDuration(d)}
+                                  className={cn(
+                                    "shrink-0 rounded-xl border px-2.5 py-1.5 text-[12px] font-semibold transition-colors",
+                                    locked
+                                      ? "cursor-not-allowed border-border opacity-40"
+                                      : videoDuration === d
+                                        ? "border-border-strong bg-surface-2"
+                                        : "border-border hover:bg-surface-2",
+                                  )}
+                                >
+                                  {d}s
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                       <div>
@@ -793,22 +778,24 @@ export function PromptComposer() {
                           </div>
                           <div>
                             <p className="mb-1.5 text-[12px] font-semibold">Tone</p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {SPEECH_TONES.map((t) => (
-                                <button
-                                  key={t}
-                                  type="button"
-                                  onClick={() => setTone(t)}
-                                  className={cn(
-                                    "rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors",
-                                    tone === t
-                                      ? "border-border-strong bg-surface-2"
-                                      : "border-border hover:bg-surface-2",
-                                  )}
-                                >
-                                  {t}
-                                </button>
-                              ))}
+                            <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                              <div className="flex w-max snap-x snap-mandatory gap-1.5">
+                                {SPEECH_TONES.map((t) => (
+                                  <button
+                                    key={t}
+                                    type="button"
+                                    onClick={() => setTone(t)}
+                                    className={cn(
+                                      "shrink-0 snap-start whitespace-nowrap rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors",
+                                      tone === t
+                                        ? "border-border-strong bg-surface-2"
+                                        : "border-border hover:bg-surface-2",
+                                    )}
+                                  >
+                                    {t}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </div>
                           <div>

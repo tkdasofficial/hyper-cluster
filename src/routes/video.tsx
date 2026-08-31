@@ -8,7 +8,12 @@ import { Panel, RatioBlocks, Segment, SliderRow, SwitchRow, TextRow } from "@/co
 import { RecentCreations } from "@/components/hyper/RecentCreations";
 import { uploadReference } from "@/lib/generation.functions";
 import { runJob } from "@/lib/jobs-runner";
-import { VIDEO_DURATIONS, VIDEO_FPS, VIDEO_RESOLUTIONS } from "@/lib/media.shared";
+import {
+  MAX_SELECTABLE_VIDEO_DURATION,
+  VIDEO_DURATIONS,
+  VIDEO_FPS,
+  VIDEO_RESOLUTIONS,
+} from "@/lib/media.shared";
 
 export const Route = createFileRoute("/video")({
   head: () => ({
@@ -35,6 +40,9 @@ const models = ["Hyper Video Omni"] as const;
 const ratios = ["16:9", "9:16", "1:1"] as const;
 const resolutions = VIDEO_RESOLUTIONS;
 const durations = VIDEO_DURATIONS.map((d) => `${d}s`) as unknown as readonly string[];
+const lockedDurations = VIDEO_DURATIONS.filter((d) => d > MAX_SELECTABLE_VIDEO_DURATION).map(
+  (d) => `${d}s`,
+) as unknown as readonly string[];
 const frameRates = VIDEO_FPS.map((f) => `${f} fps`) as unknown as readonly string[];
 const cameraMoves = ["Static", "Pan", "Tilt", "Dolly In", "Dolly Out", "Orbit", "Crane", "Handheld"] as const;
 const styles = ["Cinematic", "Photoreal", "Anime", "3D Render", "Documentary", "Neon Noir"] as const;
@@ -105,7 +113,7 @@ function VideoStudio() {
   const [model, setModel] = useState<(typeof models)[number]>(models[0]);
   const [ratio, setRatio] = useState<(typeof ratios)[number]>(ratios[0]);
   const [res, setRes] = useState<string>(resolutions[1] ?? "720p");
-  const [duration, setDuration] = useState<string>(durations[2] ?? "8s");
+  const [duration, setDuration] = useState<string>("5s");
   const [fps, setFps] = useState<string>(frameRates[0] ?? "24 fps");
   const [camera, setCamera] = useState<(typeof cameraMoves)[number]>(cameraMoves[0]);
   const [motion, setMotion] = useState(55);
@@ -210,7 +218,13 @@ function VideoStudio() {
         <Panel title="Format" summary={`${ratio} · ${res} · ${duration} · ${fps}`} defaultOpen>
           <RatioBlocks label="Aspect ratio" options={ratios} value={ratio} onChange={setRatio} />
           <Segment label="Resolution" options={resolutions} value={res} onChange={setRes} />
-          <Segment label="Duration" options={durations} value={duration} onChange={setDuration} />
+          <Segment
+            label="Duration"
+            options={durations}
+            value={duration}
+            onChange={setDuration}
+            disabledOptions={lockedDurations}
+          />
           <Segment label="Frame rate" options={frameRates} value={fps} onChange={setFps} />
         </Panel>
 

@@ -60,8 +60,10 @@ export const SPEECH_TONES = [
 ] as const;
 
 export const VIDEO_RESOLUTIONS = ["480p", "720p", "1080p"] as const;
-export const VIDEO_DURATIONS = [4, 6, 8, 10] as const;
-export const VIDEO_FPS = [24, 25, 30] as const;
+export const VIDEO_DURATIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+/** Durations above this are shown but locked (not selectable). */
+export const MAX_SELECTABLE_VIDEO_DURATION = 5;
+export const VIDEO_FPS = [24, 30, 60] as const;
 
 /** Longest edge in pixels for a video resolution label. */
 export function videoLongEdge(resolution: string): number {
