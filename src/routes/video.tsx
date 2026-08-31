@@ -40,6 +40,9 @@ const models = ["Hyper Video Omni"] as const;
 const ratios = ["16:9", "9:16", "1:1"] as const;
 const resolutions = VIDEO_RESOLUTIONS;
 const durations = VIDEO_DURATIONS.map((d) => `${d}s`) as unknown as readonly string[];
+const lockedDurations = VIDEO_DURATIONS.filter((d) => d > MAX_SELECTABLE_VIDEO_DURATION).map(
+  (d) => `${d}s`,
+) as unknown as readonly string[];
 const frameRates = VIDEO_FPS.map((f) => `${f} fps`) as unknown as readonly string[];
 const cameraMoves = ["Static", "Pan", "Tilt", "Dolly In", "Dolly Out", "Orbit", "Crane", "Handheld"] as const;
 const styles = ["Cinematic", "Photoreal", "Anime", "3D Render", "Documentary", "Neon Noir"] as const;
