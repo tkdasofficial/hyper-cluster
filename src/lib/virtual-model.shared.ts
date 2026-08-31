@@ -17,7 +17,6 @@ export type VirtualModelRecord = {
 
 export type ViewId =
   | "headshot"
-  | "three-quarter"
   | "front-full"
   | "back-full"
   | "left-profile"
@@ -56,14 +55,6 @@ export const MODEL_VIEWS: {
     portrait: false,
   },
   {
-    id: "three-quarter",
-    label: "Three-quarter",
-    instruction:
-      "three-quarter portrait from the chest up, head turned 45 degrees to the camera, same neutral expression",
-    reference: "headshot",
-    portrait: true,
-  },
-  {
     id: "back-full",
     label: "Back full body",
     instruction:
@@ -95,13 +86,31 @@ export const IDENTITY_LOCK =
 
 /** Studio conditions that keep the reference set comparable frame to frame. */
 export const STUDIO_SUFFIX =
-  "plain light grey seamless studio backdrop, even soft diffused studio lighting with no harsh shadows, fitted plain neutral grey outfit, full colour photograph, photorealistic, ultra detailed natural skin texture, sharp focus, high dynamic range, 85mm lens, shot on a full frame camera";
+  "plain light grey seamless studio backdrop, even soft diffused studio lighting with no harsh shadows, fitted plain neutral grey outfit, sharp focus, high detail";
+
+/** Art-style clause so every view of a character keeps the chosen style. */
+export function styleClause(style?: string) {
+  const s = (style ?? "realistic").toLowerCase();
+  if (s.includes("cartoon"))
+    return "stylised cartoon illustration, clean bold outlines, flat shaded colours";
+  if (s.includes("anime"))
+    return "anime illustration, cel shaded, crisp line art, expressive anime eyes";
+  if (s.includes("3d"))
+    return "3D rendered character, physically based rendering, subsurface scattering, octane render";
+  if (s.includes("cinematic"))
+    return "cinematic photograph, filmic colour grade, shallow depth of field, photorealistic";
+  if (s.includes("editorial"))
+    return "high fashion editorial photograph, magazine quality, photorealistic";
+  if (s.includes("heaven"))
+    return "ethereal dreamlike render, soft glowing rim light, luminous highlights, photorealistic base";
+  return "full colour photograph, photorealistic, ultra detailed natural skin texture, 85mm lens, shot on a full frame camera";
+}
 
 export const IDENTITY_NEGATIVE =
   "different person, another person, changing face, face swap, inconsistent features, multiple people, twins, deformed face, asymmetric eyes, extra fingers, extra limbs, missing limbs, mutated hands, cropped head, cut off feet, blurry, out of focus, lowres, low quality, jpeg artifacts, plastic skin, waxy skin, uncanny, horror, creepy, watermark, text, logo, signature, collage, split image, distorted proportions";
 
-export function viewPrompt(identityPrompt: string, instruction: string) {
-  return `${identityPrompt}. ${instruction}. ${IDENTITY_LOCK}. ${STUDIO_SUFFIX}`;
+export function viewPrompt(identityPrompt: string, instruction: string, style?: string) {
+  return `${identityPrompt}. ${instruction}. ${IDENTITY_LOCK}. ${STUDIO_SUFFIX}. ${styleClause(style)}`;
 }
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -136,7 +145,7 @@ export function referenceViewForShot(shot?: string): ViewId {
   const s = (shot ?? "").toLowerCase();
   if (s.includes("close")) return "headshot";
   if (s.includes("portrait")) return "headshot";
-  if (s.includes("half")) return "three-quarter";
+  if (s.includes("half")) return "front-full";
   if (s.includes("full") || s.includes("wide")) return "front-full";
   return "headshot";
 }
@@ -147,6 +156,7 @@ export function renderPrompt(input: {
   prompt: string;
   faceLock: boolean;
   detail: number;
+  style?: string | undefined;
 }) {
   const detail = clamp(input.detail, 0, 100);
   const detailClause =
@@ -163,7 +173,7 @@ export function renderPrompt(input: {
       : "keep the same person as the reference",
     IDENTITY_LOCK,
     detailClause,
-    "full colour photograph, photorealistic, professional editorial quality",
+    styleClause(input.style),
   ]
     .filter(Boolean)
     .join(". ");
