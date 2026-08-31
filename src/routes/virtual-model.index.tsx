@@ -72,6 +72,20 @@ function VirtualModelStudio() {
     status: m.status,
   }));
   const [selected, setSelected] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<VirtualModel | null>(null);
+  const [confirmName, setConfirmName] = useState("");
+
+  const remove = useMutation({
+    mutationFn: (id: string) => deleteVirtualModel({ data: { id } }),
+    onSuccess: (_r, id) => {
+      toast.success("Model deleted");
+      if (selected === id) setSelected(null);
+      setPendingDelete(null);
+      setConfirmName("");
+      void queryClient.invalidateQueries({ queryKey: ["virtual-models"] });
+    },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "Delete failed"),
+  });
 
   const [prompt, setPrompt] = useState("");
   const [negative, setNegative] = useState("");
