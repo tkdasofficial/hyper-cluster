@@ -75,32 +75,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Hyper Copilot — Generative AI Studio Platform" },
+      { title: "Hyper Copilot — Generative AI Platform" },
       {
         name: "description",
         content:
-          "Next-generation generative AI platform for image, video, vector and audio creation.",
+          "Advanced generative AI platform for image, video, vector and audio creation.",
       },
       { name: "author", content: "Tushar Kanti Das" },
       { name: "publisher", content: "Avzio" },
       // Open Graph Tags
       { property: "og:site_name", content: "Hyper Copilot" },
-      { property: "og:title", content: "Hyper Copilot — Generative AI Studio Platform" },
+      { property: "og:title", content: "Hyper Copilot — Generative AI Platform" },
       {
         property: "og:description",
         content:
-          "Next-generation generative AI platform for image, video, vector and audio creation.",
+          "Advanced generative AI platform for image, video, vector and audio creation.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://hypercopilot.vercel.app/" },
       { property: "og:image", content: "https://hypercopilot.vercel.app/og-image.png" },
       // Twitter Card Meta Tags
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Hyper Copilot — Generative AI Studio Platform" },
+      { name: "twitter:title", content: "Hyper Copilot — Generative AI Platform" },
       {
         name: "twitter:description",
         content:
-          "Next-generation generative AI platform for image, video, vector and audio creation.",
+          "Advanced generative AI platform for image, video, vector and audio creation.",
       },
       { name: "twitter:image", content: "https://hypercopilot.vercel.app/og-image.png" },
     ],
@@ -120,20 +120,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "canonical", href: "https://hypercopilot.vercel.app/" },
     ],
     scripts: [
-      // Schema.org Structured Data (AI Application & Software Platform)
+      // Schema.org Structured Data
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebApplication",
           "name": "Hyper Copilot",
-          "alternateName": "Hyper Copilot AI Studio",
+          "alternateName": "Hyper Copilot AI",
           "url": "https://hypercopilot.vercel.app/",
-          "applicationCategory": "MultimediaApplication",
+          "applicationCategory": "SoftwareApplication",
           "operatingSystem": "All",
           "logo": "https://hypercopilot.vercel.app/favicon-48x48.png",
           "image": "https://hypercopilot.vercel.app/og-image.png",
-          "description": "Next-generation generative AI platform for image, video, vector and audio creation.",
+          "description": "Advanced generative AI platform for image, video, vector and audio creation.",
           "author": {
             "@type": "Person",
             "name": "Tushar Kanti Das"
