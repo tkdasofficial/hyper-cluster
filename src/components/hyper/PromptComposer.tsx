@@ -561,42 +561,17 @@ export function PromptComposer() {
                     <p className="pb-2 text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
                       Aspect ratio
                     </p>
-                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                      {activeRatios.map((r) => {
-                        const selected = r.label === ratio.label;
-                        return (
-                          <button
+                    <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                      <div className="flex w-max snap-x snap-mandatory gap-2">
+                        {activeRatios.map((r) => (
+                          <RatioTile
                             key={r.label}
-                            type="button"
+                            ratio={r.label}
+                            active={r.label === ratio.label}
                             onClick={() => setRatio(r)}
-                            title={r.note}
-                            className={cn(
-                              "flex flex-col items-center gap-1.5 rounded-xl border p-2 transition-colors",
-                              selected
-                                ? "border-border-strong bg-surface-2"
-                                : "border-border hover:bg-surface-2",
-                            )}
-                          >
-                            <span className="grid h-9 w-full place-items-center">
-                              <span
-                                className={cn(
-                                  "rounded-[4px] border-2",
-                                  selected
-                                    ? "border-primary bg-primary/15"
-                                    : "border-border-strong",
-                                )}
-                                style={{
-                                  width: `${(r.w / Math.max(r.w, r.h)) * 34}px`,
-                                  height: `${(r.h / Math.max(r.w, r.h)) * 34}px`,
-                                }}
-                              />
-                            </span>
-                            <span className="text-[11px] font-bold leading-none text-foreground">
-                              {r.label}
-                            </span>
-                          </button>
-                        );
-                      })}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </PopoverContent>
                 </Popover>
