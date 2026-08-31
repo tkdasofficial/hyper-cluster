@@ -232,6 +232,44 @@ function VirtualModelStudio() {
 
         <RecentCreations />
       </div>
+
+      <AlertDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingDelete(null);
+            setConfirmName("");
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete “{pendingDelete?.name}”?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the model and all its generated images. Type{" "}
+              <span className="font-semibold text-foreground">{pendingDelete?.name}</span>{" "}
+              exactly to confirm.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            autoFocus
+            value={confirmName}
+            onChange={(e) => setConfirmName(e.target.value)}
+            placeholder={pendingDelete?.name ?? "Model name"}
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <button
+              type="button"
+              disabled={remove.isPending || confirmName !== pendingDelete?.name}
+              onClick={() => pendingDelete && remove.mutate(pendingDelete.id)}
+              className="inline-flex items-center justify-center rounded-full bg-destructive px-4 py-2 text-[13px] font-semibold text-destructive-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              {remove.isPending ? "Deleting…" : "Delete"}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </StudioLayout>
   );
 }
