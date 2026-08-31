@@ -642,22 +642,30 @@ export function PromptComposer() {
                     <div className="space-y-3">
                       <div>
                         <p className="mb-1.5 text-[12px] font-semibold">Duration</p>
-                        <div className="grid grid-cols-4 gap-1.5">
-                          {VIDEO_DURATIONS.map((d) => (
-                            <button
-                              key={d}
-                              type="button"
-                              onClick={() => setVideoDuration(d)}
-                              className={cn(
-                                "rounded-xl border px-2 py-1.5 text-[12px] font-semibold transition-colors",
-                                videoDuration === d
-                                  ? "border-border-strong bg-surface-2"
-                                  : "border-border hover:bg-surface-2",
-                              )}
-                            >
-                              {d}s
-                            </button>
-                          ))}
+                        <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                          <div className="flex w-max gap-1.5">
+                            {VIDEO_DURATIONS.map((d) => {
+                              const locked = d > MAX_SELECTABLE_VIDEO_DURATION;
+                              return (
+                                <button
+                                  key={d}
+                                  type="button"
+                                  disabled={locked}
+                                  onClick={() => !locked && setVideoDuration(d)}
+                                  className={cn(
+                                    "shrink-0 rounded-xl border px-2.5 py-1.5 text-[12px] font-semibold transition-colors",
+                                    locked
+                                      ? "cursor-not-allowed border-border opacity-40"
+                                      : videoDuration === d
+                                        ? "border-border-strong bg-surface-2"
+                                        : "border-border hover:bg-surface-2",
+                                  )}
+                                >
+                                  {d}s
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                       <div>
