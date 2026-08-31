@@ -218,7 +218,13 @@ function VideoStudio() {
         <Panel title="Format" summary={`${ratio} · ${res} · ${duration} · ${fps}`} defaultOpen>
           <RatioBlocks label="Aspect ratio" options={ratios} value={ratio} onChange={setRatio} />
           <Segment label="Resolution" options={resolutions} value={res} onChange={setRes} />
-          <Segment label="Duration" options={durations} value={duration} onChange={setDuration} />
+          <Segment
+            label="Duration"
+            options={durations}
+            value={duration}
+            onChange={setDuration}
+            disabledOptions={lockedDurations}
+          />
           <Segment label="Frame rate" options={frameRates} value={fps} onChange={setFps} />
         </Panel>
 
