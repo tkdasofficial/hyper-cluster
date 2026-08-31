@@ -8,7 +8,12 @@ import { Panel, RatioBlocks, Segment, SliderRow, SwitchRow, TextRow } from "@/co
 import { RecentCreations } from "@/components/hyper/RecentCreations";
 import { uploadReference } from "@/lib/generation.functions";
 import { runJob } from "@/lib/jobs-runner";
-import { VIDEO_DURATIONS, VIDEO_FPS, VIDEO_RESOLUTIONS } from "@/lib/media.shared";
+import {
+  MAX_SELECTABLE_VIDEO_DURATION,
+  VIDEO_DURATIONS,
+  VIDEO_FPS,
+  VIDEO_RESOLUTIONS,
+} from "@/lib/media.shared";
 
 export const Route = createFileRoute("/video")({
   head: () => ({
