@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import lightIcon from "@/assets/light_app_icon.svg.asset.json";
-import darkIcon from "@/assets/dark_app_icon.svg.asset.json";
+import lightIcon from "@/assets/light_app_icon.svg";
+import darkIcon from "@/assets/dark_app_icon.svg";
 
 /** Icon swaps with the theme; wordmark uses currentColor. */
 export function Logo({ className }: { className?: string }) {
