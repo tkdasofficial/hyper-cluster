@@ -265,6 +265,8 @@ export type Database = {
         }
       }
       email_exists: { Args: { check_email: string }; Returns: boolean }
+      kick_job_worker: { Args: never; Returns: undefined }
+      verify_worker_token: { Args: { p_token: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
