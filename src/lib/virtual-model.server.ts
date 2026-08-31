@@ -5,6 +5,7 @@ import { pixazoImage, sizeForAspect } from "@/lib/providers.server";
 import {
   GENERATIONS_BUCKET,
   MODELS_BUCKET,
+  referenceUrl,
   signedUrl,
   uploadFromUrl,
 } from "@/lib/storage.server";
@@ -103,7 +104,7 @@ export async function buildCharacterProfile(
   const renderView = async (view: (typeof MODEL_VIEWS)[number]) => {
     const done = paths.get(view.id);
     if (done) {
-      const url = await signedUrl(MODELS_BUCKET, done);
+      const url = await referenceUrl(MODELS_BUCKET, done);
       if (url) refUrls.set(view.id, url);
       return done;
     }
@@ -141,7 +142,7 @@ export async function buildCharacterProfile(
 
     const path = await uploadFromUrl(MODELS_BUCKET, userId, providerUrl);
     paths.set(view.id, path);
-    const url = await signedUrl(MODELS_BUCKET, path);
+    const url = await referenceUrl(MODELS_BUCKET, path);
     if (url) refUrls.set(view.id, url);
     return path;
   };
@@ -225,7 +226,7 @@ export async function renderCharacterImage(
     available[0]?.path ??
     null;
 
-  const reference = referencePath ? await signedUrl(MODELS_BUCKET, referencePath) : null;
+  const reference = referencePath ? await referenceUrl(MODELS_BUCKET, referencePath) : null;
   const { width, height } = sizeForAspect(input.aspect ?? "4:5");
   const faceLock = input.faceLock ?? true;
   const profile = consistencyProfile(input.consistency ?? 92);
