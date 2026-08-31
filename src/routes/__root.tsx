@@ -7,10 +7,9 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "../components/hyper/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 
@@ -39,9 +38,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -79,30 +75,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Hyper Copilot — Generative AI Studio" },
+      { title: "Hyper Copilot — Generative AI Studio Platform" },
       {
         name: "description",
         content:
-          "Advanced generative AI platform for image, video, vector and audio creation.",
+          "Next-generation generative AI platform for image, video, vector and audio creation.",
       },
-      // Open Graph Tags (WhatsApp, Twitter, LinkedIn Share Preview)
+      { name: "author", content: "Tushar Kanti Das" },
+      { name: "publisher", content: "Avzio" },
+      // Open Graph Tags
       { property: "og:site_name", content: "Hyper Copilot" },
-      { property: "og:title", content: "Hyper Copilot — Generative AI Studio" },
+      { property: "og:title", content: "Hyper Copilot — Generative AI Studio Platform" },
       {
         property: "og:description",
         content:
-          "Advanced generative AI platform for image, video, vector and audio creation.",
+          "Next-generation generative AI platform for image, video, vector and audio creation.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/og-image.png" },
+      { property: "og:url", content: "https://hypercopilot.vercel.app/" },
+      { property: "og:image", content: "https://hypercopilot.vercel.app/og-image.png" },
+      // Twitter Card Meta Tags
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Hyper Copilot — Generative AI Studio" },
+      { name: "twitter:title", content: "Hyper Copilot — Generative AI Studio Platform" },
       {
         name: "twitter:description",
         content:
-          "Advanced generative AI platform for image, video, vector and audio creation.",
+          "Next-generation generative AI platform for image, video, vector and audio creation.",
       },
-      { name: "twitter:image", content: "/og-image.png" },
+      { name: "twitter:image", content: "https://hypercopilot.vercel.app/og-image.png" },
     ],
     links: [
       {
@@ -115,22 +115,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
-      // SVG Favicon (Modern Browser Tabs)
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      // PNG Favicon (Google Search Engine Results - 144x144 px)
       { rel: "icon", href: "/favicon-48x48.png", sizes: "144x144", type: "image/png" },
+      { rel: "canonical", href: "https://hypercopilot.vercel.app/" },
     ],
     scripts: [
-      // Schema.org Structured Data (Google Bot Branding Fix)
+      // Schema.org Structured Data (AI Application & Software Platform)
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
+          "@type": "WebApplication",
           "name": "Hyper Copilot",
-          "alternateName": "Hyper Copilot AI",
-          "url": "https://your-app.vercel.app/", // <-- यहाँ अपनी Vercel/Live URL पेस्ट कर दें
-          "logo": "https://your-app.vercel.app/favicon-48x48.png",
+          "alternateName": "Hyper Copilot AI Studio",
+          "url": "https://hypercopilot.vercel.app/",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "All",
+          "logo": "https://hypercopilot.vercel.app/favicon-48x48.png",
+          "image": "https://hypercopilot.vercel.app/og-image.png",
+          "description": "Next-generation generative AI platform for image, video, vector and audio creation.",
+          "author": {
+            "@type": "Person",
+            "name": "Tushar Kanti Das"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Avzio",
+            "url": "https://hypercopilot.vercel.app/"
+          }
         }),
       },
     ],
@@ -162,7 +174,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <Toaster />
       </ThemeProvider>
