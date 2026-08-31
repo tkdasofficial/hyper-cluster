@@ -83,3 +83,43 @@ export const cancelJob = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/** Single task lookup used by the client while a task is running. */
+export const getJob = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string }) => input)
+  .handler(async ({ data, context }): Promise<JobRecord | null> => {
+    const storage = await import("@/lib/storage.server");
+    const { data: r, error } = await context.supabase
+      .from("jobs")
+      .select("id, kind, status, input, result, error, attempts, created_at, finished_at")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!r) return null;
+
+    const result = (r.result as JobResult | null) ?? null;
+    let url = result?.url ?? null;
+    if (result?.id) {
+      const { data: gen } = await context.supabase
+        .from("generations")
+        .select("storage_path")
+        .eq("id", result.id)
+        .maybeSingle();
+      if (gen?.storage_path) {
+        url = await storage.signedUrl(storage.GENERATIONS_BUCKET, gen.storage_path);
+      }
+    }
+
+    return {
+      id: r.id,
+      kind: r.kind as JobKind,
+      status: r.status as JobStatus,
+      label: String((r.input as Record<string, unknown> | null)?.["__label"] ?? ""),
+      attempts: r.attempts,
+      error: r.error,
+      result: result ? { ...result, url } : null,
+      createdAt: r.created_at,
+      finishedAt: r.finished_at,
+    };
+  });
