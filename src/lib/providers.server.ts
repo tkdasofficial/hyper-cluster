@@ -6,13 +6,14 @@
  * Lovable — Gemini image models and Gemini TTS through the AI Gateway.
  */
 
+import { providerSecret } from "@/lib/provider-secrets.server";
+
 const PIXAZO_BASE = "https://gateway.pixazo.ai";
 const LOVABLE_BASE = "https://ai.gateway.lovable.dev/v1";
 
-function pixazoKey() {
-  const key = process.env["PIXAZO_API_KEY"];
-  if (!key) throw new Error("Missing PIXAZO_API_KEY");
-  return key;
+/** The Pixazo key lives in the Supabase backend vault, not in app env config. */
+async function pixazoKey() {
+  return providerSecret("PIXAZO_API_KEY");
 }
 
 function lovableKey() {
@@ -27,7 +28,7 @@ async function pixazoPost<T>(path: string, body: unknown): Promise<T> {
     headers: {
       "Content-Type": "application/json",
       "Cache-Control": "no-cache",
-      "Ocp-Apim-Subscription-Key": pixazoKey(),
+      "Ocp-Apim-Subscription-Key": await pixazoKey(),
     },
     body: JSON.stringify(body),
   });
@@ -238,7 +239,7 @@ export type VideoJob = { status: string; url?: string | undefined; error?: strin
 
 export async function pixazoVideoStatus(requestId: string): Promise<VideoJob> {
   const res = await fetch(`${PIXAZO_BASE}/v2/requests/status/${requestId}`, {
-    headers: { "Ocp-Apim-Subscription-Key": pixazoKey() },
+    headers: { "Ocp-Apim-Subscription-Key": await pixazoKey() },
   });
   const text = await res.text();
   if (!res.ok) throw new Error(`Video status failed (${res.status}): ${text.slice(0, 200)}`);
