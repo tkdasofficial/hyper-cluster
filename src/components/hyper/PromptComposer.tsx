@@ -129,12 +129,14 @@ const suggestionsByModality: Record<string, string[]> = {
 
 function Chip({
   icon: Icon,
+  glyph,
   children,
   active,
   caret = true,
   onClick,
 }: {
-  icon: typeof Ratio;
+  icon?: typeof Ratio;
+  glyph?: React.ReactNode;
   children: React.ReactNode;
   active?: boolean;
   caret?: boolean;
@@ -151,10 +153,26 @@ function Chip({
           : "border-border bg-surface-2/70 text-muted-foreground hover:border-border-strong hover:text-foreground",
       )}
     >
-      <Icon className="h-[15px] w-[15px]" strokeWidth={1.9} />
+      {glyph ?? (Icon ? <Icon className="h-[15px] w-[15px]" strokeWidth={1.9} /> : null)}
       <span className="whitespace-nowrap">{children}</span>
       {caret ? <ChevronDown className="h-3.5 w-3.5 opacity-70" strokeWidth={2.2} /> : null}
     </button>
+  );
+}
+
+/** Small dynamic outline that mirrors the selected aspect ratio's shape. */
+function RatioGlyph({ w, h }: { w: number; h: number }) {
+  const max = 15;
+  const scale = Math.min(max / w, max / h);
+  return (
+    <span
+      aria-hidden
+      className="block shrink-0 rounded-[3px] border-[1.6px] border-current"
+      style={{
+        width: Math.max(6, Math.round(w * scale)),
+        height: Math.max(6, Math.round(h * scale)),
+      }}
+    />
   );
 }
 
@@ -219,7 +237,6 @@ export function PromptComposer() {
   const [videoDuration, setVideoDuration] = useState<number>(MAX_SELECTABLE_VIDEO_DURATION);
   const [videoFps, setVideoFps] = useState<number>(VIDEO_FPS[0] ?? 24);
   const [videoRes, setVideoRes] = useState<string>(VIDEO_RESOLUTIONS[1] ?? "720p");
-  const [videoNegative, setVideoNegative] = useState("");
   // Audio settings
   const [audioMode, setAudioMode] = useState<"speech" | "music">("speech");
   const [voice, setVoice] = useState<string>(VOICES[0].id);
@@ -229,6 +246,27 @@ export function PromptComposer() {
   const [musicSeconds, setMusicSeconds] = useState([30]);
   const [instrumental, setInstrumental] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
+  const startFrameRef = useRef<HTMLInputElement>(null);
+  const endFrameRef = useRef<HTMLInputElement>(null);
+
+  /** Video frames: slot 0 = start frame, slot 1 = end frame. */
+  const onFrameFile = (slot: 0 | 1, files: FileList | null) => {
+    const f = files?.[0];
+    if (!f) return;
+    const id = `${f.name}-${f.size}-${Math.random()}`;
+    setRefs((r) => {
+      const next = [...r];
+      next[slot] = { id, name: f.name, url: URL.createObjectURL(f) };
+      return next.filter(Boolean).slice(0, 2);
+    });
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result ?? "");
+      setRefs((r) => r.map((x) => (x.id === id ? { ...x, dataUrl } : x)));
+    };
+    reader.readAsDataURL(f);
+  };
+
 
 
   const toggleMode = (id: string) =>
@@ -363,7 +401,6 @@ export function PromptComposer() {
           resolution: videoRes,
           frames: Math.round(videoDuration * videoFps),
           frameRate: videoFps,
-          negative: videoNegative.trim(),
           seed: nextSeed,
           ...(urls[0] ? { imageUrl: urls[0] } : {}),
           ...(urls[1] ? { endImageUrl: urls[1] } : {}),
