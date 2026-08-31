@@ -9,10 +9,9 @@
 const PIXAZO_BASE = "https://gateway.pixazo.ai";
 const LOVABLE_BASE = "https://ai.gateway.lovable.dev/v1";
 
-function pixazoKey() {
-  const key = process.env["PIXAZO_API_KEY"];
-  if (!key) throw new Error("Missing PIXAZO_API_KEY");
-  return key;
+/** The Pixazo key lives in the Supabase backend vault, not in app env config. */
+async function pixazoKey() {
+  return providerSecret("PIXAZO_API_KEY");
 }
 
 function lovableKey() {
