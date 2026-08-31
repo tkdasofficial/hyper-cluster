@@ -23,7 +23,7 @@ export type ViewId =
   | "right-profile";
 
 /**
- * The six profile views generated for every character.
+ * The five profile views generated for every character.
  *
  * `reference` declares which already-rendered view conditions this one:
  * - `null`  — the anchor, rendered from text so the identity is born once.

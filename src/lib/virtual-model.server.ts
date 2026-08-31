@@ -24,7 +24,7 @@ const PORTRAIT_SIZE = { width: 768, height: 960 };
 const BODY_SIZE = { width: 704, height: 1216 };
 
 /**
- * Builds a character profile as a dependency chain instead of six independent
+ * Builds a character profile as a dependency chain instead of five independent
  * renders:
  *
  *   headshot (text-to-image anchor, generated first)

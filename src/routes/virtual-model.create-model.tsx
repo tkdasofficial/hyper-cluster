@@ -143,7 +143,7 @@ function CreateModel() {
             suffix="%"
           />
           <p className="pt-1 text-[11px] leading-relaxed text-muted-foreground">
-            Higher values hold the face and body structure tighter across all six views and every
+            Higher values hold the face and body structure tighter across all five views and every
             later render. Lower values allow more variation between shots.
           </p>
         </Panel>
@@ -158,7 +158,7 @@ function CreateModel() {
               toast.error("Give your model a name first.");
               return;
             }
-            toast.info("Generating the six-view character profile…", {
+            toast.info("Generating the five-view character profile…", {
               description: "This takes a minute.",
             });
             create.mutate();
