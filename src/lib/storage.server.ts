@@ -54,6 +54,38 @@ export async function uploadFromUrl(
   return uploadBytes(bucket, userId, bytes, contentType);
 }
 
+/**
+ * Signed URL for an image that another provider will download as a reference.
+ * Pixazo rejects source images over 1MB, and a photo-detail 768x960 PNG easily
+ * exceeds that, so this serves a progressively smaller Storage image
+ * transformation until the bytes fit comfortably under the limit. Falls back
+ * to the plain signed URL when transformations are unavailable.
+ */
+const REFERENCE_MAX_BYTES = 900_000;
+
+export async function referenceUrl(bucket: string, path: string): Promise<string | null> {
+  let lastTransformed: string | null = null;
+  for (const dim of [768, 640, 512, 384]) {
+    try {
+      const { data, error } = await supabaseAdmin.storage
+        .from(bucket)
+        .createSignedUrl(path, SIGNED_URL_TTL, {
+          transform: { width: dim, height: dim, resize: "contain", quality: 72 },
+        });
+      if (error || !data?.signedUrl) break; // transforms not enabled
+      lastTransformed = data.signedUrl;
+      const probe = await fetch(data.signedUrl);
+      if (probe.ok && probe.body) {
+        const bytes = await probe.arrayBuffer();
+        if (bytes.byteLength < REFERENCE_MAX_BYTES) return data.signedUrl;
+      }
+    } catch {
+      break;
+    }
+  }
+  return lastTransformed ?? signedUrl(bucket, path);
+}
+
 export async function signedUrl(bucket: string, path: string): Promise<string | null> {
   const { data, error } = await supabaseAdmin.storage
     .from(bucket)
