@@ -10,17 +10,31 @@ export type VirtualModel = {
   status?: string;
 };
 
+const LONG_PRESS_MS = 550;
+
 export function ModelRail({
   models,
   selectedId,
   onSelect,
   onCreate,
+  onLongPress,
 }: {
   models: VirtualModel[];
   selectedId: string | null;
   onSelect: (id: string) => void;
   onCreate: () => void;
+  onLongPress?: (model: VirtualModel) => void;
 }) {
+  const timer = useRef<number | null>(null);
+  const longPressed = useRef(false);
+
+  const cancel = () => {
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
+      timer.current = null;
+    }
+  };
+
   return (
     <div className="flex gap-2.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
       {models.map((m) => {
@@ -30,9 +44,32 @@ export function ModelRail({
             key={m.id}
             type="button"
             aria-pressed={on}
-            onClick={() => onSelect(m.id)}
+            onClick={() => {
+              if (longPressed.current) {
+                longPressed.current = false;
+                return;
+              }
+              onSelect(m.id);
+            }}
+            onPointerDown={() => {
+              cancel();
+              longPressed.current = false;
+              if (!onLongPress) return;
+              timer.current = window.setTimeout(() => {
+                longPressed.current = true;
+                onLongPress(m);
+              }, LONG_PRESS_MS);
+            }}
+            onPointerUp={cancel}
+            onPointerLeave={cancel}
+            onPointerCancel={cancel}
+            onContextMenu={(e) => {
+              if (!onLongPress) return;
+              e.preventDefault();
+              onLongPress(m);
+            }}
             className={cn(
-              "relative aspect-square w-[92px] shrink-0 overflow-hidden rounded-xl border bg-surface text-left transition-colors",
+              "relative aspect-square w-[92px] shrink-0 overflow-hidden rounded-xl border bg-surface text-left transition-colors select-none",
               on ? "border-primary" : "border-border hover:border-border-strong",
             )}
           >
@@ -41,6 +78,7 @@ export function ModelRail({
                 src={m.headshotUrl}
                 alt={m.name}
                 loading="lazy"
+                draggable={false}
                 className="h-full w-full object-cover"
               />
             ) : (
