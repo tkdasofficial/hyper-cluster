@@ -282,7 +282,8 @@ export async function renderCharacterImage(
       virtual_model_id: input.modelId,
       params: {
         aspect: input.aspect ?? "4:5",
-        referenceView: available.some((i) => i.path === referencePath) ? wanted : "headshot",
+        referenceView,
+        strength,
         consistency: input.consistency ?? 92,
         faceLock,
       },
