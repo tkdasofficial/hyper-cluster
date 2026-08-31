@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { uploadReference } from "@/lib/generation.functions";
 import { runJob } from "@/lib/jobs-runner";
 import {
+  MAX_SELECTABLE_VIDEO_DURATION,
   SPEECH_TONES,
   TTS_MODELS,
   VIDEO_DURATIONS,
