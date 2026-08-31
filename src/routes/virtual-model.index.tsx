@@ -156,6 +156,10 @@ function VirtualModelStudio() {
             selectedId={selected}
             onSelect={setSelected}
             onCreate={() => navigate({ to: "/virtual-model/create-model" })}
+            onLongPress={(m) => {
+              setConfirmName("");
+              setPendingDelete(m);
+            }}
           />
         </div>
 
