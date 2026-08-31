@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
 import { Chips, Panel, Segment, SliderRow, SwitchRow, TextRow } from "@/components/hyper/StudioControls";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
-import { generateMusic, generateSpeech } from "@/lib/generation.functions";
+import { runJob } from "@/lib/jobs-runner";
 import { SPEECH_TONES, TTS_MODELS, VOICES } from "@/lib/media.shared";
 
 export const Route = createFileRoute("/audio")({
@@ -71,21 +71,23 @@ function AudioStudio() {
     setTrackUrl(null);
     try {
       if (mode === "Text to speech") {
-        const res = await generateSpeech({
-          data: { text, voice, model: ttsModel.id, tone, pace },
+        const res = await runJob("speech", text, {
+          text,
+          voice,
+          model: ttsModel.id,
+          tone,
+          pace,
         });
         setTrackUrl(res.url ?? null);
         toast.success("Speech ready");
       } else {
-        const res = await generateMusic({
-          data: {
-            prompt: text,
-            genre,
-            mood,
-            tempo,
-            seconds: Number(musicDuration.replace("s", "")) || 30,
-            instrumental,
-          },
+        const res = await runJob("music", text, {
+          prompt: text,
+          genre,
+          mood,
+          tempo,
+          seconds: Number(musicDuration.replace("s", "")) || 30,
+          instrumental,
         });
         setTrackUrl(res.url ?? null);
         toast.success("Track ready");

@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
 import { Panel, RatioBlocks, Segment, SliderRow, SwitchRow, TextRow } from "@/components/hyper/StudioControls";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
-import { pollVideo, startVideo, uploadReference } from "@/lib/generation.functions";
+import { uploadReference } from "@/lib/generation.functions";
+import { runJob } from "@/lib/jobs-runner";
 import { VIDEO_DURATIONS, VIDEO_FPS, VIDEO_RESOLUTIONS } from "@/lib/media.shared";
 
 export const Route = createFileRoute("/video")({
@@ -154,31 +155,20 @@ function VideoStudio() {
         }),
       );
 
-      const job = await startVideo({
-        data: {
-          prompt: `${prompt.trim()}, ${style.toLowerCase()} look (${styleStrength}% style), ${camera.toLowerCase()} camera move, ${motion > 65 ? "high" : motion < 35 ? "subtle" : "moderate"} motion`,
-          negative: negative.trim(),
-          aspect: ratio,
-          resolution: res,
-          frames: Math.round(seconds * frameRate),
-          frameRate,
-          seed: nextSeed,
-          ...(startUrl ? { imageUrl: startUrl } : {}),
-          ...(endUrl ? { endImageUrl: endUrl } : {}),
-        },
+      const res = await runJob("video", prompt.trim(), {
+        prompt: `${prompt.trim()}, ${style.toLowerCase()} look (${styleStrength}% style), ${camera.toLowerCase()} camera move, ${motion > 65 ? "high" : motion < 35 ? "subtle" : "moderate"} motion`,
+        negative: negative.trim(),
+        aspect: ratio,
+        resolution: res,
+        frames: Math.round(seconds * frameRate),
+        frameRate,
+        seed: nextSeed,
+        ...(startUrl ? { imageUrl: startUrl } : {}),
+        ...(endUrl ? { endImageUrl: endUrl } : {}),
       });
-      for (let i = 0; i < 120; i += 1) {
-        await new Promise((r) => setTimeout(r, 5000));
-        const status = await pollVideo({ data: { id: job.id, requestId: job.requestId } });
-        if (status.status === "completed") {
-          setClipUrl(status.url ?? null);
-          void queryClient.invalidateQueries({ queryKey: ["generations"] });
-          toast.success("Video ready");
-          return;
-        }
-        if (status.status === "failed") throw new Error(status.error ?? "Video generation failed");
-      }
-      throw new Error("Video generation timed out");
+      setClipUrl(res.url ?? null);
+      void queryClient.invalidateQueries({ queryKey: ["generations"] });
+      toast.success("Video ready");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Video generation failed");
     } finally {
