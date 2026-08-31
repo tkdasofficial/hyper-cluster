@@ -778,22 +778,24 @@ export function PromptComposer() {
                           </div>
                           <div>
                             <p className="mb-1.5 text-[12px] font-semibold">Tone</p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {SPEECH_TONES.map((t) => (
-                                <button
-                                  key={t}
-                                  type="button"
-                                  onClick={() => setTone(t)}
-                                  className={cn(
-                                    "rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors",
-                                    tone === t
-                                      ? "border-border-strong bg-surface-2"
-                                      : "border-border hover:bg-surface-2",
-                                  )}
-                                >
-                                  {t}
-                                </button>
-                              ))}
+                            <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                              <div className="flex w-max snap-x snap-mandatory gap-1.5">
+                                {SPEECH_TONES.map((t) => (
+                                  <button
+                                    key={t}
+                                    type="button"
+                                    onClick={() => setTone(t)}
+                                    className={cn(
+                                      "shrink-0 snap-start whitespace-nowrap rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors",
+                                      tone === t
+                                        ? "border-border-strong bg-surface-2"
+                                        : "border-border hover:bg-surface-2",
+                                    )}
+                                  >
+                                    {t}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </div>
                           <div>
