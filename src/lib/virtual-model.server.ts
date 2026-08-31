@@ -97,9 +97,19 @@ export async function buildCharacterProfile(
   const paths = new Map<ViewId, string>();
   const refUrls = new Map<ViewId, string>();
 
+  // Resume: keep views a previous attempt already rendered.
+  for (const img of existing) paths.set(img.view as ViewId, img.path);
+
   const renderView = async (view: (typeof MODEL_VIEWS)[number]) => {
+    const done = paths.get(view.id);
+    if (done) {
+      const url = await signedUrl(MODELS_BUCKET, done);
+      if (url) refUrls.set(view.id, url);
+      return done;
+    }
     const size = view.portrait ? PORTRAIT_SIZE : BODY_SIZE;
     const reference = view.reference ? refUrls.get(view.reference) : undefined;
+
     const providerUrl = await pixazoImage({
       prompt: viewPrompt(input.identityPrompt, view.instruction, input.style),
       negativePrompt: IDENTITY_NEGATIVE,
