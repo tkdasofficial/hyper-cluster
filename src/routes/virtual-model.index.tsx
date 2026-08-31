@@ -14,8 +14,18 @@ import {
 } from "@/components/hyper/StudioControls";
 import { ModelRail, type VirtualModel } from "@/components/hyper/ModelRail";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
-import { listVirtualModels } from "@/lib/virtual-model.functions";
+import { deleteVirtualModel, listVirtualModels } from "@/lib/virtual-model.functions";
 import { runJob } from "@/lib/jobs-runner";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/virtual-model/")({
   head: () => ({
