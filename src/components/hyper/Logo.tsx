@@ -8,12 +8,12 @@ export function Logo({ className }: { className?: string }) {
     <span className={cn("flex items-center gap-2.5 text-foreground", className)}>
       <span className="relative block h-7 w-7 shrink-0 overflow-hidden rounded-lg">
         <img
-          src={lightIcon.url}
+          src={lightIcon}
           alt="Hyper Copilot logo"
           className="h-full w-full object-contain dark:hidden"
         />
         <img
-          src={darkIcon.url}
+          src={darkIcon}
           alt="Hyper Copilot logo"
           className="hidden h-full w-full object-contain dark:block"
         />
