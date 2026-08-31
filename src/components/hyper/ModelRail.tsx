@@ -39,16 +39,19 @@ export function ModelRail({
     <div className="flex gap-2.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
       {models.map((m) => {
         const on = m.id === selectedId;
+        const busy = !!m.status && m.status !== "ready";
         return (
           <button
             key={m.id}
             type="button"
             aria-pressed={on}
+            aria-busy={busy}
             onClick={() => {
               if (longPressed.current) {
                 longPressed.current = false;
                 return;
               }
+              if (busy) return;
               onSelect(m.id);
             }}
             onPointerDown={() => {
@@ -71,9 +74,16 @@ export function ModelRail({
             className={cn(
               "relative aspect-square w-[92px] shrink-0 overflow-hidden rounded-xl border bg-surface text-left transition-colors select-none",
               on ? "border-primary" : "border-border hover:border-border-strong",
+              busy && "cursor-default",
             )}
           >
-            {m.headshotUrl ? (
+            {busy ? (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 bg-muted/40 px-2 text-center">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" strokeWidth={1.6} />
+                <span className="text-[10px] font-bold text-muted-foreground">Processing…</span>
+                <span className="w-full truncate text-[10px] text-muted-foreground/80">{m.name}</span>
+              </div>
+            ) : m.headshotUrl ? (
               <img
                 src={m.headshotUrl}
                 alt={m.name}
@@ -83,17 +93,15 @@ export function ModelRail({
               />
             ) : (
               <div className="grid h-full w-full place-items-center bg-muted/40">
-                {m.status === "running" ? (
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.6} />
-                ) : (
-                  <User className="h-7 w-7 text-muted-foreground" strokeWidth={1.4} />
-                )}
+                <User className="h-7 w-7 text-muted-foreground" strokeWidth={1.4} />
               </div>
             )}
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-5">
-              <p className="truncate text-[11px] font-bold text-white">{m.name}</p>
-            </div>
-            {on && (
+            {!busy && (
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-2 pb-1.5 pt-5">
+                <p className="truncate text-[11px] font-bold text-white">{m.name}</p>
+              </div>
+            )}
+            {on && !busy && (
               <span className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-primary text-primary-foreground">
                 <Check className="h-3 w-3" strokeWidth={2.6} />
               </span>
@@ -101,6 +109,7 @@ export function ModelRail({
           </button>
         );
       })}
+
 
       <button
         type="button"

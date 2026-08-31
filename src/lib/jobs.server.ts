@@ -393,6 +393,8 @@ export async function runJobStep(job: JobRow): Promise<StepOutcome> {
         seed: asNumber(input["seed"]),
         consistency: asNumber(input["consistency"]),
         style: asString(input["style"]),
+        jobId: job.id,
+
       });
       return { done: true, result: { id: res.id, kind: "virtual-model" } };
     }
