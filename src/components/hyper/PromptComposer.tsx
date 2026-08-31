@@ -551,10 +551,58 @@ export function PromptComposer() {
                 className="hidden"
                 onChange={(e) => onFiles(e.target.files)}
               />
-              {supportsReferences ? (
+              {active === "Video" ? (
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <input
+                    ref={startFrameRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      onFrameFile(0, e.target.files);
+                      e.target.value = "";
+                    }}
+                  />
+                  <input
+                    ref={endFrameRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      onFrameFile(1, e.target.files);
+                      e.target.value = "";
+                    }}
+                  />
+                  {([0, 1] as const).map((slot) => (
+                    <button
+                      key={slot}
+                      type="button"
+                      aria-label={slot === 0 ? "Upload start frame" : "Upload end frame"}
+                      title={slot === 0 ? "Start frame" : "End frame"}
+                      onClick={() =>
+                        (slot === 0 ? startFrameRef : endFrameRef).current?.click()
+                      }
+                      className="relative grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full border border-border bg-surface-2/70 text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
+                    >
+                      {refs[slot] ? (
+                        <img
+                          src={refs[slot]!.url}
+                          alt={slot === 0 ? "Start frame" : "End frame"}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="flex items-center gap-px">
+                          <Plus className="h-3.5 w-3.5" strokeWidth={2.2} />
+                          <span className="text-[10px] font-bold">{slot + 1}</span>
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              ) : supportsReferences ? (
                 <button
                   type="button"
-                  aria-label={active === "Video" ? "Add frame image" : "Add reference image"}
+                  aria-label="Add reference image"
                   onClick={() => fileRef.current?.click()}
                   className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-surface-2/70 text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
                 >
@@ -590,7 +638,7 @@ export function PromptComposer() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <span>
-                      <Chip icon={Ratio}>{ratio.label}</Chip>
+                      <Chip glyph={<RatioGlyph w={ratio.w} h={ratio.h} />}>{ratio.label}</Chip>
                     </span>
                   </PopoverTrigger>
                   <PopoverContent
@@ -744,36 +792,6 @@ export function PromptComposer() {
                             </button>
                           ))}
                         </div>
-                      </div>
-                      <div>
-                        <p className="mb-1.5 text-[12px] font-semibold">Negative prompt</p>
-                        <textarea
-                          value={videoNegative}
-                          rows={2}
-                          placeholder="watermark, text overlays, jitter"
-                          onChange={(e) => setVideoNegative(e.target.value)}
-                          className="w-full resize-none rounded-xl border border-border bg-background px-2.5 py-2 text-[12px] outline-none placeholder:text-muted-foreground"
-                        />
-                      </div>
-                      <div className="rounded-xl border border-border p-2.5">
-                        <p className="text-[12px] font-semibold">Frame references</p>
-                        <p className="mt-0.5 text-[11px] text-muted-foreground">
-                          First upload = start frame, second = end frame.
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => fileRef.current?.click()}
-                          className="mt-2 w-full rounded-xl border border-border px-3 py-2 text-[12px] font-semibold transition-colors hover:bg-surface-2"
-                        >
-                          Upload frames {refs.length ? `(${refs.length})` : ""}
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[12px] font-semibold">
-                          Lock seed
-                          <span className="ml-1.5 font-normal text-muted-foreground">#{seed}</span>
-                        </span>
-                        <Switch checked={seedLocked} onCheckedChange={setSeedLocked} />
                       </div>
                     </div>
                   ) : null}
