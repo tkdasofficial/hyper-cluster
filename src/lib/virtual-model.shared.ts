@@ -150,12 +150,86 @@ export function referenceViewForShot(shot?: string): ViewId {
   return "headshot";
 }
 
-/** Identity clause appended to every character render request. */
+type Framing = "close" | "portrait" | "half" | "full" | "wide";
+
+function framingOf(shot?: string): Framing {
+  const s = (shot ?? "").toLowerCase();
+  if (s.includes("close")) return "close";
+  if (s.includes("half") || s.includes("waist") || s.includes("cowboy")) return "half";
+  if (s.includes("wide") || s.includes("environment")) return "wide";
+  if (s.includes("full")) return "full";
+  return "portrait";
+}
+
+/** Explicit camera framing instruction — the model ignores "full body" otherwise. */
+export function framingClause(shot?: string) {
+  switch (framingOf(shot)) {
+    case "close":
+      return "extreme close-up shot, face fills the frame, cropped just below the chin, shallow depth of field";
+    case "half":
+      return "half body shot, medium shot framed from the top of the head down to the waist, hands and torso visible, full head inside the frame";
+    case "full":
+      return "full body shot, the entire person is visible from the top of the head all the way down to the shoes, full length figure standing in frame with headroom above and floor visible below, whole outfit and both feet in frame";
+    case "wide":
+      return "wide establishing shot, the full figure is small in the frame with lots of surrounding environment visible, entire body from head to feet in frame";
+    default:
+      return "portrait shot, head and shoulders framing, upper chest visible, face clearly visible";
+  }
+}
+
+/** Framing-aware negatives — "cropped head" is wrong guidance for a close-up. */
+export function framingNegative(shot?: string) {
+  const f = framingOf(shot);
+  if (f === "close") return "full body, distant subject, tiny face, wide shot";
+  if (f === "portrait") return "full body, distant subject, wide shot";
+  if (f === "half") return "extreme close-up, only face, cropped head, feet in frame";
+  return "close-up, headshot, portrait crop, cropped head, cut off feet, cut off legs, torso only, upper body only, zoomed in face";
+}
+
+/**
+ * Denoise amount for a character render.
+ *
+ * The reference exists to carry identity, not framing. Locking every render to
+ * a very low strength reproduced the studio reference photo and made the shot,
+ * wardrobe, scene and prompt look ignored — so the base strength scales with
+ * how far the requested framing is from the reference view, and a mismatched
+ * reference (e.g. a headshot conditioning a full body shot) loosens further.
+ */
+export function denoiseStrength(input: {
+  shot?: string | undefined;
+  referenceView: ViewId;
+  faceLock: boolean;
+  consistency?: number | undefined;
+}) {
+  const f = framingOf(input.shot);
+  const base =
+    f === "close" ? 0.5 : f === "portrait" ? 0.58 : f === "half" ? 0.7 : f === "full" ? 0.78 : 0.82;
+  const wanted = referenceViewForShot(input.shot);
+  const mismatch = input.referenceView !== wanted ? 0.08 : 0;
+  const consistency = clamp(input.consistency ?? 92, 40, 100);
+  // A high consistency dial tightens the render, but never enough to freeze it.
+  const tighten = ((consistency - 70) / 30) * 0.08;
+  const lock = input.faceLock ? 0.04 : 0;
+  return Number(clamp(base + mismatch - tighten - lock, 0.42, 0.88).toFixed(2));
+}
+
+/** Compact identity clause for scene renders — the long lock drowns the prompt. */
+const IDENTITY_LOCK_SHORT =
+  "the exact same person as the reference: identical face, same facial bone structure, same eye shape and colour, same nose and lips, same skin tone, same hair colour and length, same body build";
+
+/**
+ * Builds a scene render prompt.
+ *
+ * The user's scene description leads and the camera framing is stated twice so
+ * the sampler treats it as a hard constraint; identity is a supporting clause,
+ * not the headline, otherwise the reference photo is simply reproduced.
+ */
 export function renderPrompt(input: {
   identityPrompt: string;
   prompt: string;
   faceLock: boolean;
   detail: number;
+  shot?: string | undefined;
   style?: string | undefined;
 }) {
   const detail = clamp(input.detail, 0, 100);
@@ -165,16 +239,20 @@ export function renderPrompt(input: {
       : detail >= 50
         ? "rich natural detail, realistic skin texture"
         : "soft natural detail";
+  const framing = framingClause(input.shot);
   return [
-    input.identityPrompt,
+    framing,
     input.prompt,
+    input.identityPrompt,
     input.faceLock
-      ? "the face must be pixel-faithful to the reference person, do not alter the facial identity in any way"
+      ? "keep the face pixel-faithful to the reference person"
       : "keep the same person as the reference",
-    IDENTITY_LOCK,
+    IDENTITY_LOCK_SHORT,
+    framing,
     detailClause,
     styleClause(input.style),
   ]
     .filter(Boolean)
     .join(". ");
 }
+
