@@ -77,10 +77,11 @@ function CreateModel() {
         description: `${gender} · ${age} · ${height}cm · ${body} · ${styleMode}`,
         identityPrompt: identityPrompt(),
         consistency,
+        style: styleMode,
       }),
     onSuccess: () => {
       toast.success(`${name.trim() || "New model"} created`, {
-        description: "Six profile views generated.",
+        description: "Five profile views generated.",
       });
       void queryClient.invalidateQueries({ queryKey: ["virtual-models"] });
       void navigate({ to: "/virtual-model" });

@@ -27,10 +27,9 @@ const BODY_SIZE = { width: 704, height: 1216 };
  * Builds a character profile as a dependency chain instead of six independent
  * renders:
  *
- *   headshot (text-to-image anchor)
+ *   headshot (text-to-image anchor, generated first)
  *     -> front full body (inherits the face)
- *          -> back / left / right (inherit face + body silhouette)
- *     -> three-quarter portrait (inherits the face)
+ *          -> back / left / right full body (inherit face + silhouette)
  *
  * Every render reuses the same identity clause, a deterministic per-view seed
  * and a low denoise strength derived from the consistency dial, so the face and
@@ -44,6 +43,7 @@ export async function buildCharacterProfile(
     identityPrompt: string;
     seed?: number | undefined;
     consistency?: number | undefined;
+    style?: string | undefined;
   },
 ) {
   const seed = input.seed ?? Math.floor(Math.random() * 1_000_000);
@@ -71,7 +71,7 @@ export async function buildCharacterProfile(
     const size = view.portrait ? PORTRAIT_SIZE : BODY_SIZE;
     const reference = view.reference ? refUrls.get(view.reference) : undefined;
     const providerUrl = await pixazoImage({
-      prompt: viewPrompt(input.identityPrompt, view.instruction),
+      prompt: viewPrompt(input.identityPrompt, view.instruction, input.style),
       negativePrompt: IDENTITY_NEGATIVE,
       width: size.width,
       height: size.height,
@@ -91,14 +91,22 @@ export async function buildCharacterProfile(
   const byId = (id: ViewId) => MODEL_VIEWS.find((v) => v.id === id)!;
 
   try {
-    // Stage 1 — the anchor identity.
-    await renderView(byId("headshot"));
+    // Stage 1 — the anchor identity: the face headshot is always rendered first.
+    const headshotPath = await renderView(byId("headshot"));
+    await supabaseAdmin
+      .from("virtual_models")
+      .update({ headshot_path: headshotPath })
+      .eq("id", row.id);
+
     // Stage 2 — the body reference, conditioned on the anchor face.
     await renderView(byId("front-full"));
-    // Stage 3 — every remaining view can now run in parallel off its reference.
-    await Promise.all(
-      MODEL_VIEWS.filter((v) => v.id !== "headshot" && v.id !== "front-full").map(renderView),
-    );
+
+    // Stage 3 — the three remaining body views, one at a time so a single
+    // character task never fans out into unbounded parallel generations.
+    for (const view of MODEL_VIEWS) {
+      if (view.id === "headshot" || view.id === "front-full") continue;
+      await renderView(view);
+    }
 
     for (const view of MODEL_VIEWS) {
       const path = paths.get(view.id);
@@ -145,6 +153,7 @@ export async function renderCharacterImage(
     detail?: number | undefined;
     faceLock?: boolean | undefined;
     variation?: number | undefined;
+    style?: string | undefined;
   },
 ) {
   // Condition on the profile view that matches the requested framing, so a full
@@ -170,6 +179,7 @@ export async function renderCharacterImage(
       prompt: input.prompt,
       faceLock,
       detail: input.detail ?? 85,
+      style: input.style,
     }),
     negativePrompt: [input.negativePrompt, IDENTITY_NEGATIVE].filter(Boolean).join(", "),
     ...(reference
