@@ -11,6 +11,8 @@ import {
 } from "@/lib/storage.server";
 import {
   consistencyProfile,
+  denoiseStrength,
+  framingNegative,
   IDENTITY_NEGATIVE,
   MODEL_VIEWS,
   referenceViewForShot,
