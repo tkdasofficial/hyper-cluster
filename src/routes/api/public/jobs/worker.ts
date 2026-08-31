@@ -45,7 +45,8 @@ async function handle(request: Request) {
   if (!(await authorize(request))) return json({ error: "Unauthorized" }, 401);
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { runJobStep, statusFromError, type JobRow } = await import("@/lib/jobs.server");
+  const { runJobStep, statusFromError } = await import("@/lib/jobs.server");
+  type JobRow = import("@/lib/jobs.server").JobRow;
 
   // Paused by a credit/policy circuit breaker? Only let a single probe through.
   const { data: runner } = await supabaseAdmin
