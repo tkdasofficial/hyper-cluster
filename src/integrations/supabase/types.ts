@@ -70,6 +70,90 @@ export type Database = {
           },
         ]
       }
+      job_runner: {
+        Row: {
+          id: string
+          lock_until: string | null
+          paused: boolean
+          paused_at: string | null
+          paused_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          lock_until?: string | null
+          paused?: boolean
+          paused_at?: string | null
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          lock_until?: string | null
+          paused?: boolean
+          paused_at?: string | null
+          paused_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          attempts: number
+          created_at: string
+          error: string | null
+          finished_at: string | null
+          generation_id: string | null
+          id: string
+          input: Json
+          kind: string
+          lease_until: string | null
+          max_attempts: number
+          next_run_at: string
+          result: Json | null
+          state: Json
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          generation_id?: string | null
+          id?: string
+          input?: Json
+          kind: string
+          lease_until?: string | null
+          max_attempts?: number
+          next_run_at?: string
+          result?: Json | null
+          state?: Json
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          generation_id?: string | null
+          id?: string
+          input?: Json
+          kind?: string
+          lease_until?: string | null
+          max_attempts?: number
+          next_run_at?: string
+          result?: Json | null
+          state?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -153,6 +237,33 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_jobs: {
+        Args: { p_lease_seconds: number; p_limit: number }
+        Returns: {
+          attempts: number
+          created_at: string
+          error: string | null
+          finished_at: string | null
+          generation_id: string | null
+          id: string
+          input: Json
+          kind: string
+          lease_until: string | null
+          max_attempts: number
+          next_run_at: string
+          result: Json | null
+          state: Json
+          status: string
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "jobs"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       email_exists: { Args: { check_email: string }; Returns: boolean }
     }
     Enums: {
