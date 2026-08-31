@@ -14,8 +14,18 @@ import {
 } from "@/components/hyper/StudioControls";
 import { ModelRail, type VirtualModel } from "@/components/hyper/ModelRail";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
-import { listVirtualModels } from "@/lib/virtual-model.functions";
+import { deleteVirtualModel, listVirtualModels } from "@/lib/virtual-model.functions";
 import { runJob } from "@/lib/jobs-runner";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/virtual-model/")({
   head: () => ({
@@ -62,6 +72,20 @@ function VirtualModelStudio() {
     status: m.status,
   }));
   const [selected, setSelected] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<VirtualModel | null>(null);
+  const [confirmName, setConfirmName] = useState("");
+
+  const remove = useMutation({
+    mutationFn: (id: string) => deleteVirtualModel({ data: { id } }),
+    onSuccess: (_r, id) => {
+      toast.success("Model deleted");
+      if (selected === id) setSelected(null);
+      setPendingDelete(null);
+      setConfirmName("");
+      void queryClient.invalidateQueries({ queryKey: ["virtual-models"] });
+    },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "Delete failed"),
+  });
 
   const [prompt, setPrompt] = useState("");
   const [negative, setNegative] = useState("");
@@ -132,6 +156,10 @@ function VirtualModelStudio() {
             selectedId={selected}
             onSelect={setSelected}
             onCreate={() => navigate({ to: "/virtual-model/create-model" })}
+            onLongPress={(m) => {
+              setConfirmName("");
+              setPendingDelete(m);
+            }}
           />
         </div>
 
@@ -204,6 +232,44 @@ function VirtualModelStudio() {
 
         <RecentCreations />
       </div>
+
+      <AlertDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPendingDelete(null);
+            setConfirmName("");
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete “{pendingDelete?.name}”?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the model and all its generated images. Type{" "}
+              <span className="font-semibold text-foreground">{pendingDelete?.name}</span>{" "}
+              exactly to confirm.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            autoFocus
+            value={confirmName}
+            onChange={(e) => setConfirmName(e.target.value)}
+            placeholder={pendingDelete?.name ?? "Model name"}
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <button
+              type="button"
+              disabled={remove.isPending || confirmName !== pendingDelete?.name}
+              onClick={() => pendingDelete && remove.mutate(pendingDelete.id)}
+              className="inline-flex items-center justify-center rounded-full bg-destructive px-4 py-2 text-[13px] font-semibold text-destructive-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              {remove.isPending ? "Deleting…" : "Delete"}
+            </button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </StudioLayout>
   );
 }
