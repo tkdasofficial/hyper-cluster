@@ -63,14 +63,20 @@ function VirtualModelStudio() {
   const { data: saved } = useQuery({
     queryKey: ["virtual-models"],
     queryFn: () => listVirtualModels(),
+    // While a profile is still being built, keep the processing card fresh.
+    refetchInterval: (q) =>
+      (q.state.data ?? []).some((m) => m.status !== "ready" && m.status !== "failed") ? 5000 : false,
   });
-  const models: VirtualModel[] = (saved ?? []).map((m) => ({
-    id: m.id,
-    name: m.name,
-    meta: m.description,
-    headshotUrl: m.headshotUrl,
-    status: m.status,
-  }));
+  const models: VirtualModel[] = (saved ?? [])
+    .filter((m) => m.status !== "failed")
+    .map((m) => ({
+      id: m.id,
+      name: m.name,
+      meta: m.description,
+      headshotUrl: m.headshotUrl,
+      status: m.status,
+    }));
+
   const [selected, setSelected] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<VirtualModel | null>(null);
   const [confirmName, setConfirmName] = useState("");
