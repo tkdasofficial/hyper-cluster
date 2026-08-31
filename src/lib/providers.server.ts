@@ -99,15 +99,34 @@ export async function pixazoStableDiffusion(input: {
   return url;
 }
 
-/** Runs a provider call again once on a transient failure. */
-export async function withRetry<T>(fn: () => Promise<T>, attempts = 2): Promise<T> {
+/**
+ * Milliseconds to wait before retrying a rate-limited (429) call, parsed from
+ * the provider's error body ("Try again in N seconds.") plus a small buffer.
+ * Returns null when the error is not a retryable rate limit.
+ */
+function rateLimitWaitMs(err: unknown): number | null {
+  if (!(err instanceof Error)) return null;
+  if (!/\(429\)/.test(err.message)) return null;
+  const match = /try again in (\d+)\s*second/i.exec(err.message);
+  const seconds = match ? Number(match[1]) : 5;
+  return Math.min(seconds * 1000 + 1500, 60_000);
+}
+
+/**
+ * Retries a provider call on transient failures. A 429 waits out the
+ * provider's own cooldown ("Try again in N seconds") instead of the old
+ * 800ms backoff that guaranteed a second rate-limit rejection.
+ */
+export async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
   let lastError: unknown;
   for (let i = 0; i < attempts; i++) {
     try {
       return await fn();
     } catch (err) {
       lastError = err;
-      if (i < attempts - 1) await new Promise((r) => setTimeout(r, 800 * (i + 1)));
+      if (i >= attempts - 1) break;
+      const wait = rateLimitWaitMs(err);
+      await new Promise((r) => setTimeout(r, wait ?? 800 * (i + 1)));
     }
   }
   throw lastError instanceof Error ? lastError : new Error("Generation failed");
