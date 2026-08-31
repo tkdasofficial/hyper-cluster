@@ -85,6 +85,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Advanced generative AI platform for image, video, vector and audio creation.",
       },
+      // Open Graph Tags (WhatsApp, Twitter, LinkedIn Share Preview)
+      { property: "og:site_name", content: "Hyper Copilot" },
       { property: "og:title", content: "Hyper Copilot — Generative AI Studio" },
       {
         property: "og:description",
@@ -92,7 +94,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Advanced generative AI platform for image, video, vector and audio creation.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/og-image.png" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Hyper Copilot — Generative AI Studio" },
+      {
+        name: "twitter:description",
+        content:
+          "Advanced generative AI platform for image, video, vector and audio creation.",
+      },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
     links: [
       {
@@ -105,7 +115,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
+      // SVG Favicon (Modern Browser Tabs)
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      // PNG Favicon (Google Search Engine Results - 144x144 px)
+      { rel: "icon", href: "/favicon-48x48.png", sizes: "144x144", type: "image/png" },
+    ],
+    scripts: [
+      // Schema.org Structured Data (Google Bot Branding Fix)
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Hyper Copilot",
+          "alternateName": "Hyper Copilot AI",
+          "url": "https://your-app.vercel.app/", // <-- यहाँ अपनी Vercel/Live URL पेस्ट कर दें
+          "logo": "https://your-app.vercel.app/favicon-48x48.png",
+        }),
+      },
     ],
   }),
 
