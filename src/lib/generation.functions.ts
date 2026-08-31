@@ -19,12 +19,14 @@ export const uploadReference = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { dataUrl: string }) => input)
   .handler(async ({ data, context }) => {
-    const { dataUrlToBytes, uploadBytes, signedUrl, GENERATIONS_BUCKET } = await import(
+    const { dataUrlToBytes, uploadBytes, referenceUrl, GENERATIONS_BUCKET } = await import(
       "@/lib/storage.server"
     );
     const { bytes, contentType } = dataUrlToBytes(data.dataUrl);
     const path = await uploadBytes(GENERATIONS_BUCKET, context.userId, bytes, contentType);
-    return { path, url: await signedUrl(GENERATIONS_BUCKET, path) };
+    // Providers reject reference images over 1MB, so hand them a compressed
+    // transformation URL instead of the raw (often multi-MB PNG) upload.
+    return { path, url: await referenceUrl(GENERATIONS_BUCKET, path) };
   });
 
 /** Saves an image that was streamed straight to the browser. */
