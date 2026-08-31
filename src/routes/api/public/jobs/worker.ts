@@ -85,7 +85,7 @@ async function handle(request: Request) {
             .from("jobs")
             .update({
               status: "completed",
-              result: outcome.result,
+              result: outcome.result as never,
               error: null,
               lease_until: null,
               finished_at: new Date().toISOString(),
@@ -97,7 +97,7 @@ async function handle(request: Request) {
             .from("jobs")
             .update({
               status: "queued",
-              state: outcome.state,
+              state: outcome.state as never,
               lease_until: null,
               // A poll hop is not a failed attempt.
               attempts: job.attempts - 1,
