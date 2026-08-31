@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
-import { Chips, Panel, RatioBlocks, Segment, SliderRow, SwitchRow, TextRow } from "@/components/hyper/StudioControls";
+import { Chips, Panel, RatioBlocks, Segment, SliderRow, TextRow } from "@/components/hyper/StudioControls";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
 
 export const Route = createFileRoute("/image")({
@@ -26,30 +26,22 @@ export const Route = createFileRoute("/image")({
   component: ImageStudio,
 });
 
-const models = ["Hyper Image Speed", "Hyper Image Flash", "Hyper Image Quality"] as const;
+const model = "Hyper Image Speed";
 const ratios = ["1:1", "4:5", "3:2", "16:9", "9:16", "21:9", "2:3", "3:4", "5:4"] as const;
 const resolutions = ["1K", "2K", "4K", "8K"] as const;
 const styles = ["HEAVEN", "Photoreal", "Cinematic", "Anime", "3D Render", "Line Art", "Neon Noir"] as const;
 const refModes = ["Reference", "Transform", "Composition", "Palette", "Character", "Inpaint", "Depth", "Pose"];
-const samplers = ["Balanced", "Creative", "Precise"] as const;
 
 function ImageStudio() {
   const [prompt, setPrompt] = useState("");
   const [negative, setNegative] = useState("");
-  const [model, setModel] = useState<(typeof models)[number]>(models[0]);
   const [ratio, setRatio] = useState<(typeof ratios)[number]>(ratios[0]);
   const [res, setRes] = useState<(typeof resolutions)[number]>(resolutions[1]);
   const [style, setStyle] = useState<(typeof styles)[number]>(styles[0]);
   const [strength, setStrength] = useState(65);
   const [modes, setModes] = useState<string[]>(["Reference"]);
   const [refWeight, setRefWeight] = useState(50);
-  const [sampler, setSampler] = useState<(typeof samplers)[number]>(samplers[0]);
-  const [steps, setSteps] = useState(32);
-  const [guidance, setGuidance] = useState(7);
   const [count, setCount] = useState(4);
-  const [seedLock, setSeedLock] = useState(false);
-  const [upscale, setUpscale] = useState(true);
-  const [transparent, setTransparent] = useState(false);
 
   return (
     <StudioLayout>
@@ -73,10 +65,6 @@ function ImageStudio() {
           </div>
         </div>
 
-        <Panel title="Model" summary={model}>
-          <Segment options={models} value={model} onChange={setModel} />
-        </Panel>
-
         <Panel title="Canvas" summary={`${ratio} · ${res}`}>
           <RatioBlocks label="Aspect ratio" options={ratios} value={ratio} onChange={setRatio} />
           <Segment label="Resolution" options={resolutions} value={res} onChange={setRes} />
@@ -96,17 +84,8 @@ function ImageStudio() {
           <SliderRow label="Reference influence" value={refWeight} onChange={setRefWeight} suffix="%" />
         </Panel>
 
-        <Panel title="Sampling" summary={`${sampler} · ${steps} steps · CFG ${guidance}`}>
-          <Segment label="Sampler" options={samplers} value={sampler} onChange={setSampler} />
-          <SliderRow label="Steps" value={steps} onChange={setSteps} min={8} max={80} />
-          <SliderRow label="Guidance" value={guidance} onChange={setGuidance} min={1} max={20} />
-          <SwitchRow label="Lock seed" checked={seedLock} onCheckedChange={setSeedLock} />
-        </Panel>
-
-        <Panel title="Output" summary={`${count} variations${upscale ? " · upscaled" : ""}`}>
+        <Panel title="Output" summary={`${count} variations`}>
           <SliderRow label="Variations" value={count} onChange={setCount} min={1} max={8} />
-          <SwitchRow label="Auto upscale" checked={upscale} onCheckedChange={setUpscale} />
-          <SwitchRow label="Transparent background" checked={transparent} onCheckedChange={setTransparent} />
         </Panel>
 
         <button
