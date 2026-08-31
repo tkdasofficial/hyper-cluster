@@ -119,7 +119,7 @@ export async function buildCharacterProfile(
       height: size.height,
       seed: viewSeed(seed, view.id),
       steps: profile.steps,
-      guidance: profile.guidance,
+      guidance: Math.min(profile.guidance, 8.5),
     };
 
     // Body views are conditioned on the anchor face. If the image-to-image
@@ -128,15 +128,23 @@ export async function buildCharacterProfile(
     // headshot.
     let providerUrl: string;
     if (reference) {
+      // A head-and-shoulders anchor cannot be nudged into a head-to-toe frame
+      // at portrait denoise levels, so body views need much more freedom.
+      const strength = view.portrait
+        ? profile.strength
+        : view.reference === "headshot"
+          ? 0.82
+          : 0.6;
       try {
         providerUrl = await pixazoImage({
           ...base,
           imageUrl: reference,
-          strength: profile.strength,
+          strength,
         });
       } catch {
         providerUrl = await pixazoImage(base);
       }
+
     } else {
       providerUrl = await pixazoImage(base);
     }
