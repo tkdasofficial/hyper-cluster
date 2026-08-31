@@ -185,18 +185,20 @@ export const startVideo = createServerFn({ method: "POST" })
     const resolution = data.resolution ?? "720p";
     const { width, height } = videoSize(aspect, resolution);
 
-    const requestId = await providers.pixazoStartVideo({
-      prompt: data.prompt,
-      imageUrl: data.imageUrl,
-      endImageUrl: data.endImageUrl,
-      negative: data.negative,
-      aspect,
-      seed: data.seed,
-      frames: data.frames,
-      frameRate: data.frameRate,
-      width,
-      height,
-    });
+    const requestId = await providers.withRetry(() =>
+      providers.pixazoStartVideo({
+        prompt: data.prompt,
+        imageUrl: data.imageUrl,
+        endImageUrl: data.endImageUrl,
+        negative: data.negative,
+        aspect,
+        seed: data.seed,
+        frames: data.frames,
+        frameRate: data.frameRate,
+        width,
+        height,
+      }),
+    );
 
     const { data: row, error } = await supabaseAdmin
       .from("generations")
