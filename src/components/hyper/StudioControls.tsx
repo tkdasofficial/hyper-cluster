@@ -35,36 +35,96 @@ export function Segment<T extends string>({
   options,
   value,
   onChange,
+  disabledOptions,
 }: {
   label?: string;
   options: readonly T[];
   value: T;
   onChange: (v: T) => void;
+  disabledOptions?: readonly T[];
 }) {
   return (
     <div>
       {label ? <p className="mb-2 text-[12px] font-semibold text-muted-foreground">{label}</p> : null}
       <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex w-max snap-x snap-mandatory gap-1.5 rounded-2xl border border-border bg-background p-1">
-          {options.map((o) => (
-            <button
-              key={o}
-              type="button"
-              aria-pressed={value === o}
-              onClick={() => onChange(o)}
-              className={cn(
-                "shrink-0 snap-start whitespace-nowrap rounded-xl px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors",
-                value === o
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
-              )}
-            >
-              {o}
-            </button>
-          ))}
+          {options.map((o) => {
+            const locked = disabledOptions?.includes(o) ?? false;
+            return (
+              <button
+                key={o}
+                type="button"
+                disabled={locked}
+                aria-disabled={locked}
+                aria-pressed={value === o}
+                onClick={() => !locked && onChange(o)}
+                className={cn(
+                  "shrink-0 snap-start whitespace-nowrap rounded-xl px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors",
+                  locked
+                    ? "cursor-not-allowed text-muted-foreground opacity-40"
+                    : value === o
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:bg-surface-2 hover:text-foreground",
+                )}
+              >
+                {o}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
+  );
+}
+
+/** Fixed square tile with an inner box that expands to the ratio shape. */
+export function RatioTile({
+  ratio,
+  active,
+  size = 68,
+  onClick,
+}: {
+  ratio: string;
+  active: boolean;
+  size?: number;
+  onClick: () => void;
+}) {
+  const [w = 1, h = 1] = ratio.split(":").map(Number);
+  const max = Math.max(w || 1, h || 1);
+  const inner = size - 18;
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      style={{ width: size, height: size }}
+      className={cn(
+        "grid shrink-0 snap-start place-items-center rounded-2xl border transition-colors",
+        active
+          ? "border-foreground/30 bg-surface-2 shadow-sm"
+          : "border-border bg-background hover:border-border-strong hover:bg-surface-2/60",
+      )}
+    >
+      <span
+        className={cn(
+          "flex items-center justify-center rounded-[6px] border transition-colors",
+          active ? "border-foreground bg-foreground/10" : "border-muted-foreground/50",
+        )}
+        style={{
+          width: `${Math.max(24, ((w || 1) / max) * inner)}px`,
+          height: `${Math.max(18, ((h || 1) / max) * inner)}px`,
+        }}
+      >
+        <span
+          className={cn(
+            "text-[10.5px] font-bold leading-none tabular-nums",
+            active ? "text-foreground" : "text-muted-foreground",
+          )}
+        >
+          {ratio}
+        </span>
+      </span>
+    </button>
   );
 }
 
@@ -84,47 +144,9 @@ export function RatioBlocks<T extends string>({
       {label ? <p className="mb-2 text-[12px] font-semibold text-muted-foreground">{label}</p> : null}
       <div className="-mx-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex w-max snap-x snap-mandatory gap-2">
-          {options.map((o) => {
-            const [w = 1, h = 1] = o.split(":").map(Number);
-            const max = Math.max(w, h);
-            const active = value === o;
-            return (
-              <button
-                key={o}
-                type="button"
-                aria-pressed={active}
-                onClick={() => onChange(o)}
-                className={cn(
-                  "flex h-[74px] w-[64px] shrink-0 snap-start flex-col items-center justify-center rounded-2xl border transition-colors",
-                  active
-                    ? "border-foreground/30 bg-surface-2 shadow-sm"
-                    : "border-border bg-background hover:border-border-strong hover:bg-surface-2/60",
-                )}
-              >
-                <span
-                  aria-hidden
-                  className={cn(
-                    "flex items-center justify-center rounded-[5px] border transition-colors",
-                    active ? "border-foreground bg-foreground/10" : "border-muted-foreground/50",
-                  )}
-                  style={{
-                    width: `${(w / max) * 30}px`,
-                    height: `${(h / max) * 30}px`,
-                    minWidth: 10,
-                    minHeight: 10,
-                  }}
-                />
-                <span
-                  className={cn(
-                    "mt-1.5 text-[11.5px] font-bold tabular-nums",
-                    active ? "text-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  {o}
-                </span>
-              </button>
-            );
-          })}
+          {options.map((o) => (
+            <RatioTile key={o} ratio={o} active={value === o} onClick={() => onChange(o)} />
+          ))}
         </div>
       </div>
     </div>
