@@ -3,7 +3,7 @@ import { CheckCircle2, Loader2, ListChecks, XCircle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { listJobs } from "@/lib/jobs.functions";
-import { kickWorker } from "@/lib/jobs.client";
+import { kickWorker } from "@/lib/jobs-runner";
 import { jobKindLabel, type JobRecord } from "@/lib/jobs.shared";
 
 function useJobsQuery() {
