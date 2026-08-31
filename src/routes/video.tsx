@@ -155,7 +155,7 @@ function VideoStudio() {
         }),
       );
 
-      const res = await runJob("video", prompt.trim(), {
+      const out = await runJob("video", prompt.trim(), {
         prompt: `${prompt.trim()}, ${style.toLowerCase()} look (${styleStrength}% style), ${camera.toLowerCase()} camera move, ${motion > 65 ? "high" : motion < 35 ? "subtle" : "moderate"} motion`,
         negative: negative.trim(),
         aspect: ratio,
@@ -166,7 +166,7 @@ function VideoStudio() {
         ...(startUrl ? { imageUrl: startUrl } : {}),
         ...(endUrl ? { endImageUrl: endUrl } : {}),
       });
-      setClipUrl(res.url ?? null);
+      setClipUrl(out.url ?? null);
       void queryClient.invalidateQueries({ queryKey: ["generations"] });
       toast.success("Video ready");
     } catch (err) {
