@@ -268,7 +268,12 @@ export type Database = {
         }
       }
       email_exists: { Args: { check_email: string }; Returns: boolean }
+      get_provider_secret: { Args: { p_name: string }; Returns: string }
       kick_job_worker: { Args: never; Returns: undefined }
+      set_provider_secret: {
+        Args: { p_name: string; p_value: string }
+        Returns: undefined
+      }
       verify_worker_token: { Args: { p_token: string }; Returns: boolean }
     }
     Enums: {
