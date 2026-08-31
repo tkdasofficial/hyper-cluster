@@ -20,14 +20,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import {
-  generateImage,
-  generateMusic,
-  generateSpeech,
-  pollVideo,
-  startVideo,
-  uploadReference,
-} from "@/lib/generation.functions";
+import { uploadReference } from "@/lib/generation.functions";
+import { runJob } from "@/lib/jobs.client";
 import {
   SPEECH_TONES,
   TTS_MODELS,
@@ -328,16 +322,18 @@ export function PromptComposer() {
         toast.success(audioMode === "speech" ? "Generating speech…" : "Composing music…");
         const res =
           audioMode === "speech"
-            ? await generateSpeech({
-                data: { text: prompt, voice, model: model.id, tone, pace: pace[0] ?? 100 },
+            ? await runJob("speech", prompt, {
+                text: prompt,
+                voice,
+                model: model.id,
+                tone,
+                pace: pace[0] ?? 100,
               })
-            : await generateMusic({
-                data: {
-                  prompt,
-                  tempo: musicTempo[0] ?? 120,
-                  seconds: musicSeconds[0] ?? 30,
-                  instrumental,
-                },
+            : await runJob("music", prompt, {
+                prompt,
+                tempo: musicTempo[0] ?? 120,
+                seconds: musicSeconds[0] ?? 30,
+                instrumental,
               });
         setResults((list) =>
           list.map((r) => (r.id === ph.id ? { ...r, dataUrl: res.url ?? "", isFinal: true } : r)),
@@ -359,34 +355,21 @@ export function PromptComposer() {
         setResults((r) => [ph, ...r]);
         toast.success("Generating video…", { description: "This can take a few minutes." });
         const urls = await referenceUrls();
-        const job = await startVideo({
-          data: {
-            prompt: promptWithStyle(prompt),
-            aspect: ratio.label,
-            resolution: videoRes,
-            frames: Math.round(videoDuration * videoFps),
-            frameRate: videoFps,
-            negative: videoNegative.trim(),
-            seed: nextSeed,
-            ...(urls[0] ? { imageUrl: urls[0] } : {}),
-            ...(urls[1] ? { endImageUrl: urls[1] } : {}),
-          },
+        const res = await runJob("video", prompt, {
+          prompt: promptWithStyle(prompt),
+          aspect: ratio.label,
+          resolution: videoRes,
+          frames: Math.round(videoDuration * videoFps),
+          frameRate: videoFps,
+          negative: videoNegative.trim(),
+          seed: nextSeed,
+          ...(urls[0] ? { imageUrl: urls[0] } : {}),
+          ...(urls[1] ? { endImageUrl: urls[1] } : {}),
         });
-
-        for (let attempt = 0; attempt < 120; attempt += 1) {
-          await new Promise((res) => setTimeout(res, 5000));
-          const status = await pollVideo({ data: { id: job.id, requestId: job.requestId } });
-          if (status.status === "completed") {
-            setResults((list) =>
-              list.map((r) =>
-                r.id === ph.id ? { ...r, dataUrl: status.url ?? "", isFinal: true } : r,
-              ),
-            );
-            return;
-          }
-          if (status.status === "failed") throw new Error(status.error ?? "Video failed");
-        }
-        throw new Error("Video generation timed out");
+        setResults((list) =>
+          list.map((r) => (r.id === ph.id ? { ...r, dataUrl: res.url ?? "", isFinal: true } : r)),
+        );
+        return;
       }
 
       // Image / Vector
@@ -415,16 +398,14 @@ export function PromptComposer() {
       await Promise.all(
         placeholders.map(async (ph, i) => {
           try {
-            const res = await generateImage({
-              data: {
-                prompt: promptWithStyle(
-                  active === "Vector" ? `${prompt}. flat vector illustration, clean shapes` : prompt,
-                ),
-                model: model.id,
-                aspect: ratio.label,
-                seed: nextSeed + i,
-                referenceUrls: urls,
-              },
+            const res = await runJob("image", prompt, {
+              prompt: promptWithStyle(
+                active === "Vector" ? `${prompt}. flat vector illustration, clean shapes` : prompt,
+              ),
+              model: model.id,
+              aspect: ratio.label,
+              seed: nextSeed + i,
+              referenceUrls: urls,
             });
             setResults((list) =>
               list.map((r) => (r.id === ph.id ? { ...r, dataUrl: res.url ?? "", isFinal: true } : r)),

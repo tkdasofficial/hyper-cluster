@@ -26,6 +26,7 @@ import { Route as AuthenticatedGettingReadyRouteImport } from './routes/_authent
 import { Route as ApiGenerateImageRouteImport } from './routes/api/generate-image'
 import { Route as VirtualModelIndexRouteImport } from './routes/virtual-model.index'
 import { Route as VirtualModelCreateModelRouteImport } from './routes/virtual-model.create-model'
+import { Route as ApiPublicJobsWorkerRouteImport } from './routes/api/public/jobs/worker'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -112,6 +113,11 @@ const VirtualModelCreateModelRoute = VirtualModelCreateModelRouteImport.update({
   path: '/virtual-model/create-model',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicJobsWorkerRoute = ApiPublicJobsWorkerRouteImport.update({
+  id: '/api/public/jobs/worker',
+  path: '/api/public/jobs/worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/api/generate-image': typeof ApiGenerateImageRoute
   '/virtual-model/create-model': typeof VirtualModelCreateModelRoute
   '/virtual-model/': typeof VirtualModelIndexRoute
+  '/api/public/jobs/worker': typeof ApiPublicJobsWorkerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/api/generate-image': typeof ApiGenerateImageRoute
   '/virtual-model/create-model': typeof VirtualModelCreateModelRoute
   '/virtual-model': typeof VirtualModelIndexRoute
+  '/api/public/jobs/worker': typeof ApiPublicJobsWorkerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/api/generate-image': typeof ApiGenerateImageRoute
   '/virtual-model/create-model': typeof VirtualModelCreateModelRoute
   '/virtual-model/': typeof VirtualModelIndexRoute
+  '/api/public/jobs/worker': typeof ApiPublicJobsWorkerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/api/generate-image'
     | '/virtual-model/create-model'
     | '/virtual-model/'
+    | '/api/public/jobs/worker'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/api/generate-image'
     | '/virtual-model/create-model'
     | '/virtual-model'
+    | '/api/public/jobs/worker'
   id:
     | '__root__'
     | '/'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/api/generate-image'
     | '/virtual-model/create-model'
     | '/virtual-model/'
+    | '/api/public/jobs/worker'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -243,6 +255,7 @@ export interface RootRouteChildren {
   ApiGenerateImageRoute: typeof ApiGenerateImageRoute
   VirtualModelCreateModelRoute: typeof VirtualModelCreateModelRoute
   VirtualModelIndexRoute: typeof VirtualModelIndexRoute
+  ApiPublicJobsWorkerRoute: typeof ApiPublicJobsWorkerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -366,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VirtualModelCreateModelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/worker': {
+      id: '/api/public/jobs/worker'
+      path: '/api/public/jobs/worker'
+      fullPath: '/api/public/jobs/worker'
+      preLoaderRoute: typeof ApiPublicJobsWorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -398,6 +418,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiGenerateImageRoute: ApiGenerateImageRoute,
   VirtualModelCreateModelRoute: VirtualModelCreateModelRoute,
   VirtualModelIndexRoute: VirtualModelIndexRoute,
+  ApiPublicJobsWorkerRoute: ApiPublicJobsWorkerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
