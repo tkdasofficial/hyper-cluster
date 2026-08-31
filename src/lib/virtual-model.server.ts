@@ -11,6 +11,8 @@ import {
 } from "@/lib/storage.server";
 import {
   consistencyProfile,
+  denoiseStrength,
+  framingNegative,
   IDENTITY_NEGATIVE,
   MODEL_VIEWS,
   referenceViewForShot,
@@ -117,7 +119,7 @@ export async function buildCharacterProfile(
       height: size.height,
       seed: viewSeed(seed, view.id),
       steps: profile.steps,
-      guidance: profile.guidance,
+      guidance: Math.min(profile.guidance, 8.5),
     };
 
     // Body views are conditioned on the anchor face. If the image-to-image
@@ -126,15 +128,23 @@ export async function buildCharacterProfile(
     // headshot.
     let providerUrl: string;
     if (reference) {
+      // A head-and-shoulders anchor cannot be nudged into a head-to-toe frame
+      // at portrait denoise levels, so body views need much more freedom.
+      const strength = view.portrait
+        ? profile.strength
+        : view.reference === "headshot"
+          ? 0.82
+          : 0.6;
       try {
         providerUrl = await pixazoImage({
           ...base,
           imageUrl: reference,
-          strength: profile.strength,
+          strength,
         });
       } catch {
         providerUrl = await pixazoImage(base);
       }
+
     } else {
       providerUrl = await pixazoImage(base);
     }
@@ -219,18 +229,29 @@ export async function renderCharacterImage(
   // body shot inherits proportions and a close-up inherits the face.
   const wanted = referenceViewForShot(input.shot);
   const available = input.images ?? [];
+  const matched = available.find((i) => i.view === wanted)?.path ?? null;
   const referencePath =
-    available.find((i) => i.view === wanted)?.path ??
+    matched ??
+    available.find((i) => i.view === "front-full")?.path ??
     available.find((i) => i.view === "headshot")?.path ??
     input.headshotPath ??
     available[0]?.path ??
     null;
+  const referenceView: ViewId = matched
+    ? wanted
+    : ((available.find((i) => i.path === referencePath)?.view as ViewId | undefined) ?? "headshot");
 
   const reference = referencePath ? await referenceUrl(MODELS_BUCKET, referencePath) : null;
   const { width, height } = sizeForAspect(input.aspect ?? "4:5");
   const faceLock = input.faceLock ?? true;
   const profile = consistencyProfile(input.consistency ?? 92);
   const variation = input.variation ?? 0;
+  const strength = denoiseStrength({
+    shot: input.shot,
+    referenceView,
+    faceLock,
+    consistency: input.consistency,
+  });
 
   const providerUrl = await pixazoImage({
     prompt: renderPrompt({
@@ -238,24 +259,23 @@ export async function renderCharacterImage(
       prompt: input.prompt,
       faceLock,
       detail: input.detail ?? 85,
+      shot: input.shot,
       style: input.style,
     }),
-    negativePrompt: [input.negativePrompt, IDENTITY_NEGATIVE].filter(Boolean).join(", "),
-    ...(reference
-      ? {
-          imageUrl: reference,
-          // A locked face keeps the denoise even tighter than the dial alone.
-          strength: faceLock ? Math.min(profile.strength, 0.45) : profile.strength,
-        }
-      : {}),
+    negativePrompt: [input.negativePrompt, framingNegative(input.shot), IDENTITY_NEGATIVE]
+      .filter(Boolean)
+      .join(", "),
+    ...(reference ? { imageUrl: reference, strength } : {}),
     width,
     height,
     // Same identity seed, offset per variation so a batch differs in pose and
     // framing without becoming a different person.
-    seed: viewSeed(input.seed, `render-${variation}`),
+    seed: viewSeed(input.seed, `render-${variation}-${input.shot ?? ""}-${input.prompt.length}`),
     steps: profile.steps,
-    guidance: profile.guidance,
+    // Very high guidance burns detail on this sampler and fights the prompt.
+    guidance: Math.min(profile.guidance, 8.5),
   });
+
 
   const path = await uploadFromUrl(GENERATIONS_BUCKET, userId, providerUrl);
   const { data: row, error } = await supabaseAdmin
@@ -270,7 +290,8 @@ export async function renderCharacterImage(
       virtual_model_id: input.modelId,
       params: {
         aspect: input.aspect ?? "4:5",
-        referenceView: available.some((i) => i.path === referencePath) ? wanted : "headshot",
+        referenceView,
+        strength,
         consistency: input.consistency ?? 92,
         faceLock,
       },
