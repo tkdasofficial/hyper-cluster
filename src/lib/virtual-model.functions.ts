@@ -2,24 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { VirtualModelImage, VirtualModelRecord } from "@/lib/virtual-model.shared";
 
-/** Creates a character and generates its six-view profile with a locked seed. */
-export const createVirtualModel = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (input: {
-      name: string;
-      description: string;
-      identityPrompt: string;
-      seed?: number;
-      consistency?: number;
-    }) => input,
-  )
-  .handler(async ({ data, context }) => {
-    const { buildCharacterProfile } = await import("@/lib/virtual-model.server");
-    return buildCharacterProfile(context.userId, data);
-  });
-
-
 export const listVirtualModels = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<VirtualModelRecord[]> => {
@@ -69,47 +51,5 @@ export const deleteVirtualModel = createServerFn({ method: "POST" })
     const paths = ((row?.images as VirtualModelImage[] | null) ?? []).map((i) => i.path);
     await storage.removeFiles(storage.MODELS_BUCKET, paths);
     return { ok: true };
-  });
-
-/** Generates a new image of an existing character, conditioned on its profile set. */
-export const generateWithVirtualModel = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (input: {
-      modelId: string;
-      prompt: string;
-      negativePrompt?: string;
-      aspect?: string;
-      shot?: string;
-      consistency?: number;
-      detail?: number;
-      faceLock?: boolean;
-      variation?: number;
-    }) => input,
-  )
-  .handler(async ({ data, context }) => {
-    const { renderCharacterImage } = await import("@/lib/virtual-model.server");
-    const { data: model, error } = await context.supabase
-      .from("virtual_models")
-      .select("id, identity_prompt, seed, headshot_path, images")
-      .eq("id", data.modelId)
-      .single();
-    if (error) throw new Error(error.message);
-
-    return renderCharacterImage(context.userId, {
-      modelId: model.id,
-      identityPrompt: model.identity_prompt,
-      seed: Number(model.seed),
-      headshotPath: model.headshot_path,
-      images: (model.images as VirtualModelImage[] | null) ?? [],
-      prompt: data.prompt,
-      ...(data.negativePrompt === undefined ? {} : { negativePrompt: data.negativePrompt }),
-      ...(data.aspect === undefined ? {} : { aspect: data.aspect }),
-      ...(data.shot === undefined ? {} : { shot: data.shot }),
-      ...(data.consistency === undefined ? {} : { consistency: data.consistency }),
-      ...(data.detail === undefined ? {} : { detail: data.detail }),
-      ...(data.faceLock === undefined ? {} : { faceLock: data.faceLock }),
-      ...(data.variation === undefined ? {} : { variation: data.variation }),
-    });
   });
 

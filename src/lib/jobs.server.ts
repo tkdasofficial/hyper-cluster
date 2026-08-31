@@ -342,9 +342,6 @@ export async function runCharacterImage(userId: string, data: Record<string, unk
     .single();
   if (error) throw new Error(error.message);
 
-  const { VirtualModelImages } = { VirtualModelImages: null } as { VirtualModelImages: null };
-  void VirtualModelImages;
-
   return renderCharacterImage(userId, {
     modelId: model.id,
     identityPrompt: model.identity_prompt,

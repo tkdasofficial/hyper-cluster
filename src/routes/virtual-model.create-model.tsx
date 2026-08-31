@@ -4,7 +4,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
 import { Chips, Panel, Segment, SliderRow, TextRow } from "@/components/hyper/StudioControls";
-import { createVirtualModel } from "@/lib/virtual-model.functions";
+import { runJob } from "@/lib/jobs-runner";
 
 export const Route = createFileRoute("/virtual-model/create-model")({
   head: () => ({
@@ -72,13 +72,11 @@ function CreateModel() {
 
   const create = useMutation({
     mutationFn: () =>
-      createVirtualModel({
-        data: {
-          name: name.trim() || "New model",
-          description: `${gender} · ${age} · ${height}cm · ${body} · ${styleMode}`,
-          identityPrompt: identityPrompt(),
-          consistency,
-        },
+      runJob("virtual-model", name.trim() || "New model", {
+        name: name.trim() || "New model",
+        description: `${gender} · ${age} · ${height}cm · ${body} · ${styleMode}`,
+        identityPrompt: identityPrompt(),
+        consistency,
       }),
     onSuccess: () => {
       toast.success(`${name.trim() || "New model"} created`, {

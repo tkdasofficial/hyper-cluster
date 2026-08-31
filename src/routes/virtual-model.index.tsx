@@ -14,7 +14,8 @@ import {
 } from "@/components/hyper/StudioControls";
 import { ModelRail, type VirtualModel } from "@/components/hyper/ModelRail";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
-import { generateWithVirtualModel, listVirtualModels } from "@/lib/virtual-model.functions";
+import { listVirtualModels } from "@/lib/virtual-model.functions";
+import { runJob } from "@/lib/jobs-runner";
 
 export const Route = createFileRoute("/virtual-model/")({
   head: () => ({
@@ -97,18 +98,16 @@ function VirtualModelStudio() {
   const render = useMutation({
     mutationFn: async () => {
       const runs = Array.from({ length: count }, (_, i) =>
-        generateWithVirtualModel({
-          data: {
-            modelId: selected!,
-            prompt: scenePrompt(),
-            negativePrompt: negative.trim(),
-            aspect: ratio,
-            shot,
-            consistency,
-            detail,
-            faceLock,
-            variation: i,
-          },
+        runJob("character-image", scenePrompt(), {
+          modelId: selected!,
+          prompt: scenePrompt(),
+          negativePrompt: negative.trim(),
+          aspect: ratio,
+          shot,
+          consistency,
+          detail,
+          faceLock,
+          variation: i,
         }),
       );
       return Promise.all(runs);

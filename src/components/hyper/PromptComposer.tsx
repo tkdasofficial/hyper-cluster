@@ -21,7 +21,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { uploadReference } from "@/lib/generation.functions";
-import { runJob } from "@/lib/jobs.client";
+import { runJob } from "@/lib/jobs-runner";
 import {
   SPEECH_TONES,
   TTS_MODELS,

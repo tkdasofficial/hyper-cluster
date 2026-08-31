@@ -23,9 +23,13 @@ function json(body: unknown, status = 200) {
 }
 
 async function authorize(request: Request) {
-  const secret = process.env["JOBS_WORKER_SECRET"];
+  // Scheduled runs present a token that lives only in the database vault.
   const provided = request.headers.get("x-worker-secret");
-  if (secret && provided && provided === secret) return true;
+  if (provided) {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin.rpc("verify_worker_token", { p_token: provided });
+    if (data === true) return true;
+  }
 
   const auth = request.headers.get("authorization");
   if (auth?.startsWith("Bearer ")) {
