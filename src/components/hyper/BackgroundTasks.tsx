@@ -59,7 +59,8 @@ export function BackgroundTasks() {
   const list = jobs ?? [];
   const active = list.filter((j) => j.status === "queued" || j.status === "running");
 
-  if (!list.length) return null;
+  // Only surface the tray while work is actually in flight.
+  if (!active.length) return null;
 
   return (
     <div className="fixed bottom-5 right-5 z-40">
