@@ -113,7 +113,7 @@ function VideoStudio() {
   const [model, setModel] = useState<(typeof models)[number]>(models[0]);
   const [ratio, setRatio] = useState<(typeof ratios)[number]>(ratios[0]);
   const [res, setRes] = useState<string>(resolutions[1] ?? "720p");
-  const [duration, setDuration] = useState<string>(durations[2] ?? "8s");
+  const [duration, setDuration] = useState<string>("5s");
   const [fps, setFps] = useState<string>(frameRates[0] ?? "24 fps");
   const [camera, setCamera] = useState<(typeof cameraMoves)[number]>(cameraMoves[0]);
   const [motion, setMotion] = useState(55);
