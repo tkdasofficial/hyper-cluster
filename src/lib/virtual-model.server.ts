@@ -109,8 +109,7 @@ export async function buildCharacterProfile(
     }
     const size = view.portrait ? PORTRAIT_SIZE : BODY_SIZE;
     const reference = view.reference ? refUrls.get(view.reference) : undefined;
-
-    const providerUrl = await pixazoImage({
+    const base = {
       prompt: viewPrompt(input.identityPrompt, view.instruction, input.style),
       negativePrompt: IDENTITY_NEGATIVE,
       width: size.width,
@@ -118,8 +117,27 @@ export async function buildCharacterProfile(
       seed: viewSeed(seed, view.id),
       steps: profile.steps,
       guidance: profile.guidance,
-      ...(reference ? { imageUrl: reference, strength: profile.strength } : {}),
-    });
+    };
+
+    // Body views are conditioned on the anchor face. If the image-to-image
+    // provider rejects the request, fall back to a prompt-only render so the
+    // profile still ends up with all five views instead of stopping at the
+    // headshot.
+    let providerUrl: string;
+    if (reference) {
+      try {
+        providerUrl = await pixazoImage({
+          ...base,
+          imageUrl: reference,
+          strength: profile.strength,
+        });
+      } catch {
+        providerUrl = await pixazoImage(base);
+      }
+    } else {
+      providerUrl = await pixazoImage(base);
+    }
+
 
     const path = await uploadFromUrl(MODELS_BUCKET, userId, providerUrl);
     paths.set(view.id, path);
