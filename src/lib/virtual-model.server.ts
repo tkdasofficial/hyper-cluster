@@ -44,24 +44,54 @@ export async function buildCharacterProfile(
     seed?: number | undefined;
     consistency?: number | undefined;
     style?: string | undefined;
+    jobId?: string | undefined;
   },
 ) {
-  const seed = input.seed ?? Math.floor(Math.random() * 1_000_000);
-  const profile = consistencyProfile(input.consistency ?? 92);
+  const profileFor = (s: number) => consistencyProfile(s);
 
-  const { data: row, error } = await supabaseAdmin
-    .from("virtual_models")
-    .insert({
-      user_id: userId,
-      name: input.name,
-      description: input.description,
-      identity_prompt: input.identityPrompt,
-      seed,
-      status: "running",
-    })
-    .select("id")
-    .single();
-  if (error) throw new Error(error.message);
+  // One profile row per background task: a retried task resumes the same row
+  // instead of creating a second half-built character.
+  let row: { id: string } | null = null;
+  let seed = input.seed ?? Math.floor(Math.random() * 1_000_000);
+  let existing: VirtualModelImage[] = [];
+
+  if (input.jobId) {
+    const { data: prior } = await supabaseAdmin
+      .from("virtual_models")
+      .select("id, seed, images")
+      .eq("job_id", input.jobId)
+      .maybeSingle();
+    if (prior) {
+      row = { id: prior.id };
+      seed = Number(prior.seed) || seed;
+      existing = ((prior.images as VirtualModelImage[] | null) ?? []).filter((i) => i.path);
+      await supabaseAdmin
+        .from("virtual_models")
+        .update({ status: "running", error: null })
+        .eq("id", prior.id);
+    }
+  }
+
+  if (!row) {
+    const { data: created, error } = await supabaseAdmin
+      .from("virtual_models")
+      .insert({
+        user_id: userId,
+        name: input.name,
+        description: input.description,
+        identity_prompt: input.identityPrompt,
+        seed,
+        status: "running",
+        job_id: input.jobId ?? null,
+      })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    row = { id: created.id };
+  }
+
+  const profile = profileFor(input.consistency ?? 92);
+
 
   const images: VirtualModelImage[] = [];
   const paths = new Map<ViewId, string>();
