@@ -196,6 +196,7 @@ export type Database = {
           id: string
           identity_prompt: string
           images: Json
+          job_id: string | null
           name: string
           seed: number
           status: string
@@ -210,6 +211,7 @@ export type Database = {
           id?: string
           identity_prompt?: string
           images?: Json
+          job_id?: string | null
           name: string
           seed?: number
           status?: string
@@ -224,6 +226,7 @@ export type Database = {
           id?: string
           identity_prompt?: string
           images?: Json
+          job_id?: string | null
           name?: string
           seed?: number
           status?: string
