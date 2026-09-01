@@ -69,7 +69,7 @@ export async function runImage(
     style && style.toLowerCase() !== "none"
       ? `${style} visual style, style influence ${styleStrength} percent`
       : "",
-    referenceModes.length
+    refs.length && referenceModes.length
       ? `Use the supplied image as ${referenceModes.join(", ").toLowerCase()} guidance with ${Math.max(0, Math.min(100, data.referenceWeight ?? 50))} percent influence`
       : "",
     `compose strictly for a ${aspect} canvas`,
