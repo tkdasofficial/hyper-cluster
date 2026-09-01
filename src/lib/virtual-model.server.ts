@@ -265,27 +265,32 @@ export async function renderCharacterImage(
     consistency: input.consistency,
   });
 
-  const providerUrl = await pixazoImage({
-    prompt: renderPrompt({
-      identityPrompt: input.identityPrompt,
-      prompt: input.prompt,
-      faceLock,
-      detail: input.detail ?? 85,
-      shot: input.shot,
-      style: input.style,
-      scene: input.scene,
-    }),
-    negativePrompt: [
-      input.negativePrompt,
-      input.scene ? sceneNegative(input.scene) : "",
-      framingNegative(input.shot),
-      IDENTITY_NEGATIVE,
-    ]
-      .filter(Boolean)
-      .join(", "),
-    ...(reference ? { imageUrl: reference, strength } : {}),
+  const prompt = renderPrompt({
+    identityPrompt: input.identityPrompt,
+    prompt: input.prompt,
+    faceLock,
+    detail: input.detail ?? 85,
+    shot: input.shot,
+    style: input.style,
+    scene: input.scene,
+  });
+  const negative = [
+    input.negativePrompt,
+    input.scene ? sceneNegative(input.scene) : "",
+    framingNegative(input.shot),
+    IDENTITY_NEGATIVE,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const providerUrl = await identityRender({
+    prompt,
+    negative,
+    reference,
+    aspect: input.aspect ?? "4:5",
     width,
     height,
+    strength,
     // Same identity seed, offset per variation so a batch differs in pose and
     // framing without becoming a different person.
     seed: viewSeed(input.seed, `render-${variation}-${input.shot ?? ""}-${input.prompt.length}`),
