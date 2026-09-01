@@ -111,14 +111,10 @@ function VirtualModelStudio() {
   const [faceLock, setFaceLock] = useState(true);
 
   const model = models.find((m) => m.id === selected) ?? null;
-  const scenePrompt = () =>
-    [
-      prompt.trim(),
-      outfit.length ? `wearing ${outfit.join(", ").toLowerCase()}` : "",
-      acc.length ? `with ${acc.join(", ").toLowerCase()}` : "",
-    ]
-      .filter(Boolean)
-      .join(", ");
+  // Wardrobe, scene, camera and output settings are sent as structured fields
+  // and turned into prompt clauses server-side, so each control has real effect.
+  const scenePrompt = () => prompt.trim();
+
 
   const render = useMutation({
     mutationFn: async () => {
