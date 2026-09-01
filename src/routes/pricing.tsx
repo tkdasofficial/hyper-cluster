@@ -19,8 +19,10 @@ export const Route = createFileRoute("/pricing")({
         content: "Starter, Pro and Studio plans for image, video, vector and audio generation.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hypercopilot.vercel.app/pricing" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/pricing" }],
   }),
   component: PricingPage,
 });

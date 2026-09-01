@@ -17,8 +17,10 @@ export const Route = createFileRoute("/privacy")({
         content: "What we collect, how prompts and references are handled, and your data controls.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hypercopilot.vercel.app/privacy" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/privacy" }],
   }),
   component: PrivacyPage,
 });

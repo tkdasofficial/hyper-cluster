@@ -17,8 +17,10 @@ export const Route = createFileRoute("/terms")({
         content: "Acceptable use, output ownership and account rules for Hyper Copilot.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hypercopilot.vercel.app/terms" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/terms" }],
   }),
   component: TermsPage,
 });
