@@ -17,6 +17,9 @@ import {
   MODEL_VIEWS,
   referenceViewForShot,
   renderPrompt,
+  resolutionBase,
+  sceneNegative,
+  type SceneSettings,
   viewPrompt,
   viewSeed,
   type ViewId,
@@ -223,6 +226,8 @@ export async function renderCharacterImage(
     faceLock?: boolean | undefined;
     variation?: number | undefined;
     style?: string | undefined;
+    scene?: SceneSettings | undefined;
+    upscale?: boolean | undefined;
   },
 ) {
   // Condition on the profile view that matches the requested framing, so a full
@@ -242,7 +247,10 @@ export async function renderCharacterImage(
     : ((available.find((i) => i.path === referencePath)?.view as ViewId | undefined) ?? "headshot");
 
   const reference = referencePath ? await referenceUrl(MODELS_BUCKET, referencePath) : null;
-  const { width, height } = sizeForAspect(input.aspect ?? "4:5");
+  const { width, height } = sizeForAspect(
+    input.aspect ?? "4:5",
+    resolutionBase(input.scene?.resolution),
+  );
   const faceLock = input.faceLock ?? true;
   const profile = consistencyProfile(input.consistency ?? 92);
   const variation = input.variation ?? 0;
@@ -261,8 +269,14 @@ export async function renderCharacterImage(
       detail: input.detail ?? 85,
       shot: input.shot,
       style: input.style,
+      scene: input.scene,
     }),
-    negativePrompt: [input.negativePrompt, framingNegative(input.shot), IDENTITY_NEGATIVE]
+    negativePrompt: [
+      input.negativePrompt,
+      input.scene ? sceneNegative(input.scene) : "",
+      framingNegative(input.shot),
+      IDENTITY_NEGATIVE,
+    ]
       .filter(Boolean)
       .join(", "),
     ...(reference ? { imageUrl: reference, strength } : {}),
@@ -271,7 +285,8 @@ export async function renderCharacterImage(
     // Same identity seed, offset per variation so a batch differs in pose and
     // framing without becoming a different person.
     seed: viewSeed(input.seed, `render-${variation}-${input.shot ?? ""}-${input.prompt.length}`),
-    steps: profile.steps,
+    // Auto upscale trades time for extra refinement passes.
+    steps: Math.min(input.upscale === false ? profile.steps : profile.steps + 10, 60),
     // Very high guidance burns detail on this sampler and fights the prompt.
     guidance: Math.min(profile.guidance, 8.5),
   });

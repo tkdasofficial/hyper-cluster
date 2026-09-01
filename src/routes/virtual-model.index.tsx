@@ -111,19 +111,10 @@ function VirtualModelStudio() {
   const [faceLock, setFaceLock] = useState(true);
 
   const model = models.find((m) => m.id === selected) ?? null;
-  const scenePrompt = () =>
-    [
-      prompt.trim(),
-      outfit.length ? `wearing ${outfit.join(", ").toLowerCase()}` : "",
-      acc.length ? `with ${acc.join(", ").toLowerCase()}` : "",
-      `${bg.toLowerCase()} background`,
-      `${light.toLowerCase()} lighting`,
-      `${shot.toLowerCase()} shot`,
-      `${lens} lens`,
-      `${res} resolution, ultra detailed`,
-    ]
-      .filter(Boolean)
-      .join(", ");
+  // Wardrobe, scene, camera and output settings are sent as structured fields
+  // and turned into prompt clauses server-side, so each control has real effect.
+  const scenePrompt = () => prompt.trim();
+
 
   const render = useMutation({
     mutationFn: async () => {
@@ -138,6 +129,14 @@ function VirtualModelStudio() {
           detail,
           faceLock,
           variation: i,
+          outfit,
+          accessories: acc,
+          background: bg,
+          lighting: light,
+          lens,
+          depth,
+          resolution: res,
+          upscale,
         }),
       );
       return Promise.all(runs);
