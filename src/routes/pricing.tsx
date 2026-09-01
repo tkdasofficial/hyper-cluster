@@ -21,7 +21,6 @@ export const Route = createFileRoute("/pricing")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://hypercopilot.vercel.app/pricing" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/pricing" }],
   }),

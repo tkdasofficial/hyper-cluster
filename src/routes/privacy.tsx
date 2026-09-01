@@ -19,7 +19,6 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://hypercopilot.vercel.app/privacy" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/privacy" }],
   }),
