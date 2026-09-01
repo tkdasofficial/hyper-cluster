@@ -22,22 +22,36 @@ import { useSession } from "@/hooks/useSession";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hyper Copilot — Generative AI Studio for Image, Video & Audio" },
+      { title: "Hyper Copilot — Multi-Modal AI Generator" },
       {
         name: "description",
         content:
-          "Hyper Copilot turns one prompt into photoreal images, cinematic video, vectors and audio. Virtual models, generative fill, 8K upscaling and commercially safe output.",
+          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
-      { property: "og:title", content: "Hyper Copilot — Generative AI Studio" },
+      { property: "og:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
       {
         property: "og:description",
         content:
-          "One prompt box for image, video, vector and audio models — built for teams that ship.",
+          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hypercopilot.vercel.app/" },
+      { property: "og:image", content: "https://hypercopilot.vercel.app/og-image.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Hyper Copilot generative AI studio" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
+      {
+        name: "twitter:description",
+        content:
+          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+      },
+      { name: "twitter:image", content: "https://hypercopilot.vercel.app/og-image.png" },
     ],
+    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/" }],
   }),
+
   component: Landing,
 });
 
