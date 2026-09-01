@@ -47,6 +47,10 @@ export async function uploadFromUrl(
   userId: string,
   url: string,
 ): Promise<string> {
+  if (url.startsWith("data:")) {
+    const { bytes, contentType } = dataUrlToBytes(url);
+    return uploadBytes(bucket, userId, bytes, contentType);
+  }
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Could not download the generated file (${res.status})`);
   const contentType = res.headers.get("content-type") ?? "application/octet-stream";
