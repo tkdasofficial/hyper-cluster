@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Tushar Kanti Das" },
       { name: "creator", content: "Tushar Kanti Das" },
-      { name: "publisher", content: "Avzio" },
+      { name: "publisher", content: "Tushar Kanti Das" },
       { name: "theme-color", content: "#111111" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "Hyper Copilot" },
@@ -146,10 +146,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               description:
                 "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               publisher: {
-                "@type": "Organization",
-                name: "Avzio",
+                "@type": "Person",
+                name: "Tushar Kanti Das",
                 url: "https://hypercopilot.vercel.app/",
-                logo: "https://hypercopilot.vercel.app/icon-512.png",
               },
             },
             {
@@ -176,8 +175,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               creator: { "@type": "Person", name: "Tushar Kanti Das" },
               author: { "@type": "Person", name: "Tushar Kanti Das" },
               publisher: {
-                "@type": "Organization",
-                name: "Avzio",
+                "@type": "Person",
+                name: "Tushar Kanti Das",
                 url: "https://hypercopilot.vercel.app/",
               },
               isPartOf: { "@id": "https://hypercopilot.vercel.app/#website" },
