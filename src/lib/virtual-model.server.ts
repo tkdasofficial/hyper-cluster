@@ -1,7 +1,7 @@
 /** Server-only character generation pipeline. */
 
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { pixazoImage, sizeForAspect } from "@/lib/providers.server";
+import { lovableGeminiImage, pixazoImage, sizeForAspect } from "@/lib/providers.server";
 import {
   GENERATIONS_BUCKET,
   MODELS_BUCKET,
@@ -129,28 +129,23 @@ export async function buildCharacterProfile(
     // provider rejects the request, fall back to a prompt-only render so the
     // profile still ends up with all five views instead of stopping at the
     // headshot.
-    let providerUrl: string;
-    if (reference) {
-      // A head-and-shoulders anchor cannot be nudged into a head-to-toe frame
-      // at portrait denoise levels, so body views need much more freedom.
-      const strength = view.portrait
-        ? profile.strength
-        : view.reference === "headshot"
-          ? 0.82
-          : 0.6;
-      try {
-        providerUrl = await pixazoImage({
-          ...base,
-          imageUrl: reference,
-          strength,
-        });
-      } catch {
-        providerUrl = await pixazoImage(base);
-      }
-
-    } else {
-      providerUrl = await pixazoImage(base);
-    }
+    const strength = view.portrait
+      ? profile.strength
+      : view.reference === "headshot"
+        ? 0.82
+        : 0.6;
+    const providerUrl = await identityRender({
+      prompt: base.prompt,
+      negative: IDENTITY_NEGATIVE,
+      reference: reference ?? null,
+      aspect: view.portrait ? "4:5" : "9:16",
+      width: base.width,
+      height: base.height,
+      strength,
+      seed: base.seed,
+      steps: base.steps,
+      guidance: base.guidance,
+    });
 
 
     const path = await uploadFromUrl(MODELS_BUCKET, userId, providerUrl);
@@ -211,6 +206,83 @@ export async function buildCharacterProfile(
     .eq("id", row.id);
 
   return { id: row.id };
+}
+
+/**
+ * Renders an image that must keep a character's identity.
+ *
+ * The Pixazo inpainting endpoint ignores the prompt when it is handed a source
+ * image — it simply returns the reference photo re-framed, which is why every
+ * "full body" render came back as the profile picture. Reference-conditioned
+ * renders therefore go to the gateway image model, which actually edits the
+ * reference (new pose, wardrobe, scene, framing) while holding the face. The
+ * Pixazo path stays as a fallback so a gateway outage still produces an image.
+ */
+async function identityRender(input: {
+  prompt: string;
+  negative: string;
+  reference: string | null;
+  aspect: string;
+  width: number;
+  height: number;
+  strength: number;
+  seed: number;
+  steps: number;
+  guidance: number;
+}): Promise<string> {
+  if (input.reference) {
+    const inlined = await inlineReference(input.reference);
+    try {
+      return await lovableGeminiImage({
+        prompt: [
+          input.prompt,
+          `output image aspect ratio ${input.aspect}, roughly ${input.width}x${input.height} pixels`,
+          "Use the attached reference image only as the identity of the person: keep the same face, hair and body. Everything else (pose, framing, wardrobe, background, lighting) must follow the directions above. Do not return the reference image unchanged.",
+          input.negative ? `Avoid: ${input.negative}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n\n"),
+        imageUrls: [inlined],
+      });
+    } catch {
+      return pixazoImage({
+        prompt: input.prompt,
+        negativePrompt: input.negative,
+        imageUrl: input.reference,
+        strength: input.strength,
+        width: input.width,
+        height: input.height,
+        seed: input.seed,
+        steps: input.steps,
+        guidance: input.guidance,
+      });
+    }
+  }
+  return pixazoImage({
+    prompt: input.prompt,
+    negativePrompt: input.negative,
+    width: input.width,
+    height: input.height,
+    seed: input.seed,
+    steps: input.steps,
+    guidance: input.guidance,
+  });
+}
+
+/** Inlines a signed reference URL so the gateway always receives the bytes. */
+async function inlineReference(url: string): Promise<string> {
+  if (url.startsWith("data:")) return url;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return url;
+    const contentType = res.headers.get("content-type") ?? "image/jpeg";
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let binary = "";
+    for (let i = 0; i < buf.length; i += 1) binary += String.fromCharCode(buf[i] as number);
+    return `data:${contentType};base64,${btoa(binary)}`;
+  } catch {
+    return url;
+  }
 }
 
 export async function renderCharacterImage(
