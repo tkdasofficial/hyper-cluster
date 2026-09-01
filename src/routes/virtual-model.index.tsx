@@ -116,11 +116,6 @@ function VirtualModelStudio() {
       prompt.trim(),
       outfit.length ? `wearing ${outfit.join(", ").toLowerCase()}` : "",
       acc.length ? `with ${acc.join(", ").toLowerCase()}` : "",
-      `${bg.toLowerCase()} background`,
-      `${light.toLowerCase()} lighting`,
-      `${shot.toLowerCase()} shot`,
-      `${lens} lens`,
-      `${res} resolution, ultra detailed`,
     ]
       .filter(Boolean)
       .join(", ");
@@ -138,6 +133,14 @@ function VirtualModelStudio() {
           detail,
           faceLock,
           variation: i,
+          outfit,
+          accessories: acc,
+          background: bg,
+          lighting: light,
+          lens,
+          depth,
+          resolution: res,
+          upscale,
         }),
       );
       return Promise.all(runs);

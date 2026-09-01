@@ -329,6 +329,10 @@ export async function runMusic(
 
 /* ------------------------------------------------------------- characters */
 
+function asStringList(v: unknown): string[] | undefined {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : undefined;
+}
+
 export async function runCharacterImage(userId: string, data: Record<string, unknown>) {
   const { renderCharacterImage } = await import("@/lib/virtual-model.server");
   const modelId = asString(data["modelId"]);
@@ -356,6 +360,16 @@ export async function runCharacterImage(userId: string, data: Record<string, unk
     detail: asNumber(data["detail"]),
     faceLock: asBool(data["faceLock"]),
     variation: asNumber(data["variation"]),
+    upscale: asBool(data["upscale"]),
+    scene: {
+      outfit: asStringList(data["outfit"]),
+      accessories: asStringList(data["accessories"]),
+      background: asString(data["background"]),
+      lighting: asString(data["lighting"]),
+      lens: asString(data["lens"]),
+      depth: asNumber(data["depth"]),
+      resolution: asString(data["resolution"]),
+    },
     // The render style is stored as the last segment of the description.
     style: (model.description ?? "").split("·").pop()?.trim() || undefined,
   });
