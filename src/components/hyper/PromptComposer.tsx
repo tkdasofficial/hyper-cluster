@@ -438,13 +438,15 @@ export function PromptComposer() {
         placeholders.map(async (ph, i) => {
           try {
             const res = await runJob("image", prompt, {
-              prompt: promptWithStyle(
-                active === "Vector" ? `${prompt}. flat vector illustration, clean shapes` : prompt,
-              ),
+              prompt: active === "Vector" ? `${prompt}. flat vector illustration, clean shapes` : prompt,
               model: model.id,
               aspect: ratio.label,
               seed: nextSeed + i,
               referenceUrls: urls,
+              style: style.name,
+              styleStrength: styleStrength[0] ?? 65,
+              referenceModes: modes,
+              referenceWeight: 50,
             });
             setResults((list) =>
               list.map((r) => (r.id === ph.id ? { ...r, dataUrl: res.url ?? "", isFinal: true } : r)),

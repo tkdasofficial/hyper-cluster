@@ -160,7 +160,11 @@ export async function buildCharacterProfile(
     return path;
   };
 
-  const byId = (id: ViewId) => MODEL_VIEWS.find((v) => v.id === id)!;
+  const byId = (id: ViewId) => {
+    const view = MODEL_VIEWS.find((candidate) => candidate.id === id);
+    if (!view) throw new Error(`Missing character view: ${id}`);
+    return view;
+  };
 
   try {
     // Stage 1 — the anchor identity: the face headshot is always rendered first.
@@ -305,6 +309,11 @@ export async function renderCharacterImage(
       virtual_model_id: input.modelId,
       params: {
         aspect: input.aspect ?? "4:5",
+        shot: input.shot ?? "Portrait",
+        detail: input.detail ?? 85,
+        style: input.style ?? null,
+        scene: input.scene ?? null,
+        upscale: input.upscale ?? true,
         referenceView,
         strength,
         consistency: input.consistency ?? 92,

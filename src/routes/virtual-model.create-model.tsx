@@ -57,15 +57,18 @@ function CreateModel() {
 
   const identityPrompt = () =>
     [
-      `${styleMode.toLowerCase()} portrait of a ${age} year old ${gender.toLowerCase()} fashion model`,
-      `${ethnicity.toLowerCase()} features`,
-      `Fitzpatrick skin tone ${skin}`,
-      `${eye.toLowerCase()} eyes`,
-      `${hairColor.toLowerCase()} ${hair.toLowerCase()} hair`,
-      `${body.toLowerCase()} build`,
-      `${height} cm tall`,
-      traits.length ? traits.join(", ").toLowerCase() : "",
-      persona.trim(),
+      `presentation: ${gender}`,
+      `exact age: ${age} years old`,
+      `ethnic facial features: ${ethnicity}`,
+      `exact Fitzpatrick skin tone: ${skin}`,
+      `exact eye colour: ${eye}`,
+      `exact hairstyle: ${hair}`,
+      `exact hair colour: ${hairColor}`,
+      `body build: ${body}`,
+      `height and proportions: ${height} cm tall`,
+      traits.length ? `required facial traits: ${traits.join(", ")}` : "",
+      persona.trim() ? `persona and visual character: ${persona.trim()}` : "",
+      `required rendering medium: ${styleMode}`,
     ]
       .filter(Boolean)
       .join(", ");

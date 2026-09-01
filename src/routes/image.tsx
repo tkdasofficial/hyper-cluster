@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Plus, X } from "lucide-react";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
 import { Chips, Panel, RatioBlocks, Segment, SliderRow, TextRow } from "@/components/hyper/StudioControls";
 import { RecentCreations } from "@/components/hyper/RecentCreations";
+import { Button } from "@/components/ui/button";
+import { uploadReference } from "@/lib/generation.functions";
+import { runJob } from "@/lib/jobs-runner";
 
 export const Route = createFileRoute("/image")({
   head: () => ({
@@ -42,6 +47,48 @@ function ImageStudio() {
   const [modes, setModes] = useState<string[]>(["Reference"]);
   const [refWeight, setRefWeight] = useState(50);
   const [count, setCount] = useState(4);
+  const [references, setReferences] = useState<{ id: string; name: string; url: string; dataUrl: string }[]>([]);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+
+  const onFiles = (files: FileList | null) => {
+    for (const file of Array.from(files ?? []).slice(0, 4 - references.length)) {
+      const reader = new FileReader();
+      const id = `${file.name}-${file.size}-${Math.random()}`;
+      reader.onload = () => {
+        const dataUrl = String(reader.result ?? "");
+        setReferences((current) => [...current, { id, name: file.name, url: URL.createObjectURL(file), dataUrl }].slice(0, 4));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const generate = useMutation({
+    mutationFn: async () => {
+      const uploaded = await Promise.all(
+        references.map((reference) => uploadReference({ data: { dataUrl: reference.dataUrl } })),
+      );
+      const referenceUrls = uploaded.map((item) => item.url).filter((url): url is string => Boolean(url));
+      return Promise.all(Array.from({ length: count }, (_, index) => runJob("image", prompt.trim(), {
+        prompt: prompt.trim(),
+        negativePrompt: negative.trim(),
+        model: referenceUrls.length ? "hyper-image-flash" : "hyper-image-speed",
+        aspect: ratio,
+        resolution: res,
+        style,
+        styleStrength: strength,
+        referenceModes: modes,
+        referenceWeight: refWeight,
+        referenceUrls,
+        seed: Math.floor(Math.random() * 999999) + index,
+      })));
+    },
+    onSuccess: () => {
+      toast.success(`Generated ${count} render${count === 1 ? "" : "s"}`);
+      void queryClient.invalidateQueries({ queryKey: ["generations"] });
+    },
+    onError: (error) => toast.error(error instanceof Error ? error.message : "Generation failed"),
+  });
 
   return (
     <StudioLayout>
@@ -76,6 +123,22 @@ function ImageStudio() {
         </Panel>
 
         <Panel title="Reference & advanced" summary={modes.join(", ") || "None"}>
+          <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={(event) => { onFiles(event.target.files); event.target.value = ""; }} />
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {references.map((reference) => (
+              <div key={reference.id} className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border">
+                <img src={reference.url} alt={reference.name} className="h-full w-full object-cover" />
+                <Button type="button" variant="secondary" size="icon" aria-label={`Remove ${reference.name}`} onClick={() => setReferences((current) => current.filter((item) => item.id !== reference.id))} className="absolute right-1 top-1 h-6 w-6 rounded-full">
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ))}
+            {references.length < 4 ? (
+              <Button type="button" variant="outline" size="icon" aria-label="Add reference image" onClick={() => fileRef.current?.click()} className="h-16 w-16 shrink-0">
+                <Plus />
+              </Button>
+            ) : null}
+          </div>
           <Chips
             options={refModes}
             values={modes}
@@ -88,19 +151,14 @@ function ImageStudio() {
           <SliderRow label="Variations" value={count} onChange={setCount} min={1} max={8} />
         </Panel>
 
-        <button
+        <Button
           type="button"
-          onClick={() =>
-            prompt.trim()
-              ? toast.success(`Queued ${count} render${count === 1 ? "" : "s"}`, {
-                  description: `${model} · ${ratio} · ${res} · ${style}`,
-                })
-              : toast.error("Describe what you want to create first.")
-          }
-          className="w-full rounded-full bg-primary py-3 text-[14px] font-bold text-primary-foreground transition-opacity hover:opacity-90"
+          disabled={generate.isPending}
+          onClick={() => prompt.trim() ? generate.mutate() : toast.error("Describe what you want to create first.")}
+          className="h-11 w-full rounded-full text-[14px] font-bold"
         >
-          Generate
-        </button>
+          {generate.isPending ? "Generating…" : "Generate"}
+        </Button>
 
         <RecentCreations />
       </div>

@@ -46,20 +46,41 @@ export async function runImage(
     negativePrompt?: string | undefined;
     referenceUrls?: string[] | undefined;
     virtualModelId?: string | undefined;
+    resolution?: string | undefined;
+    style?: string | undefined;
+    styleStrength?: number | undefined;
+    referenceModes?: string[] | undefined;
+    referenceWeight?: number | undefined;
   },
 ) {
   const providers = await import("@/lib/providers.server");
   const storage = await import("@/lib/storage.server");
 
   const aspect = data.aspect ?? "1:1";
-  const { width, height } = providers.sizeForAspect(aspect);
+  const resolutionBase =
+    data.resolution === "1K" ? 896 : data.resolution === "4K" ? 1280 : data.resolution === "8K" ? 1408 : 1088;
+  const { width, height } = providers.sizeForAspect(aspect, resolutionBase);
   const refs = (data.referenceUrls ?? []).filter(Boolean);
+  const styleStrength = Math.max(0, Math.min(100, data.styleStrength ?? 65));
+  const style = data.style?.trim();
+  const referenceModes = (data.referenceModes ?? []).filter(Boolean);
+  const finalPrompt = [
+    data.prompt.trim(),
+    style && style.toLowerCase() !== "none"
+      ? `${style} visual style, style influence ${styleStrength} percent`
+      : "",
+    referenceModes.length
+      ? `Use the supplied image as ${referenceModes.join(", ").toLowerCase()} guidance with ${Math.max(0, Math.min(100, data.referenceWeight ?? 50))} percent influence`
+      : "",
+    `compose strictly for a ${aspect} canvas`,
+    data.resolution ? `${data.resolution} high-detail output` : "",
+  ].filter(Boolean).join(". ");
 
   let storagePath: string;
   try {
     if (data.model === "hyper-image-quality") {
       const dataUrl = await providers.lovableGeminiImage({
-        prompt: data.prompt,
+        prompt: finalPrompt,
         imageUrls: refs,
       });
       const { bytes, contentType } = storage.dataUrlToBytes(dataUrl);
@@ -71,7 +92,7 @@ export async function runImage(
       );
     } else if (data.model === "hyper-image-speed") {
       const url = await providers.pixazoFluxSchnell({
-        prompt: data.prompt,
+        prompt: finalPrompt,
         width,
         height,
         seed: data.seed,
@@ -79,12 +100,15 @@ export async function runImage(
       storagePath = await storage.uploadFromUrl(storage.GENERATIONS_BUCKET, userId, url);
     } else {
       const url = await providers.pixazoImage({
-        prompt: data.prompt,
+        prompt: finalPrompt,
         width,
         height,
         seed: data.seed,
         negativePrompt: data.negativePrompt,
         imageUrl: refs[0],
+        strength: refs[0]
+          ? Number((0.35 + (1 - Math.max(0, Math.min(100, data.referenceWeight ?? 50)) / 100) * 0.5).toFixed(2))
+          : undefined,
       });
       storagePath = await storage.uploadFromUrl(storage.GENERATIONS_BUCKET, userId, url);
     }
@@ -94,7 +118,7 @@ export async function runImage(
       user_id: userId,
       kind: "image",
       model: data.model,
-      prompt: data.prompt,
+      prompt: finalPrompt,
       status: "failed",
       error: message,
       params: { aspect },
@@ -111,7 +135,15 @@ export async function runImage(
       prompt: data.prompt,
       status: "completed",
       storage_path: storagePath,
-      params: { aspect, seed: data.seed ?? null },
+      params: {
+        aspect,
+        resolution: data.resolution ?? "2K",
+        style: style ?? null,
+        styleStrength,
+        referenceModes,
+        referenceWeight: data.referenceWeight ?? null,
+        seed: data.seed ?? null,
+      },
       virtual_model_id: data.virtualModelId ?? null,
     })
     .select("id")

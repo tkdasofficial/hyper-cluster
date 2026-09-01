@@ -118,9 +118,10 @@ function VirtualModelStudio() {
 
   const render = useMutation({
     mutationFn: async () => {
+      if (!selected) throw new Error("Select a model first.");
       const runs = Array.from({ length: count }, (_, i) =>
         runJob("character-image", scenePrompt(), {
-          modelId: selected!,
+          modelId: selected,
           prompt: scenePrompt(),
           negativePrompt: negative.trim(),
           aspect: ratio,
