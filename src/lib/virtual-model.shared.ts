@@ -110,7 +110,16 @@ export const IDENTITY_NEGATIVE =
   "different person, another person, changing face, face swap, inconsistent features, multiple people, twins, deformed face, asymmetric eyes, extra fingers, extra limbs, missing limbs, mutated hands, cropped head, cut off feet, blurry, out of focus, lowres, low quality, jpeg artifacts, plastic skin, waxy skin, uncanny, horror, creepy, watermark, text, logo, signature, collage, split image, distorted proportions";
 
 export function viewPrompt(identityPrompt: string, instruction: string, style?: string) {
-  return `${identityPrompt}. ${instruction}. ${IDENTITY_LOCK}. ${STUDIO_SUFFIX}. ${styleClause(style)}`;
+  return [
+    "MANDATORY CHARACTER SPECIFICATION — follow every listed physical attribute exactly",
+    identityPrompt,
+    "MANDATORY CAMERA VIEW",
+    instruction,
+    IDENTITY_LOCK,
+    STUDIO_SUFFIX,
+    styleClause(style),
+    "one person only; do not replace, generalize, or omit any requested age, presentation, ethnicity, skin, eye, hair, face, height, build, or art-style attribute",
+  ].join(". ");
 }
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
@@ -350,15 +359,16 @@ export function renderPrompt(input: {
         : "soft natural detail";
   const framing = framingClause(input.shot);
   return [
-    framing,
-    input.prompt,
+    "MANDATORY IMAGE DIRECTIONS — follow every selected setting exactly",
+    `SUBJECT ACTION AND COMPOSITION: ${input.prompt}`,
+    `CAMERA FRAMING: ${framing}`,
     ...(input.scene ? sceneClauses(input.scene) : []),
-    input.identityPrompt,
+    `CHARACTER IDENTITY: ${input.identityPrompt}`,
     input.faceLock
       ? "keep the face pixel-faithful to the reference person"
       : "keep the same person as the reference",
     IDENTITY_LOCK_SHORT,
-    framing,
+    `CAMERA FRAMING: ${framing}`,
     detailClause,
     styleClause(input.style),
   ]
