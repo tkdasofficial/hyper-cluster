@@ -225,6 +225,7 @@ export function PromptComposer() {
   const [style, setStyle] = useState(styles[0]!);
   const [styleStrength, setStyleStrength] = useState([65]);
   const [modes, setModes] = useState<string[]>([]);
+  const [referenceWeight, setReferenceWeight] = useState([50]);
   const [refs, setRefs] = useState<
     { id: string; name: string; url: string; dataUrl?: string }[]
   >([]);
@@ -446,7 +447,7 @@ export function PromptComposer() {
               style: style.name,
               styleStrength: styleStrength[0] ?? 65,
               referenceModes: modes,
-              referenceWeight: 50,
+              referenceWeight: referenceWeight[0] ?? 50,
             });
             setResults((list) =>
               list.map((r) => (r.id === ph.id ? { ...r, dataUrl: res.url ?? "", isFinal: true } : r)),
@@ -941,13 +942,22 @@ export function PromptComposer() {
                           <Switch checked={seedLocked} onCheckedChange={setSeedLocked} />
                         </div>
                         {supportsReferences ? (
-                          <button
-                            type="button"
-                            onClick={() => fileRef.current?.click()}
-                            className="w-full rounded-xl border border-border px-3 py-2 text-[12px] font-semibold text-foreground transition-colors hover:bg-surface-2"
-                          >
-                            Upload image {refs.length ? `(${refs.length})` : ""}
-                          </button>
+                          <>
+                            <div>
+                              <div className="mb-2 flex items-center justify-between text-[12px] font-semibold text-foreground">
+                                <span>Reference influence</span>
+                                <span className="text-muted-foreground">{referenceWeight[0]}%</span>
+                              </div>
+                              <Slider value={referenceWeight} onValueChange={setReferenceWeight} min={0} max={100} step={1} />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => fileRef.current?.click()}
+                              className="w-full rounded-xl border border-border px-3 py-2 text-[12px] font-semibold text-foreground transition-colors hover:bg-surface-2"
+                            >
+                              Upload image {refs.length ? `(${refs.length})` : ""}
+                            </button>
+                          </>
                         ) : null}
                       </div>
                     </div>

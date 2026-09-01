@@ -74,6 +74,9 @@ export async function runImage(
       : "",
     `compose strictly for a ${aspect} canvas`,
     data.resolution ? `${data.resolution} high-detail output` : "",
+    data.negativePrompt?.trim()
+      ? `Exclude all of the following from the image: ${data.negativePrompt.trim()}`
+      : "",
   ].filter(Boolean).join(". ");
 
   let storagePath: string;

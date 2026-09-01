@@ -31,7 +31,6 @@ export const Route = createFileRoute("/image")({
   component: ImageStudio,
 });
 
-const model = "Hyper Image Speed";
 const ratios = ["1:1", "4:5", "3:2", "16:9", "9:16", "21:9", "2:3", "3:4", "5:4"] as const;
 const resolutions = ["1K", "2K", "4K", "8K"] as const;
 const styles = ["HEAVEN", "Photoreal", "Cinematic", "Anime", "3D Render", "Line Art", "Neon Noir"] as const;
