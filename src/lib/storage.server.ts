@@ -116,3 +116,26 @@ export async function removeFiles(bucket: string, paths: string[]): Promise<void
   if (paths.length === 0) return;
   await supabaseAdmin.storage.from(bucket).remove(paths);
 }
+
+/**
+ * Inlines a stored reference image as a base64 data URL.
+ *
+ * The AI gateway image model conditions on the bytes we send it, so passing a
+ * short-lived signed URL is fragile; inlining guarantees the reference is
+ * always readable by the provider.
+ */
+export async function referenceDataUrl(bucket: string, path: string): Promise<string | null> {
+  const url = await referenceUrl(bucket, path);
+  if (!url) return null;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const contentType = res.headers.get("content-type") ?? "image/jpeg";
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let binary = "";
+    for (let i = 0; i < buf.length; i += 1) binary += String.fromCharCode(buf[i] as number);
+    return `data:${contentType};base64,${btoa(binary)}`;
+  } catch {
+    return url;
+  }
+}
