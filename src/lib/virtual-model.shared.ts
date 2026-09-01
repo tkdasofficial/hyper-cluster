@@ -217,6 +217,114 @@ export function denoiseStrength(input: {
 const IDENTITY_LOCK_SHORT =
   "the exact same person as the reference: identical face, same facial bone structure, same eye shape and colour, same nose and lips, same skin tone, same hair colour and length, same body build";
 
+export type SceneSettings = {
+  outfit?: string[] | undefined;
+  accessories?: string[] | undefined;
+  background?: string | undefined;
+  lighting?: string | undefined;
+  lens?: string | undefined;
+  depth?: number | undefined;
+  resolution?: string | undefined;
+};
+
+const BACKGROUNDS: Record<string, string> = {
+  studio: "in a professional photo studio against a clean seamless backdrop",
+  city: "on a busy city street with buildings, traffic and pedestrians behind her",
+  "café": "inside a cosy café with tables, cups and warm interior details behind her",
+  cafe: "inside a cosy café with tables, cups and warm interior details behind her",
+  beach: "on a sandy beach with the sea, surf and open sky behind her",
+  rooftop: "on an open city rooftop with a skyline horizon behind her",
+  interior: "inside a styled modern interior room with furniture and decor behind her",
+  nature: "outdoors in nature with trees, foliage and natural terrain behind her",
+  neon: "in a neon-lit night street with glowing coloured signage behind her",
+};
+
+const LIGHTING: Record<string, string> = {
+  softbox: "soft even softbox studio lighting, gentle wrap-around light, minimal shadows",
+  "golden hour": "warm golden hour sunlight, low sun, long soft shadows, glowing skin",
+  rembrandt: "dramatic Rembrandt lighting, strong key light from one side, triangle of light on the cheek, deep contrast",
+  ring: "ring light beauty lighting, flat frontal illumination, circular catchlights in the eyes",
+  neon: "coloured neon lighting, magenta and cyan colour cast, moody night ambience",
+  flash: "direct on-camera flash, harsh frontal light, crisp shadow behind the subject, snapshot look",
+  backlit: "strong backlight behind the subject, glowing rim light around hair and shoulders, hazy lens flare",
+};
+
+/** Focal-length look — a lens choice must change compression and background blur. */
+function lensClause(lens?: string, depth?: number) {
+  const l = (lens ?? "85mm").toLowerCase();
+  const look = l.startsWith("24")
+    ? "shot on a 24mm wide angle lens, wide field of view with expanded perspective and visible surroundings"
+    : l.startsWith("35")
+      ? "shot on a 35mm lens, natural reportage perspective with context around the subject"
+      : l.startsWith("50")
+        ? "shot on a 50mm lens, natural undistorted perspective"
+        : l.startsWith("135")
+          ? "shot on a 135mm telephoto lens, strong compression, tightly isolated subject"
+          : "shot on an 85mm portrait lens, flattering compression";
+  const d = clamp(depth ?? 35, 0, 100);
+  const dof =
+    d >= 75
+      ? "very shallow depth of field, f/1.4, background melted into creamy bokeh"
+      : d >= 45
+        ? "shallow depth of field, f/2.0, softly blurred background"
+        : d >= 20
+          ? "moderate depth of field, f/4, background slightly soft but readable"
+          : "deep depth of field, f/11, everything from subject to background in sharp focus";
+  return `${look}, ${dof}`;
+}
+
+/** Resolution dial — real pixels plus a matching fidelity clause. */
+export function resolutionBase(resolution?: string) {
+  const r = (resolution ?? "2K").toUpperCase();
+  if (r === "1K") return 896;
+  if (r === "4K") return 1280;
+  if (r === "8K") return 1408;
+  return 1088;
+}
+
+function resolutionClause(resolution?: string) {
+  const r = (resolution ?? "2K").toUpperCase();
+  if (r === "1K") return "clean high quality render";
+  if (r === "4K") return "4K ultra high resolution, razor sharp, tack sharp edge to edge";
+  if (r === "8K") return "8K ultra high resolution, maximum sharpness, hyper detailed";
+  return "2K high resolution, crisp and sharp";
+}
+
+/** Wardrobe / scene clauses so each control visibly changes the picture. */
+export function sceneClauses(s: SceneSettings) {
+  const outfit = (s.outfit ?? []).filter(Boolean);
+  const acc = (s.accessories ?? []).filter(Boolean);
+  const bgKey = (s.background ?? "").toLowerCase();
+  const lightKey = (s.lighting ?? "").toLowerCase();
+  return [
+    outfit.length
+      ? `wearing a complete ${outfit.join(" and ").toLowerCase()} outfit, the clothing is clearly visible and well fitted`
+      : "",
+    acc.length ? `wearing ${acc.join(", ").toLowerCase()}, the accessories are clearly visible` : "",
+    bgKey ? (BACKGROUNDS[bgKey] ?? `${bgKey} background`) : "",
+    lightKey ? (LIGHTING[lightKey] ?? `${lightKey} lighting`) : "",
+    lensClause(s.lens, s.depth),
+    resolutionClause(s.resolution),
+  ].filter(Boolean);
+}
+
+/** Negatives derived from the settings — what was NOT chosen must not appear. */
+export function sceneNegative(s: SceneSettings) {
+  const acc = (s.accessories ?? []).filter(Boolean).map((a) => a.toLowerCase());
+  const all = ["sunglasses", "earrings", "necklace", "watch", "cap", "handbag"];
+  const unwanted = all.filter((a) => !acc.some((x) => x.includes(a)));
+  const bg = (s.background ?? "").toLowerCase();
+  const bgNeg =
+    bg === "studio"
+      ? "outdoor scenery, street, landscape, cluttered background"
+      : bg
+        ? "plain studio backdrop, empty grey wall"
+        : "";
+  const d = clamp(s.depth ?? 35, 0, 100);
+  const dofNeg = d >= 60 ? "sharp busy background" : d <= 20 ? "blurry background, heavy bokeh" : "";
+  return [unwanted.length ? unwanted.join(", ") : "", bgNeg, dofNeg].filter(Boolean).join(", ");
+}
+
 /**
  * Builds a scene render prompt.
  *
@@ -231,6 +339,7 @@ export function renderPrompt(input: {
   detail: number;
   shot?: string | undefined;
   style?: string | undefined;
+  scene?: SceneSettings | undefined;
 }) {
   const detail = clamp(input.detail, 0, 100);
   const detailClause =
@@ -243,6 +352,7 @@ export function renderPrompt(input: {
   return [
     framing,
     input.prompt,
+    ...(input.scene ? sceneClauses(input.scene) : []),
     input.identityPrompt,
     input.faceLock
       ? "keep the face pixel-faithful to the reference person"
@@ -255,4 +365,5 @@ export function renderPrompt(input: {
     .filter(Boolean)
     .join(". ");
 }
+
 
