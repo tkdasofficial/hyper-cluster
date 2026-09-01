@@ -91,8 +91,12 @@ export async function pixazoStableDiffusion(input: {
   try {
     data = await pixazoPost("/inpainting/v1/getImage", withStrength);
   } catch (err) {
-    // Some deployments reject unknown sampler fields; retry with the safe body.
-    if (input.strength === undefined) throw err;
+    // Only retry without the optional field when the request schema rejects it.
+    // Retrying rate limits, oversized inputs, auth failures, or provider faults
+    // here both duplicates work and silently drops the user's influence setting.
+    const message = err instanceof Error ? err.message : "";
+    const unsupportedField = /\((400|422)\)/.test(message) && /strength|unknown|unsupported|field|schema/i.test(message);
+    if (input.strength === undefined || !unsupportedField) throw err;
     data = await pixazoPost("/inpainting/v1/getImage", base);
   }
   const url = data.imageUrl ?? data.output;
