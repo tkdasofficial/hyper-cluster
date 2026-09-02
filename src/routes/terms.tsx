@@ -25,9 +25,14 @@ export const Route = createFileRoute("/terms")({
 
 const sections = [
   {
-    h: "1. Using Celestial Intelligence Copilot",
+    h: "1. Who we are",
+    p: "Celestial Intelligence Copilot (\u201cCopilot\u201d) is owned, operated and published by Celestial Intelligence, a private software company. These terms form an agreement between you and Celestial Intelligence.",
+  },
+  {
+    h: "2. Using Celestial Intelligence Copilot",
     p: "You may use Celestial Intelligence Copilot to generate images, video, vectors and audio for personal and commercial projects, provided your prompts and references do not infringe the rights of others.",
   },
+
   {
     h: "2. Your content and output",
     p: "You keep the rights to the prompts and references you upload. Subject to your plan, you also own the output you generate and may use it commercially.",
