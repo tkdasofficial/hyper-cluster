@@ -17,7 +17,7 @@ export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
-    // server entry override disabled during static prerender
+    server: { entry: "server" },
     // Static export: every public route is rendered to HTML at build time so the
     // site can be served by a plain static host (GitLab Pages).
     pages: [
