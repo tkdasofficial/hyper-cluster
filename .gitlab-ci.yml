@@ -36,7 +36,17 @@ build:
   stage: build
   script:
     - *install
-    - npm run build
+    # Derive the real deploy base path + origin from the Pages URL GitLab assigns.
+    # Unique-domain pages ("https://copilot-182fec.gitlab.io") => base "/",
+    # classic subpath pages ("https://group.gitlab.io/copilot") => base "/copilot/".
+    - |
+      PAGES_URL="${CI_PAGES_URL%/}"
+      SITE_ORIGIN="$(echo "$PAGES_URL" | sed -E 's#^(https?://[^/]+).*#\1#')"
+      BASE_PATH="$(echo "$PAGES_URL" | sed -E 's#^https?://[^/]+##')/"
+      export PUBLIC_BASE_PATH="$BASE_PATH"
+      export VITE_SITE_URL="$PAGES_URL"
+      echo "base=$PUBLIC_BASE_PATH site=$VITE_SITE_URL"
+      npm run build
     # Locate the static client output produced by the build.
     - |
       if [ -d .output/public ]; then OUT=.output/public;
