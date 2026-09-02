@@ -1,0 +1,72 @@
+# Celestial Intelligence Copilot — GitLab Pages deployment
+# Published at https://celestialintelligence.gitlab.io/copilot
+image: node:22
+
+stages:
+  - build
+  - deploy
+
+variables:
+  # Vite/TanStack base path — must match the GitLab Pages project subpath.
+  PUBLIC_BASE_PATH: "/copilot/"
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
+cache:
+  key:
+    files:
+      - bun.lock
+      - package-lock.json
+      - pnpm-lock.yaml
+  paths:
+    - node_modules/
+    - .npm/
+
+.install: &install
+  - |
+    if [ -f bun.lock ] || [ -f bun.lockb ]; then
+      npm install -g bun
+      bun install --frozen-lockfile
+    elif [ -f pnpm-lock.yaml ]; then
+      corepack enable && corepack prepare pnpm@latest --activate
+      pnpm install --frozen-lockfile
+    elif [ -f package-lock.json ]; then
+      npm ci --cache .npm --prefer-offline
+    else
+      npm install
+    fi
+
+build:
+  stage: build
+  script:
+    - *install
+    - npm run build
+    # Locate the static client output produced by the build.
+    - |
+      if [ -d .output/public ]; then OUT=.output/public;
+      elif [ -d dist/client ]; then OUT=dist/client;
+      elif [ -d dist ]; then OUT=dist;
+      else echo "No build output found" && exit 1; fi
+      echo "Using build output: $OUT"
+      rm -rf build-output && mkdir -p build-output
+      # Static assets from public/ first, then the build output wins on conflicts.
+      cp -r public/. build-output/ 2>/dev/null || true
+      cp -r "$OUT"/. build-output/
+      # SPA fallback for routes that are not prerendered.
+      [ -f build-output/index.html ] && cp build-output/index.html build-output/404.html
+  artifacts:
+    paths:
+      - build-output
+    expire_in: 1 week
+
+pages:
+  stage: deploy
+  dependencies:
+    - build
+  script:
+    - rm -rf public
+    - mv build-output public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
