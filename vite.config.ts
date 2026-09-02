@@ -6,8 +6,8 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-// GitLab Pages serves the site from https://celestialintelligence.gitlab.io/copilot.
-// CI sets PUBLIC_BASE_PATH=/copilot/ ; locally the app stays at "/".
+// CI derives PUBLIC_BASE_PATH from the real GitLab Pages URL.
+// Unique-domain Pages (https://copilot-182fec.gitlab.io) serve from the root.
 const base = process.env["PUBLIC_BASE_PATH"] || "/";
 
 export default defineConfig({
