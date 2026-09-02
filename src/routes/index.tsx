@@ -155,7 +155,7 @@ function Landing() {
             <span className="text-spectral">Then make it real.</span>
           </h1>
           <p className="relative mx-auto mt-4 max-w-xl text-[14px] leading-relaxed text-muted-foreground sm:text-base">
-            Celestial Intelligence Copilot is one generative studio for image, video, vector and audio — with
+            Copilot is one generative studio for image, video, vector and audio — with
             references, style kits and commercially safe output.
           </p>
           <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -293,7 +293,7 @@ function Landing() {
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-8 text-center lg:px-8">
           <p className="text-[12px] text-muted-foreground">
-            Celestial Intelligence Copilot · Generative AI for teams that ship
+            Copilot · Generative AI for teams that ship
           </p>
           <div className="flex gap-4 text-[12px] text-muted-foreground">
             <Link to="/pricing" className="hover:text-foreground">

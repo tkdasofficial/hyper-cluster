@@ -91,9 +91,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "publisher", content: "Tushar Kanti Das" },
       { name: "theme-color", content: "#111111" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-title", content: "Celestial Intelligence Copilot" },
+      { name: "apple-mobile-web-app-title", content: "Copilot" },
       // Open Graph Tags
-      { property: "og:site_name", content: "Celestial Intelligence Copilot" },
+      { property: "og:site_name", content: "Copilot" },
       { property: "og:locale", content: "en_US" },
       { property: "og:title", content: "Celestial Intelligence Copilot — Multi-Modal AI Generator" },
       {

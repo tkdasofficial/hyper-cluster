@@ -120,7 +120,7 @@ function AudioStudio() {
             rows={4}
             placeholder={
               mode === "Text to speech"
-                ? "Welcome to Celestial Intelligence Copilot — everything you imagine, generated in seconds."
+                ? "Welcome to Copilot — everything you imagine, generated in seconds."
                 : "A brooding synthwave score with analog arpeggios building to a soaring chorus…"
             }
           />

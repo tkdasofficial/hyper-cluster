@@ -18,7 +18,7 @@ export function Logo({ className }: { className?: string }) {
           className="hidden h-full w-full object-contain dark:block"
         />
       </span>
-      <span className="text-[15px] font-extrabold tracking-tight">Celestial Intelligence Copilot</span>
+      <span className="text-[15px] font-extrabold tracking-tight">Copilot</span>
     </span>
   );
 }

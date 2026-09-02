@@ -59,7 +59,7 @@ function Dashboard() {
 
           <footer className="mt-20 flex flex-col items-center gap-2 border-t border-border pt-8 text-center">
             <p className="text-[12px] text-muted-foreground">
-              Celestial Intelligence Copilot · Generative AI for teams that ship
+              Copilot · Generative AI for teams that ship
             </p>
           </footer>
         </main>
