@@ -10,6 +10,7 @@ import {
 import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { SITE_URL } from "@/lib/seo";
 import { ThemeProvider } from "../components/hyper/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 
@@ -106,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://celestialintelligence.gitlab.io/copilot/" },
+      { property: "og:url", content: `${SITE_URL}/` },
       // Twitter Card Meta Tags
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Celestial Intelligence Copilot — Multi-Modal AI Generator" },
@@ -143,30 +144,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": "https://celestialintelligence.gitlab.io/copilot/#website",
+              "@id": `${SITE_URL}/#website`,
               name: "Celestial Intelligence Copilot",
               alternateName: "Celestial Intelligence Copilot AI",
-              url: "https://celestialintelligence.gitlab.io/copilot/",
+              url: `${SITE_URL}/`,
               inLanguage: "en",
               description:
                 "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               publisher: {
                 "@type": "Organization",
                 name: "Celestial Intelligence",
-                url: "https://celestialintelligence.gitlab.io/copilot/",
+                url: `${SITE_URL}/`,
               },
             },
             {
               "@type": "SoftwareApplication",
-              "@id": "https://celestialintelligence.gitlab.io/copilot/#app",
+              "@id": `${SITE_URL}/#app`,
               name: "Celestial Intelligence Copilot",
               alternateName: "Celestial Intelligence Copilot AI",
-              url: "https://celestialintelligence.gitlab.io/copilot/",
+              url: `${SITE_URL}/`,
               applicationCategory: "MultimediaApplication",
               operatingSystem: "All",
               browserRequirements: "Requires a modern web browser with JavaScript enabled.",
-              image: "https://celestialintelligence.gitlab.io/copilot/og-image.png",
-              screenshot: "https://celestialintelligence.gitlab.io/copilot/og-image.png",
+              image: `${SITE_URL}/og-image.png`,
+              screenshot: `${SITE_URL}/og-image.png`,
               description:
                 "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               featureList: [
@@ -182,9 +183,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               publisher: {
                 "@type": "Organization",
                 name: "Celestial Intelligence",
-                url: "https://celestialintelligence.gitlab.io/copilot/",
+                url: `${SITE_URL}/`,
               },
-              isPartOf: { "@id": "https://celestialintelligence.gitlab.io/copilot/#website" },
+              isPartOf: { "@id": `${SITE_URL}/#website` },
             },
           ],
         }),
