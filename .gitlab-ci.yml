@@ -7,8 +7,6 @@ stages:
   - deploy
 
 variables:
-  # Vite/TanStack base path — must match the GitLab Pages project subpath.
-  PUBLIC_BASE_PATH: "/copilot/"
   NODE_OPTIONS: "--max-old-space-size=4096"
 
 cache:
