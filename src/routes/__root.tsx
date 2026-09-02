@@ -13,6 +13,10 @@ import appCss from "../styles.css?url";
 import { ThemeProvider } from "../components/hyper/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 
+/** Deploy base path ("/" locally, "/copilot/" on GitLab Pages). */
+const BASE = import.meta.env.BASE_URL ?? "/";
+
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
