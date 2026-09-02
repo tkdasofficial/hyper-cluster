@@ -20,10 +20,10 @@ export const Route = createFileRoute("/video")({
   head: () =>
     pageHead({
       path: "/video",
-      title: "AI Video Generator \u2014 Video Studio | Celestial Intelligence Copilot",
+      title: "AI Video Generator \u2014 Video Studio | Hyper Copilot",
       description:
         "Create cinematic AI videos from text or start and end frames with duration, frame rate, camera motion and aspect ratio control.",
-      ogTitle: "AI Video Generator \u2014 Celestial Intelligence Copilot Video Studio",
+      ogTitle: "AI Video Generator \u2014 Hyper Copilot Video Studio",
       keywords: [
         "AI video generator",
         "text to video",

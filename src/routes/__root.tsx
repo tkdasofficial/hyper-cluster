@@ -10,13 +10,8 @@ import {
 import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { SITE_URL } from "@/lib/seo";
 import { ThemeProvider } from "../components/hyper/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
-
-/** Deploy base path ("/" locally, "/copilot/" on GitLab Pages). */
-const BASE = import.meta.env.BASE_URL ?? "/";
-
 
 function NotFoundComponent() {
   return (
@@ -80,11 +75,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Celestial Intelligence Copilot — Multi-Modal AI Generator" },
+      { title: "Hyper Copilot — Multi-Modal AI Generator" },
       {
         name: "description",
         content:
-          "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
       { name: "robots", content: "index, follow" },
       {
@@ -93,28 +88,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Tushar Kanti Das" },
       { name: "creator", content: "Tushar Kanti Das" },
-      { name: "publisher", content: "Celestial Intelligence" },
+      { name: "publisher", content: "Tushar Kanti Das" },
       { name: "theme-color", content: "#111111" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-title", content: "Copilot" },
+      { name: "apple-mobile-web-app-title", content: "Hyper Copilot" },
       // Open Graph Tags
-      { property: "og:site_name", content: "Copilot" },
+      { property: "og:site_name", content: "Hyper Copilot" },
       { property: "og:locale", content: "en_US" },
-      { property: "og:title", content: "Celestial Intelligence Copilot — Multi-Modal AI Generator" },
+      { property: "og:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
       {
         property: "og:description",
         content:
-          "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: `${SITE_URL}/` },
+      { property: "og:url", content: "https://hypercopilot.vercel.app/" },
       // Twitter Card Meta Tags
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Celestial Intelligence Copilot — Multi-Modal AI Generator" },
+      { name: "twitter:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
       {
         name: "twitter:description",
         content:
-          "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
     ],
     links: [
@@ -128,12 +123,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
-      { rel: "icon", href: `${BASE}favicon.ico`, sizes: "any" },
-      { rel: "icon", href: `${BASE}favicon.svg`, type: "image/svg+xml" },
-      { rel: "icon", href: `${BASE}favicon-48x48.png`, sizes: "48x48", type: "image/png" },
-      { rel: "apple-touch-icon", href: `${BASE}apple-touch-icon.png`, sizes: "180x180" },
-      { rel: "manifest", href: `${BASE}manifest.json` },
-
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "manifest", href: "/manifest.json" },
     ],
     scripts: [
       // Schema.org Structured Data
@@ -144,32 +138,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": `${SITE_URL}/#website`,
-              name: "Celestial Intelligence Copilot",
-              alternateName: "Celestial Intelligence Copilot AI",
-              url: `${SITE_URL}/`,
+              "@id": "https://hypercopilot.vercel.app/#website",
+              name: "Hyper Copilot",
+              alternateName: "Hyper Copilot AI",
+              url: "https://hypercopilot.vercel.app/",
               inLanguage: "en",
               description:
-                "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+                "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               publisher: {
-                "@type": "Organization",
-                name: "Celestial Intelligence",
-                url: `${SITE_URL}/`,
+                "@type": "Person",
+                name: "Tushar Kanti Das",
+                url: "https://hypercopilot.vercel.app/",
               },
             },
             {
               "@type": "SoftwareApplication",
-              "@id": `${SITE_URL}/#app`,
-              name: "Celestial Intelligence Copilot",
-              alternateName: "Celestial Intelligence Copilot AI",
-              url: `${SITE_URL}/`,
+              "@id": "https://hypercopilot.vercel.app/#app",
+              name: "Hyper Copilot",
+              alternateName: "Hyper Copilot AI",
+              url: "https://hypercopilot.vercel.app/",
               applicationCategory: "MultimediaApplication",
               operatingSystem: "All",
               browserRequirements: "Requires a modern web browser with JavaScript enabled.",
-              image: `${SITE_URL}/og-image.png`,
-              screenshot: `${SITE_URL}/og-image.png`,
+              image: "https://hypercopilot.vercel.app/og-image.png",
+              screenshot: "https://hypercopilot.vercel.app/og-image.png",
               description:
-                "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+                "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               featureList: [
                 "Text to image generation",
                 "Text to video generation",
@@ -181,11 +175,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               creator: { "@type": "Person", name: "Tushar Kanti Das" },
               author: { "@type": "Person", name: "Tushar Kanti Das" },
               publisher: {
-                "@type": "Organization",
-                name: "Celestial Intelligence",
-                url: `${SITE_URL}/`,
+                "@type": "Person",
+                name: "Tushar Kanti Das",
+                url: "https://hypercopilot.vercel.app/",
               },
-              isPartOf: { "@id": `${SITE_URL}/#website` },
+              isPartOf: { "@id": "https://hypercopilot.vercel.app/#website" },
             },
           ],
         }),

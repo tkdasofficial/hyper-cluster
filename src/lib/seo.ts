@@ -1,22 +1,13 @@
-/** Canonical origin. */
-export const SITE_URL = (
-  import.meta.env["VITE_SITE_URL"] || "https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app"
-).replace(/\/$/, "");
-/** Full product name — SEO, legal, social. */
-export const SITE_NAME = "Celestial Intelligence Copilot";
-/** Short product name — UI, navigation, headers. */
-export const SHORT_NAME = "Copilot";
-export const COMPANY = "Celestial Intelligence";
+export const SITE_URL = "https://hypercopilot.vercel.app";
+export const SITE_NAME = "Hyper Copilot";
 export const AUTHOR = "Tushar Kanti Das";
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 /** Terms every page should compete for, regardless of topic. */
 export const BASE_KEYWORDS = [
-  "Celestial Intelligence Copilot",
-  "Celestial Intelligence",
-  "CelestialIntelligenceCopilot",
-  "Celestial Intelligence AI",
-  "Copilot AI",
+  "Hyper Copilot",
+  "HyperCopilot",
+  "Hyper Copilot AI",
   "Tushar Kanti Das",
   "AI generator",
   "multi-modal AI",
@@ -29,7 +20,6 @@ export const BASE_KEYWORDS = [
   "AI voice generator",
   "AI influencer generator",
 ];
-
 
 type HeadInput = {
   /** Route path, e.g. "/pricing". Used for canonical + og:url. */
@@ -91,7 +81,7 @@ export function pageHead(input: HeadInput) {
       inLanguage: "en",
       isPartOf: { "@id": `${SITE_URL}/#website` },
       author: { "@type": "Person", name: AUTHOR },
-      publisher: { "@type": "Organization", name: COMPANY, url: `${SITE_URL}/` },
+      publisher: { "@type": "Person", name: AUTHOR },
     },
     ...(breadcrumbItems.length > 1
       ? [

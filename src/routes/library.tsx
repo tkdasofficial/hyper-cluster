@@ -14,9 +14,9 @@ export const Route = createFileRoute("/library")({
   head: () =>
     pageHead({
       path: "/library",
-      title: "Library \u2014 Manage Your AI Generations | Celestial Intelligence Copilot",
+      title: "Library \u2014 Manage Your AI Generations | Hyper Copilot",
       description:
-        "Browse, search, download and delete every image, video, audio and vector asset you have generated in Celestial Intelligence Copilot.",
+        "Browse, search, download and delete every image, video, audio and vector asset you have generated in Hyper Copilot.",
       noindex: true,
       keywords: [
         "AI generation library",

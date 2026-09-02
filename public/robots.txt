@@ -14,4 +14,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/sitemap.xml
+Sitemap: https://hypercopilot.vercel.app/sitemap.xml

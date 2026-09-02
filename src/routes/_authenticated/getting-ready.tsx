@@ -11,12 +11,12 @@ export const Route = createFileRoute("/_authenticated/getting-ready")({
   head: () =>
     pageHead({
       path: "/getting-ready",
-      title: "Getting Ready \u2014 Celestial Intelligence Copilot",
+      title: "Getting Ready \u2014 Hyper Copilot",
       description:
         "Tell us your name, role and what you plan to create so we can tailor your studio.",
       noindex: true,
       keywords: [
-        "Celestial Intelligence Copilot onboarding",
+        "Hyper Copilot onboarding",
       ],
     }),
   component: GettingReady,
