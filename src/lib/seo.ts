@@ -1,4 +1,7 @@
-export const SITE_URL = "https://celestialintelligence.gitlab.io/copilot";
+/** Canonical origin. CI injects VITE_SITE_URL from the real Pages URL. */
+export const SITE_URL = (
+  import.meta.env["VITE_SITE_URL"] || "https://copilot-182fec.gitlab.io"
+).replace(/\/$/, "");
 /** Full product name — SEO, legal, social. */
 export const SITE_NAME = "Celestial Intelligence Copilot";
 /** Short product name — UI, navigation, headers. */

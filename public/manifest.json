@@ -2,18 +2,18 @@
   "name": "Celestial Intelligence Copilot",
   "short_name": "Copilot",
   "description": "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
-  "start_url": "/copilot/",
-  "scope": "/copilot/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#111111",
   "background_color": "#ffffff",
   "categories": ["productivity", "graphics", "multimedia"],
   "icons": [
-    { "src": "/copilot/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "/copilot/favicon-48x48.png", "sizes": "48x48", "type": "image/png" },
-    { "src": "/copilot/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
-    { "src": "/copilot/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/copilot/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon-48x48.png", "sizes": "48x48", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
