@@ -24,9 +24,9 @@ export const Route = createFileRoute("/")({
   head: () =>
     pageHead({
       path: "/",
-      title: "Hyper Copilot \u2014 Multi-Modal AI Generator",
+      title: "Celestial Intelligence Copilot \u2014 Multi-Modal AI Generator",
       description:
-        "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+        "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       keywords: [
         "AI image generator",
         "AI video generator",
@@ -44,10 +44,10 @@ export const Route = createFileRoute("/")({
       jsonLd: [
         {
           "@type": "SoftwareApplication",
-          "name": "Hyper Copilot",
+          "name": "Celestial Intelligence Copilot",
           "applicationCategory": "MultimediaApplication",
           "operatingSystem": "All",
-          "url": "https://hypercopilot.vercel.app/",
+          "url": "https://celestialintelligence.gitlab.io/copilot/",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -155,7 +155,7 @@ function Landing() {
             <span className="text-spectral">Then make it real.</span>
           </h1>
           <p className="relative mx-auto mt-4 max-w-xl text-[14px] leading-relaxed text-muted-foreground sm:text-base">
-            Hyper Copilot is one generative studio for image, video, vector and audio — with
+            Celestial Intelligence Copilot is one generative studio for image, video, vector and audio — with
             references, style kits and commercially safe output.
           </p>
           <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -293,7 +293,7 @@ function Landing() {
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-8 text-center lg:px-8">
           <p className="text-[12px] text-muted-foreground">
-            Hyper Copilot · Generative AI for teams that ship
+            Celestial Intelligence Copilot · Generative AI for teams that ship
           </p>
           <div className="flex gap-4 text-[12px] text-muted-foreground">
             <Link to="/pricing" className="hover:text-foreground">

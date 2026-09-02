@@ -7,11 +7,11 @@ export const Route = createFileRoute("/privacy")({
   head: () =>
     pageHead({
       path: "/privacy",
-      title: "Privacy Policy \u2014 Hyper Copilot",
+      title: "Privacy Policy \u2014 Celestial Intelligence Copilot",
       description:
-        "How Hyper Copilot collects, uses and protects your prompts, uploaded references and account data, plus the controls you have over them.",
+        "How Celestial Intelligence Copilot collects, uses and protects your prompts, uploaded references and account data, plus the controls you have over them.",
       keywords: [
-        "Hyper Copilot privacy policy",
+        "Celestial Intelligence Copilot privacy policy",
         "AI data privacy",
         "AI prompt data retention",
         "GDPR AI platform",

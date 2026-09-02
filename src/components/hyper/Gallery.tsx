@@ -6,7 +6,7 @@ export function Gallery() {
     <section aria-labelledby="gallery-heading" className="mt-16">
       <div className="flex items-center gap-3">
         <h2 id="gallery-heading" className="text-xl font-extrabold tracking-tight sm:text-2xl">
-          Made with Hyper Copilot
+          Made with Celestial Intelligence Copilot
         </h2>
         <span className="rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
           Community

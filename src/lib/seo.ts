@@ -1,13 +1,13 @@
-export const SITE_URL = "https://hypercopilot.vercel.app";
-export const SITE_NAME = "Hyper Copilot";
+export const SITE_URL = "https://celestialintelligence.gitlab.io/copilot";
+export const SITE_NAME = "Celestial Intelligence Copilot";
 export const AUTHOR = "Tushar Kanti Das";
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 /** Terms every page should compete for, regardless of topic. */
 export const BASE_KEYWORDS = [
-  "Hyper Copilot",
-  "HyperCopilot",
-  "Hyper Copilot AI",
+  "Celestial Intelligence Copilot",
+  "CelestialIntelligenceCopilot",
+  "Celestial Intelligence Copilot AI",
   "Tushar Kanti Das",
   "AI generator",
   "multi-modal AI",

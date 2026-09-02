@@ -14,4 +14,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://hypercopilot.vercel.app/sitemap.xml
+Sitemap: https://celestialintelligence.gitlab.io/copilot/sitemap.xml

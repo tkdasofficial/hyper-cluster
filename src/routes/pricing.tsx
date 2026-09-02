@@ -9,9 +9,9 @@ export const Route = createFileRoute("/pricing")({
   head: () =>
     pageHead({
       path: "/pricing",
-      title: "Pricing & Plans \u2014 Hyper Copilot AI Studio",
+      title: "Pricing & Plans \u2014 Celestial Intelligence Copilot AI Studio",
       description:
-        "Compare Hyper Copilot plans: free starter credits, Pro unlimited fast renders with 4K upscaling, and Studio for teams shipping generative AI at scale.",
+        "Compare Celestial Intelligence Copilot plans: free starter credits, Pro unlimited fast renders with 4K upscaling, and Studio for teams shipping generative AI at scale.",
       keywords: [
         "AI generator pricing",
         "free AI image generator",
@@ -28,11 +28,11 @@ export const Route = createFileRoute("/pricing")({
       jsonLd: [
         {
           "@type": "Product",
-          "name": "Hyper Copilot",
+          "name": "Celestial Intelligence Copilot",
           "description": "Multi-modal AI generation platform",
           "brand": {
             "@type": "Brand",
-            "name": "Hyper Copilot"
+            "name": "Celestial Intelligence Copilot"
           },
           "offers": [
             {
@@ -40,21 +40,21 @@ export const Route = createFileRoute("/pricing")({
               "name": "Starter",
               "price": "0",
               "priceCurrency": "USD",
-              "url": "https://hypercopilot.vercel.app/pricing"
+              "url": "https://celestialintelligence.gitlab.io/copilot/pricing"
             },
             {
               "@type": "Offer",
               "name": "Pro",
               "price": "29",
               "priceCurrency": "USD",
-              "url": "https://hypercopilot.vercel.app/pricing"
+              "url": "https://celestialintelligence.gitlab.io/copilot/pricing"
             },
             {
               "@type": "Offer",
               "name": "Studio",
               "price": "89",
               "priceCurrency": "USD",
-              "url": "https://hypercopilot.vercel.app/pricing"
+              "url": "https://celestialintelligence.gitlab.io/copilot/pricing"
             }
           ]
         }
