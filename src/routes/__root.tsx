@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Tushar Kanti Das" },
       { name: "creator", content: "Tushar Kanti Das" },
-      { name: "publisher", content: "Tushar Kanti Das" },
+      { name: "publisher", content: "Celestial Intelligence" },
       { name: "theme-color", content: "#111111" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "Copilot" },

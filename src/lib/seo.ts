@@ -88,7 +88,7 @@ export function pageHead(input: HeadInput) {
       inLanguage: "en",
       isPartOf: { "@id": `${SITE_URL}/#website` },
       author: { "@type": "Person", name: AUTHOR },
-      publisher: { "@type": "Person", name: AUTHOR },
+      publisher: { "@type": "Organization", name: COMPANY, url: `${SITE_URL}/` },
     },
     ...(breadcrumbItems.length > 1
       ? [
