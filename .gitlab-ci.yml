@@ -62,7 +62,7 @@ build:
       PAGES_URL="${CI_PAGES_URL%/}"
       BASE_PATH="$(echo "$PAGES_URL" | sed -E 's#^https?://[^/]+##')/"
       sed -i "s#https://copilot-182fec.gitlab.io#${PAGES_URL}#g" build-output/robots.txt build-output/sitemap.xml 2>/dev/null || true
-      sed -i "s#\"/#\"${BASE_PATH}#g; s#${BASE_PATH}${BASE_PATH#/}#${BASE_PATH}#g" build-output/manifest.json 2>/dev/null || true
+      node -e 'const f="build-output/manifest.json",fs=require("fs");if(fs.existsSync(f)){const b=process.argv[1];const s=fs.readFileSync(f,"utf8").replace(/"\/(?!\/)/g,`"${b}`);fs.writeFileSync(f,s);}' "$BASE_PATH"
       # SPA fallback for routes that are not prerendered (e.g. /dashboard).
       [ -f build-output/index.html ] && cp build-output/index.html build-output/404.html
   artifacts:
