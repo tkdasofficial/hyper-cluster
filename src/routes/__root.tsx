@@ -123,11 +123,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", sizes: "any" },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
-      { rel: "manifest", href: "/manifest.json" },
+      { rel: "icon", href: `${BASE}favicon.ico`, sizes: "any" },
+      { rel: "icon", href: `${BASE}favicon.svg`, type: "image/svg+xml" },
+      { rel: "icon", href: `${BASE}favicon-48x48.png`, sizes: "48x48", type: "image/png" },
+      { rel: "apple-touch-icon", href: `${BASE}apple-touch-icon.png`, sizes: "180x180" },
+      { rel: "manifest", href: `${BASE}manifest.json` },
+
     ],
     scripts: [
       // Schema.org Structured Data
