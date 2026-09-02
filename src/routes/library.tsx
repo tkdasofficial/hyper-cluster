@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Download, Search, Trash2, ImageIcon, Video, AudioLines, PenTool } from "lucide-react";
@@ -10,23 +11,20 @@ import { deleteGeneration, listGenerations } from "@/lib/generation.functions";
 type AssetKind = "Image" | "Video" | "Audio" | "Vector";
 
 export const Route = createFileRoute("/library")({
-  head: () => ({
-    meta: [
-      { title: "Library — Manage Your AI Generations | Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Browse, search, download and delete every image, video, audio and vector asset you have generated in Hyper Copilot.",
-      },
-      { property: "og:title", content: "Library — Manage Your AI Generations" },
-      {
-        property: "og:description",
-        content: "One place for every generation and asset you create in Hyper Copilot.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/library",
+      title: "Library \u2014 Manage Your AI Generations | Hyper Copilot",
+      description:
+        "Browse, search, download and delete every image, video, audio and vector asset you have generated in Hyper Copilot.",
+      noindex: true,
+      keywords: [
+        "AI generation library",
+        "AI asset manager",
+        "download AI images",
+        "AI media history",
+      ],
+    }),
   component: LibraryPage,
 });
 

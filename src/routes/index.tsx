@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -20,37 +21,45 @@ import { Logo } from "@/components/hyper/Logo";
 import { useSession } from "@/hooks/useSession";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Hyper Copilot — Multi-Modal AI Generator" },
-      {
-        name: "description",
-        content:
-          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
-      },
-      { property: "og:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
-      {
-        property: "og:description",
-        content:
-          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hypercopilot.vercel.app/" },
-      { property: "og:image", content: "https://hypercopilot.vercel.app/og-image.png" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "Hyper Copilot generative AI studio" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
-      {
-        name: "twitter:description",
-        content:
-          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
-      },
-      { name: "twitter:image", content: "https://hypercopilot.vercel.app/og-image.png" },
-    ],
-    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/",
+      title: "Hyper Copilot \u2014 Multi-Modal AI Generator",
+      description:
+        "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+      keywords: [
+        "AI image generator",
+        "AI video generator",
+        "AI music generator",
+        "AI influencer creator",
+        "photoreal image AI",
+        "text to speech AI",
+        "AI art generator online",
+        "all in one AI studio",
+        "generative AI for teams",
+        "AI vector generator",
+        "8K AI upscaler",
+        "commercially safe AI images",
+      ],
+      jsonLd: [
+        {
+          "@type": "SoftwareApplication",
+          "name": "Hyper Copilot",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "All",
+          "url": "https://hypercopilot.vercel.app/",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "creator": {
+            "@type": "Person",
+            "name": "Tushar Kanti Das"
+          }
+        }
+      ],
+    }),
 
   component: Landing,
 });

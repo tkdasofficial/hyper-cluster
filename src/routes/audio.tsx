@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
@@ -9,23 +10,27 @@ import { runJob } from "@/lib/jobs-runner";
 import { SPEECH_TONES, TTS_MODELS, VOICES } from "@/lib/media.shared";
 
 export const Route = createFileRoute("/audio")({
-  head: () => ({
-    meta: [
-      { title: "Audio Studio — AI Music & Speech Generation | Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Generate AI speech and music with Hyper Audio Omni: 30 voices, tone, pace, genre, tempo and duration controls in Hyper Copilot's Audio Studio.",
-      },
-      { property: "og:title", content: "Audio Studio — AI Music & Speech Generation" },
-      {
-        property: "og:description",
-        content: "30 voices, tone and pace controls plus music briefs for production-grade AI audio.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/audio",
+      title: "AI Voice & Music Generator \u2014 Audio Studio | Hyper Copilot",
+      description:
+        "Generate AI speech and music with 30 voices plus tone, pace, genre, tempo and duration controls in Hyper Copilot's Audio Studio.",
+      ogTitle: "AI Voice & Music Generator \u2014 Hyper Copilot Audio Studio",
+      keywords: [
+        "AI voice generator",
+        "text to speech online",
+        "AI music generator",
+        "AI voiceover",
+        "realistic TTS voices",
+        "royalty free AI music",
+        "AI narration generator",
+        "AI song maker",
+      ],
+      breadcrumbs: [
+        { name: "Audio Studio", path: "/audio" },
+      ],
+    }),
   component: AudioStudio,
 });
 

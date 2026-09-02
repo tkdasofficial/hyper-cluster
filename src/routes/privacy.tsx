@@ -1,27 +1,26 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Sidebar } from "@/components/hyper/Sidebar";
 import { TopBar } from "@/components/hyper/TopBar";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy — Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "How Hyper Copilot collects, uses and protects your prompts, uploaded references and account data, plus the controls you have over them.",
-      },
-      { property: "og:title", content: "Privacy Policy — Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "What we collect, how prompts and references are handled, and your data controls.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hypercopilot.vercel.app/privacy" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/privacy" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/privacy",
+      title: "Privacy Policy \u2014 Hyper Copilot",
+      description:
+        "How Hyper Copilot collects, uses and protects your prompts, uploaded references and account data, plus the controls you have over them.",
+      keywords: [
+        "Hyper Copilot privacy policy",
+        "AI data privacy",
+        "AI prompt data retention",
+        "GDPR AI platform",
+        "AI model training opt out",
+      ],
+      breadcrumbs: [
+        { name: "Privacy Policy", path: "/privacy" },
+      ],
+    }),
   component: PrivacyPage,
 });
 

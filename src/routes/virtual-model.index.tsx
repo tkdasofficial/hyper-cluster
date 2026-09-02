@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
@@ -28,23 +29,27 @@ import {
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/virtual-model/")({
-  head: () => ({
-    meta: [
-      { title: "Virtual Model — Ultra-Detailed AI Influencer Studio | Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Generate ultra-detailed, face-consistent AI influencer images with wardrobe, scene, lighting and camera control.",
-      },
-      { property: "og:title", content: "Virtual Model — AI Influencer Studio" },
-      {
-        property: "og:description",
-        content: "Face-consistent AI influencer renders with full image customization.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/virtual-model",
+      title: "AI Influencer Generator \u2014 Virtual Model Studio | Hyper Copilot",
+      description:
+        "Create face-consistent AI influencers and virtual models with wardrobe, scene, lighting, lens and framing control from a reusable character profile.",
+      ogTitle: "AI Influencer Generator \u2014 Virtual Model Studio",
+      keywords: [
+        "AI influencer generator",
+        "virtual model AI",
+        "consistent character AI",
+        "AI fashion model",
+        "virtual influencer creator",
+        "AI UGC model",
+        "face consistent AI images",
+        "AI model photoshoot",
+      ],
+      breadcrumbs: [
+        { name: "Virtual Model", path: "/virtual-model" },
+      ],
+    }),
   component: VirtualModelStudio,
 });
 

@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Sidebar } from "@/components/hyper/Sidebar";
 import { TopBar } from "@/components/hyper/TopBar";
@@ -6,23 +7,18 @@ import { ToolGrid } from "@/components/hyper/ToolGrid";
 import { Gallery } from "@/components/hyper/Gallery";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({
-    meta: [
-      { title: "Dashboard — Hyper Copilot Generative AI Studio" },
-      {
-        name: "description",
-        content:
-          "Your Hyper Copilot studio: one prompt box for photoreal images, cinematic video, vectors and audio.",
-      },
-      { property: "og:title", content: "Hyper Copilot Dashboard" },
-      {
-        property: "og:description",
-        content: "Generate images, video, vectors and audio from a single prompt box.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/dashboard",
+      title: "Dashboard \u2014 Hyper Copilot Generative AI Studio",
+      description:
+        "Your Hyper Copilot studio: one prompt box for photoreal images, cinematic video, vectors and audio.",
+      noindex: true,
+      keywords: [
+        "Hyper Copilot dashboard",
+        "AI studio workspace",
+      ],
+    }),
   component: Dashboard,
 });
 

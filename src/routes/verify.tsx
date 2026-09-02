@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { MailCheck, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
@@ -7,23 +8,18 @@ import { Logo } from "@/components/hyper/Logo";
 
 export const Route = createFileRoute("/verify")({
   ssr: false,
-  head: () => ({
-    meta: [
-      { title: "Confirm your email — Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Confirm your email address to activate your Hyper Copilot account and start generating.",
-      },
-      { property: "og:title", content: "Confirm your email — Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "Verify your email to activate your Hyper Copilot generative AI account.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/verify",
+      title: "Confirm Your Email \u2014 Hyper Copilot",
+      description:
+        "Confirm your email address to activate your Hyper Copilot account and start generating.",
+      noindex: true,
+      keywords: [
+        "Hyper Copilot email verification",
+        "activate AI account",
+      ],
+    }),
   component: VerifyPage,
 });
 

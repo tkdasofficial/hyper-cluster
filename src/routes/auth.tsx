@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Loader2, Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
@@ -8,25 +9,26 @@ import { Logo } from "@/components/hyper/Logo";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  head: () => ({
-    meta: [
-      { title: "Sign in or create your Hyper Copilot account" },
-      {
-        name: "description",
-        content:
-          "Continue with email or Google to access the Hyper Copilot generative AI studio for image, video, vector and audio creation.",
-      },
-      { property: "og:title", content: "Sign in to Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "Continue with email or Google to access the Hyper Copilot generative AI studio.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hypercopilot.vercel.app/auth" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/auth" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/auth",
+      title: "Sign In or Sign Up \u2014 Hyper Copilot AI Studio",
+      description:
+        "Continue with email or Google to access the Hyper Copilot generative AI studio for image, video, vector and audio creation.",
+      ogTitle: "Sign in to Hyper Copilot",
+      ogDescription:
+        "Continue with email or Google to access the Hyper Copilot generative AI studio.",
+      keywords: [
+        "Hyper Copilot login",
+        "Hyper Copilot sign up",
+        "AI generator login",
+        "free AI account signup",
+        "google sign in AI studio",
+      ],
+      breadcrumbs: [
+        { name: "Sign in", path: "/auth" },
+      ],
+    }),
   component: AuthPage,
 });
 

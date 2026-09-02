@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { StudioLayout } from "@/components/hyper/StudioLayout";
@@ -7,23 +8,26 @@ import { Chips, Panel, Segment, SliderRow, TextRow } from "@/components/hyper/St
 import { runJob } from "@/lib/jobs-runner";
 
 export const Route = createFileRoute("/virtual-model/create-model")({
-  head: () => ({
-    meta: [
-      { title: "Create Model — AI Character Builder | Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Build a reusable AI character: age, height, body, render style, skin tone, eyes, hair and face traits with top-tier consistency.",
-      },
-      { property: "og:title", content: "Create Model — AI Character Builder" },
-      {
-        property: "og:description",
-        content: "Define a consistent AI influencer identity from A to Z.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/virtual-model/create-model",
+      title: "Create an AI Character \u2014 AI Model Builder | Hyper Copilot",
+      description:
+        "Build a reusable AI character with age, height, body type, render style, skin tone, eyes, hair and face traits for consistent AI influencer images.",
+      ogTitle: "Create an AI Character \u2014 Hyper Copilot Model Builder",
+      keywords: [
+        "create AI character",
+        "AI character builder",
+        "custom AI model creator",
+        "consistent AI face",
+        "AI persona generator",
+        "design virtual influencer",
+      ],
+      breadcrumbs: [
+        { name: "Virtual Model", path: "/virtual-model" },
+        { name: "Create Model", path: "/virtual-model/create-model" },
+      ],
+    }),
   component: CreateModel,
 });
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -7,22 +8,17 @@ import { Logo } from "@/components/hyper/Logo";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/getting-ready")({
-  head: () => ({
-    meta: [
-      { title: "Getting ready — Hyper Copilot" },
-      {
-        name: "description",
-        content: "Tell us your name, role and what you plan to create so we can tailor your studio.",
-      },
-      { property: "og:title", content: "Getting ready — Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "Finish setting up your Hyper Copilot workspace in a few seconds.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/getting-ready",
+      title: "Getting Ready \u2014 Hyper Copilot",
+      description:
+        "Tell us your name, role and what you plan to create so we can tailor your studio.",
+      noindex: true,
+      keywords: [
+        "Hyper Copilot onboarding",
+      ],
+    }),
   component: GettingReady,
 });
 
