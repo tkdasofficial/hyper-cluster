@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { toast } from "sonner";
@@ -16,23 +17,28 @@ import {
 } from "@/lib/media.shared";
 
 export const Route = createFileRoute("/video")({
-  head: () => ({
-    meta: [
-      { title: "Video Studio — AI Video Generation | Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Create cinematic AI videos with Hyper Video Omni: aspect ratios, duration, camera motion, frame rate and start/end frame references in Hyper Copilot's Video Studio.",
-      },
-      { property: "og:title", content: "Video Studio — AI Video Generation" },
-      {
-        property: "og:description",
-        content: "Camera, motion, duration and frame references for production-grade AI video.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/video",
+      title: "AI Video Generator \u2014 Video Studio | Hyper Copilot",
+      description:
+        "Create cinematic AI videos from text or start and end frames with duration, frame rate, camera motion and aspect ratio control.",
+      ogTitle: "AI Video Generator \u2014 Hyper Copilot Video Studio",
+      keywords: [
+        "AI video generator",
+        "text to video",
+        "image to video AI",
+        "cinematic AI video",
+        "AI video maker free",
+        "start and end frame video AI",
+        "AI reels generator",
+        "short form video AI",
+        "1080p AI video",
+      ],
+      breadcrumbs: [
+        { name: "Video Studio", path: "/video" },
+      ],
+    }),
   component: VideoStudio,
 });
 

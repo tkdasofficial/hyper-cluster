@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Sidebar } from "@/components/hyper/Sidebar";
@@ -5,25 +6,60 @@ import { TopBar } from "@/components/hyper/TopBar";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing & Plans — Hyper Copilot Generative AI" },
-      {
-        name: "description",
-        content:
-          "Compare Hyper Copilot plans: free starter credits, Pro unlimited fast renders with 4K upscaling, and Studio for teams shipping generative AI at scale.",
-      },
-      { property: "og:title", content: "Pricing & Plans — Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "Starter, Pro and Studio plans for image, video, vector and audio generation.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hypercopilot.vercel.app/pricing" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/pricing" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/pricing",
+      title: "Pricing & Plans \u2014 Hyper Copilot AI Studio",
+      description:
+        "Compare Hyper Copilot plans: free starter credits, Pro unlimited fast renders with 4K upscaling, and Studio for teams shipping generative AI at scale.",
+      keywords: [
+        "AI generator pricing",
+        "free AI image generator",
+        "AI video generator price",
+        "cheap AI art subscription",
+        "AI studio plans",
+        "unlimited AI image generation",
+        "commercial license AI images",
+        "AI credits pricing",
+      ],
+      breadcrumbs: [
+        { name: "Pricing", path: "/pricing" },
+      ],
+      jsonLd: [
+        {
+          "@type": "Product",
+          "name": "Hyper Copilot",
+          "description": "Multi-modal AI generation platform",
+          "brand": {
+            "@type": "Brand",
+            "name": "Hyper Copilot"
+          },
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "Starter",
+              "price": "0",
+              "priceCurrency": "USD",
+              "url": "https://hypercopilot.vercel.app/pricing"
+            },
+            {
+              "@type": "Offer",
+              "name": "Pro",
+              "price": "29",
+              "priceCurrency": "USD",
+              "url": "https://hypercopilot.vercel.app/pricing"
+            },
+            {
+              "@type": "Offer",
+              "name": "Studio",
+              "price": "89",
+              "priceCurrency": "USD",
+              "url": "https://hypercopilot.vercel.app/pricing"
+            }
+          ]
+        }
+      ],
+    }),
   component: PricingPage,
 });
 

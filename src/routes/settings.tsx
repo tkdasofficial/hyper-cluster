@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { account } from "@/lib/content";
 import { Monitor, Moon, Sun } from "lucide-react";
@@ -7,23 +8,19 @@ import { useTheme, type Theme } from "@/components/hyper/ThemeProvider";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({
-  head: () => ({
-    meta: [
-      { title: "User Settings & Appearance — Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "Manage your Hyper Copilot account preferences and choose a System, Light or Dark appearance for the generative AI studio.",
-      },
-      { property: "og:title", content: "User Settings & Appearance — Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "Account preferences and System, Light or Dark theme controls for Hyper Copilot.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/settings",
+      title: "Settings & Appearance \u2014 Hyper Copilot",
+      description:
+        "Manage your Hyper Copilot account preferences and choose a System, Light or Dark appearance for the generative AI studio.",
+      noindex: true,
+      keywords: [
+        "Hyper Copilot settings",
+        "AI studio dark mode",
+        "account preferences",
+      ],
+    }),
   component: SettingsPage,
 });
 

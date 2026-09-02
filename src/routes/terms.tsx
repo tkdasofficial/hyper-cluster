@@ -1,27 +1,25 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Sidebar } from "@/components/hyper/Sidebar";
 import { TopBar } from "@/components/hyper/TopBar";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms of Service — Hyper Copilot" },
-      {
-        name: "description",
-        content:
-          "The terms that govern your use of Hyper Copilot, including acceptable use, output ownership, credits and account termination.",
-      },
-      { property: "og:title", content: "Terms of Service — Hyper Copilot" },
-      {
-        property: "og:description",
-        content: "Acceptable use, output ownership and account rules for Hyper Copilot.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hypercopilot.vercel.app/terms" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://hypercopilot.vercel.app/terms" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/terms",
+      title: "Terms of Service \u2014 Hyper Copilot",
+      description:
+        "The terms that govern your use of Hyper Copilot, including acceptable use, output ownership, credits and account termination.",
+      keywords: [
+        "Hyper Copilot terms of service",
+        "AI output ownership",
+        "AI commercial use license",
+        "AI acceptable use policy",
+      ],
+      breadcrumbs: [
+        { name: "Terms of Service", path: "/terms" },
+      ],
+    }),
   component: TermsPage,
 });
 
