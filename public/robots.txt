@@ -14,4 +14,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://celestialintelligence.gitlab.io/copilot/sitemap.xml
+Sitemap: https://copilot-182fec.gitlab.io/sitemap.xml
