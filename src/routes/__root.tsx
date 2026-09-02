@@ -146,8 +146,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               description:
                 "Built by Tushar Kanti Das, Celestial Intelligence Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               publisher: {
-                "@type": "Person",
-                name: "Tushar Kanti Das",
+                "@type": "Organization",
+                name: "Celestial Intelligence",
                 url: "https://celestialintelligence.gitlab.io/copilot/",
               },
             },
@@ -175,8 +175,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               creator: { "@type": "Person", name: "Tushar Kanti Das" },
               author: { "@type": "Person", name: "Tushar Kanti Das" },
               publisher: {
-                "@type": "Person",
-                name: "Tushar Kanti Das",
+                "@type": "Organization",
+                name: "Celestial Intelligence",
                 url: "https://celestialintelligence.gitlab.io/copilot/",
               },
               isPartOf: { "@id": "https://celestialintelligence.gitlab.io/copilot/#website" },
