@@ -12,15 +12,15 @@ export const Route = createFileRoute("/auth")({
   head: () =>
     pageHead({
       path: "/auth",
-      title: "Sign In or Sign Up \u2014 Hyper Copilot AI Studio",
+      title: "Sign In or Sign Up \u2014 Celestial Intelligence Copilot AI Studio",
       description:
-        "Continue with email or Google to access the Hyper Copilot generative AI studio for image, video, vector and audio creation.",
-      ogTitle: "Sign in to Hyper Copilot",
+        "Continue with email or Google to access the Celestial Intelligence Copilot generative AI studio for image, video, vector and audio creation.",
+      ogTitle: "Sign in to Celestial Intelligence Copilot",
       ogDescription:
-        "Continue with email or Google to access the Hyper Copilot generative AI studio.",
+        "Continue with email or Google to access the Celestial Intelligence Copilot generative AI studio.",
       keywords: [
-        "Hyper Copilot login",
-        "Hyper Copilot sign up",
+        "Celestial Intelligence Copilot login",
+        "Celestial Intelligence Copilot sign up",
         "AI generator login",
         "free AI account signup",
         "google sign in AI studio",

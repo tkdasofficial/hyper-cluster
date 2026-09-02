@@ -1,4 +1,4 @@
-# Hyper Copilot
+# Celestial Intelligence Copilot
 
 Build a High-tech & Advanced Generative AI Tools Platform. 
 
@@ -6,7 +6,7 @@ UI Reference: https://firefly.adobe.com/
 
 Get Inspiration form Adobe FireFly Platform, and build the main UI. 
 
-App Name: Hyper Copilot
+App Name: Celestial Intelligence Copilot
 
 Use my Uploaded Svg Logos, & Favicon. 
 

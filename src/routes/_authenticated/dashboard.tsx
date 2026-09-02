@@ -10,12 +10,12 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () =>
     pageHead({
       path: "/dashboard",
-      title: "Dashboard \u2014 Hyper Copilot Generative AI Studio",
+      title: "Dashboard \u2014 Celestial Intelligence Copilot Generative AI Studio",
       description:
-        "Your Hyper Copilot studio: one prompt box for photoreal images, cinematic video, vectors and audio.",
+        "Your Celestial Intelligence Copilot studio: one prompt box for photoreal images, cinematic video, vectors and audio.",
       noindex: true,
       keywords: [
-        "Hyper Copilot dashboard",
+        "Celestial Intelligence Copilot dashboard",
         "AI studio workspace",
       ],
     }),
@@ -59,7 +59,7 @@ function Dashboard() {
 
           <footer className="mt-20 flex flex-col items-center gap-2 border-t border-border pt-8 text-center">
             <p className="text-[12px] text-muted-foreground">
-              Hyper Copilot · Generative AI for teams that ship
+              Copilot · Generative AI for teams that ship
             </p>
           </footer>
         </main>

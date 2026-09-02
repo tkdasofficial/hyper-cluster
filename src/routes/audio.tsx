@@ -13,10 +13,10 @@ export const Route = createFileRoute("/audio")({
   head: () =>
     pageHead({
       path: "/audio",
-      title: "AI Voice & Music Generator \u2014 Audio Studio | Hyper Copilot",
+      title: "AI Voice & Music Generator \u2014 Audio Studio | Celestial Intelligence Copilot",
       description:
-        "Generate AI speech and music with 30 voices plus tone, pace, genre, tempo and duration controls in Hyper Copilot's Audio Studio.",
-      ogTitle: "AI Voice & Music Generator \u2014 Hyper Copilot Audio Studio",
+        "Generate AI speech and music with 30 voices plus tone, pace, genre, tempo and duration controls in Celestial Intelligence Copilot's Audio Studio.",
+      ogTitle: "AI Voice & Music Generator \u2014 Celestial Intelligence Copilot Audio Studio",
       keywords: [
         "AI voice generator",
         "text to speech online",
@@ -120,7 +120,7 @@ function AudioStudio() {
             rows={4}
             placeholder={
               mode === "Text to speech"
-                ? "Welcome to Hyper Copilot — everything you imagine, generated in seconds."
+                ? "Welcome to Copilot — everything you imagine, generated in seconds."
                 : "A brooding synthwave score with analog arpeggios building to a soaring chorus…"
             }
           />

@@ -90,7 +90,7 @@ export function TopBar() {
       />
       <div className="absolute inset-y-0 left-0 flex w-[280px] flex-col border-r border-border bg-background px-3 py-4 shadow-2xl">
         <div className="flex items-center justify-between px-2 pb-3">
-          <span className="text-[15px] font-extrabold tracking-[-0.02em]">Hyper Copilot</span>
+          <span className="text-[15px] font-extrabold tracking-[-0.02em]">Copilot</span>
           <button
             type="button"
             aria-label="Close menu"
@@ -168,7 +168,7 @@ export function TopBar() {
           >
             <Menu className="h-4.5 w-4.5" strokeWidth={2} />
           </button>
-          <span className="text-[15px] font-extrabold tracking-[-0.02em]">Hyper Copilot</span>
+          <span className="text-[15px] font-extrabold tracking-[-0.02em]">Copilot</span>
         </div>
 
         <div className="ml-auto hidden min-w-0 flex-1 items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-2 text-muted-foreground lg:flex lg:max-w-md">

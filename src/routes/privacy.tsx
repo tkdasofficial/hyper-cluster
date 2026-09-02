@@ -7,11 +7,11 @@ export const Route = createFileRoute("/privacy")({
   head: () =>
     pageHead({
       path: "/privacy",
-      title: "Privacy Policy \u2014 Hyper Copilot",
+      title: "Privacy Policy \u2014 Celestial Intelligence Copilot",
       description:
-        "How Hyper Copilot collects, uses and protects your prompts, uploaded references and account data, plus the controls you have over them.",
+        "How Celestial Intelligence Copilot collects, uses and protects your prompts, uploaded references and account data, plus the controls you have over them.",
       keywords: [
-        "Hyper Copilot privacy policy",
+        "Celestial Intelligence Copilot privacy policy",
         "AI data privacy",
         "AI prompt data retention",
         "GDPR AI platform",
@@ -26,9 +26,14 @@ export const Route = createFileRoute("/privacy")({
 
 const sections = [
   {
+    h: "Who controls your data",
+    p: "Celestial Intelligence Copilot is owned and operated by Celestial Intelligence, a private software company, which acts as the data controller for the information described below.",
+  },
+  {
     h: "Data we collect",
     p: "Account details, prompts you submit, references you upload, and basic usage metrics such as credits consumed and models used.",
   },
+
   {
     h: "How we use it",
     p: "To generate your output, keep your history and library available, prevent abuse, and improve reliability of the platform.",

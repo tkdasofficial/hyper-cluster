@@ -9,16 +9,16 @@ export function Logo({ className }: { className?: string }) {
       <span className="relative block h-7 w-7 shrink-0 overflow-hidden rounded-lg">
         <img
           src={lightIcon}
-          alt="Hyper Copilot logo"
+          alt="Celestial Intelligence Copilot logo"
           className="h-full w-full object-contain dark:hidden"
         />
         <img
           src={darkIcon}
-          alt="Hyper Copilot logo"
+          alt="Celestial Intelligence Copilot logo"
           className="hidden h-full w-full object-contain dark:block"
         />
       </span>
-      <span className="text-[15px] font-extrabold tracking-tight">Hyper Copilot</span>
+      <span className="text-[15px] font-extrabold tracking-tight">Copilot</span>
     </span>
   );
 }

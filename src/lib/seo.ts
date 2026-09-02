@@ -1,13 +1,19 @@
-export const SITE_URL = "https://hypercopilot.vercel.app";
-export const SITE_NAME = "Hyper Copilot";
+export const SITE_URL = "https://celestialintelligence.gitlab.io/copilot";
+/** Full product name — SEO, legal, social. */
+export const SITE_NAME = "Celestial Intelligence Copilot";
+/** Short product name — UI, navigation, headers. */
+export const SHORT_NAME = "Copilot";
+export const COMPANY = "Celestial Intelligence";
 export const AUTHOR = "Tushar Kanti Das";
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 /** Terms every page should compete for, regardless of topic. */
 export const BASE_KEYWORDS = [
-  "Hyper Copilot",
-  "HyperCopilot",
-  "Hyper Copilot AI",
+  "Celestial Intelligence Copilot",
+  "Celestial Intelligence",
+  "CelestialIntelligenceCopilot",
+  "Celestial Intelligence AI",
+  "Copilot AI",
   "Tushar Kanti Das",
   "AI generator",
   "multi-modal AI",
@@ -20,6 +26,7 @@ export const BASE_KEYWORDS = [
   "AI voice generator",
   "AI influencer generator",
 ];
+
 
 type HeadInput = {
   /** Route path, e.g. "/pricing". Used for canonical + og:url. */
@@ -81,7 +88,7 @@ export function pageHead(input: HeadInput) {
       inLanguage: "en",
       isPartOf: { "@id": `${SITE_URL}/#website` },
       author: { "@type": "Person", name: AUTHOR },
-      publisher: { "@type": "Person", name: AUTHOR },
+      publisher: { "@type": "Organization", name: COMPANY, url: `${SITE_URL}/` },
     },
     ...(breadcrumbItems.length > 1
       ? [

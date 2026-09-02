@@ -7,11 +7,11 @@ export const Route = createFileRoute("/terms")({
   head: () =>
     pageHead({
       path: "/terms",
-      title: "Terms of Service \u2014 Hyper Copilot",
+      title: "Terms of Service \u2014 Celestial Intelligence Copilot",
       description:
-        "The terms that govern your use of Hyper Copilot, including acceptable use, output ownership, credits and account termination.",
+        "The terms that govern your use of Celestial Intelligence Copilot, including acceptable use, output ownership, credits and account termination.",
       keywords: [
-        "Hyper Copilot terms of service",
+        "Celestial Intelligence Copilot terms of service",
         "AI output ownership",
         "AI commercial use license",
         "AI acceptable use policy",
@@ -25,26 +25,31 @@ export const Route = createFileRoute("/terms")({
 
 const sections = [
   {
-    h: "1. Using Hyper Copilot",
-    p: "You may use Hyper Copilot to generate images, video, vectors and audio for personal and commercial projects, provided your prompts and references do not infringe the rights of others.",
+    h: "1. Who we are",
+    p: "Celestial Intelligence Copilot (\u201cCopilot\u201d) is owned, operated and published by Celestial Intelligence, a private software company. These terms form an agreement between you and Celestial Intelligence.",
   },
   {
-    h: "2. Your content and output",
-    p: "You keep the rights to the prompts and references you upload. Subject to your plan, you also own the output you generate and may use it commercially.",
+    h: "2. Using Celestial Intelligence Copilot",
+    p: "You may use Celestial Intelligence Copilot to generate images, video, vectors and audio for personal and commercial projects, provided your prompts and references do not infringe the rights of others.",
   },
   {
-    h: "3. Acceptable use",
+    h: "3. Your content and output",
+    p: "You keep the rights to the prompts and references you upload. Subject to your plan, you also own the output you generate and may use it commercially. The platform, brand and software remain the property of Celestial Intelligence.",
+  },
+  {
+    h: "4. Acceptable use",
     p: "Do not generate content that is unlawful, hateful, sexually explicit involving minors, or intended to deceive people about real events or identities.",
   },
   {
-    h: "4. Credits and billing",
+    h: "5. Credits and billing",
     p: "Credits are consumed per generation and reset at the start of each billing period. Paid plans renew automatically until cancelled.",
   },
   {
-    h: "5. Changes",
-    p: "We may update these terms as the product evolves. Continued use after an update means you accept the revised terms.",
+    h: "6. Changes",
+    p: "We may update these terms as the product evolves. Continued use after an update means you accept the revised terms. Questions can be directed to Celestial Intelligence support.",
   },
 ];
+
 
 function TermsPage() {
   return (
