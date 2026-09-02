@@ -1,6 +1,6 @@
-/** Canonical origin. CI injects VITE_SITE_URL from the real Pages URL. */
+/** Canonical origin. */
 export const SITE_URL = (
-  import.meta.env["VITE_SITE_URL"] || "https://copilot-182fec.gitlab.io"
+  import.meta.env["VITE_SITE_URL"] || "https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app"
 ).replace(/\/$/, "");
 /** Full product name — SEO, legal, social. */
 export const SITE_NAME = "Celestial Intelligence Copilot";

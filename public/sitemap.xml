@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://copilot-182fec.gitlab.io/</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/image</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/image</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/video</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/video</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/audio</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/audio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/virtual-model</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/virtual-model</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/virtual-model/create-model</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/virtual-model/create-model</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/pricing</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/auth</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/auth</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/terms</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://copilot-182fec.gitlab.io/privacy</loc>
+    <loc>https://id-preview--cfb6794e-b945-4064-9f72-6ea003a19ac5.lovable.app/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
