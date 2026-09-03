@@ -75,11 +75,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Hyper Copilot — Multi-Modal AI Generator" },
+      { title: "Hyper Cluster — Multi-Modal AI Generator" },
       {
         name: "description",
         content:
-          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+          "Built by Tushar Kanti Das, Hyper Cluster is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
       { name: "robots", content: "index, follow" },
       {
@@ -91,25 +91,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "publisher", content: "Tushar Kanti Das" },
       { name: "theme-color", content: "#111111" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-title", content: "Hyper Copilot" },
+      { name: "apple-mobile-web-app-title", content: "Hyper Cluster" },
       // Open Graph Tags
-      { property: "og:site_name", content: "Hyper Copilot" },
+      { property: "og:site_name", content: "Hyper Cluster" },
       { property: "og:locale", content: "en_US" },
-      { property: "og:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
+      { property: "og:title", content: "Hyper Cluster — Multi-Modal AI Generator" },
       {
         property: "og:description",
         content:
-          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+          "Built by Tushar Kanti Das, Hyper Cluster is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://hypercopilot.vercel.app/" },
       // Twitter Card Meta Tags
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Hyper Copilot — Multi-Modal AI Generator" },
+      { name: "twitter:title", content: "Hyper Cluster — Multi-Modal AI Generator" },
       {
         name: "twitter:description",
         content:
-          "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+          "Built by Tushar Kanti Das, Hyper Cluster is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
       },
     ],
     links: [
@@ -139,12 +139,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             {
               "@type": "WebSite",
               "@id": "https://hypercopilot.vercel.app/#website",
-              name: "Hyper Copilot",
-              alternateName: "Hyper Copilot AI",
+              name: "Hyper Cluster",
+              alternateName: "Hyper Cluster AI",
               url: "https://hypercopilot.vercel.app/",
               inLanguage: "en",
               description:
-                "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+                "Built by Tushar Kanti Das, Hyper Cluster is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               publisher: {
                 "@type": "Person",
                 name: "Tushar Kanti Das",
@@ -154,8 +154,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             {
               "@type": "SoftwareApplication",
               "@id": "https://hypercopilot.vercel.app/#app",
-              name: "Hyper Copilot",
-              alternateName: "Hyper Copilot AI",
+              name: "Hyper Cluster",
+              alternateName: "Hyper Cluster AI",
               url: "https://hypercopilot.vercel.app/",
               applicationCategory: "MultimediaApplication",
               operatingSystem: "All",
@@ -163,7 +163,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               image: "https://hypercopilot.vercel.app/og-image.png",
               screenshot: "https://hypercopilot.vercel.app/og-image.png",
               description:
-                "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+                "Built by Tushar Kanti Das, Hyper Cluster is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
               featureList: [
                 "Text to image generation",
                 "Text to video generation",

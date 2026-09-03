@@ -32,7 +32,7 @@ export const Route = createFileRoute("/virtual-model/")({
   head: () =>
     pageHead({
       path: "/virtual-model",
-      title: "AI Influencer Generator \u2014 Virtual Model Studio | Hyper Copilot",
+      title: "AI Influencer Generator \u2014 Virtual Model Studio | Hyper Cluster",
       description:
         "Create face-consistent AI influencers and virtual models with wardrobe, scene, lighting, lens and framing control from a reusable character profile.",
       ogTitle: "AI Influencer Generator \u2014 Virtual Model Studio",

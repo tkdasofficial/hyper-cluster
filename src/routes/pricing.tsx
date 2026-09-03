@@ -9,9 +9,9 @@ export const Route = createFileRoute("/pricing")({
   head: () =>
     pageHead({
       path: "/pricing",
-      title: "Pricing & Plans \u2014 Hyper Copilot AI Studio",
+      title: "Pricing & Plans \u2014 Hyper Cluster AI Studio",
       description:
-        "Compare Hyper Copilot plans: free starter credits, Pro unlimited fast renders with 4K upscaling, and Studio for teams shipping generative AI at scale.",
+        "Compare Hyper Cluster plans: free starter credits, Pro unlimited fast renders with 4K upscaling, and Studio for teams shipping generative AI at scale.",
       keywords: [
         "AI generator pricing",
         "free AI image generator",
@@ -28,11 +28,11 @@ export const Route = createFileRoute("/pricing")({
       jsonLd: [
         {
           "@type": "Product",
-          "name": "Hyper Copilot",
+          "name": "Hyper Cluster",
           "description": "Multi-modal AI generation platform",
           "brand": {
             "@type": "Brand",
-            "name": "Hyper Copilot"
+            "name": "Hyper Cluster"
           },
           "offers": [
             {

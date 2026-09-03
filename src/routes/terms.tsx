@@ -7,11 +7,11 @@ export const Route = createFileRoute("/terms")({
   head: () =>
     pageHead({
       path: "/terms",
-      title: "Terms of Service \u2014 Hyper Copilot",
+      title: "Terms of Service \u2014 Hyper Cluster",
       description:
-        "The terms that govern your use of Hyper Copilot, including acceptable use, output ownership, credits and account termination.",
+        "The terms that govern your use of Hyper Cluster, including acceptable use, output ownership, credits and account termination.",
       keywords: [
-        "Hyper Copilot terms of service",
+        "Hyper Cluster terms of service",
         "AI output ownership",
         "AI commercial use license",
         "AI acceptable use policy",
@@ -25,8 +25,8 @@ export const Route = createFileRoute("/terms")({
 
 const sections = [
   {
-    h: "1. Using Hyper Copilot",
-    p: "You may use Hyper Copilot to generate images, video, vectors and audio for personal and commercial projects, provided your prompts and references do not infringe the rights of others.",
+    h: "1. Using Hyper Cluster",
+    p: "You may use Hyper Cluster to generate images, video, vectors and audio for personal and commercial projects, provided your prompts and references do not infringe the rights of others.",
   },
   {
     h: "2. Your content and output",

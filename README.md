@@ -1,4 +1,4 @@
-# Hyper Copilot
+# Hyper Cluster
 
 Build a High-tech & Advanced Generative AI Tools Platform. 
 
@@ -6,7 +6,7 @@ UI Reference: https://firefly.adobe.com/
 
 Get Inspiration form Adobe FireFly Platform, and build the main UI. 
 
-App Name: Hyper Copilot
+App Name: Hyper Cluster
 
 Use my Uploaded Svg Logos, & Favicon. 
 
