@@ -11,12 +11,12 @@ export const Route = createFileRoute("/settings")({
   head: () =>
     pageHead({
       path: "/settings",
-      title: "Settings & Appearance \u2014 Hyper Copilot",
+      title: "Settings & Appearance \u2014 Hyper Cluster",
       description:
-        "Manage your Hyper Copilot account preferences and choose a System, Light or Dark appearance for the generative AI studio.",
+        "Manage your Hyper Cluster account preferences and choose a System, Light or Dark appearance for the generative AI studio.",
       noindex: true,
       keywords: [
-        "Hyper Copilot settings",
+        "Hyper Cluster settings",
         "AI studio dark mode",
         "account preferences",
       ],

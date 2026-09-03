@@ -15,10 +15,10 @@ export const Route = createFileRoute("/image")({
   head: () =>
     pageHead({
       path: "/image",
-      title: "AI Image Generator \u2014 Image Studio | Hyper Copilot",
+      title: "AI Image Generator \u2014 Image Studio | Hyper Cluster",
       description:
-        "Generate photoreal AI images from text with aspect ratio, style, reference image and variation controls in Hyper Copilot's Image Studio.",
-      ogTitle: "AI Image Generator \u2014 Hyper Copilot Image Studio",
+        "Generate photoreal AI images from text with aspect ratio, style, reference image and variation controls in Hyper Cluster's Image Studio.",
+      ogTitle: "AI Image Generator \u2014 Hyper Cluster Image Studio",
       keywords: [
         "AI image generator",
         "text to image",

@@ -1,7 +1,7 @@
 {
-  "name": "Hyper Copilot",
-  "short_name": "Hyper Copilot",
-  "description": "Built by Tushar Kanti Das, Hyper Copilot is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
+  "name": "Hyper Cluster",
+  "short_name": "Hyper Cluster",
+  "description": "Built by Tushar Kanti Das, Hyper Cluster is an all-in-one multi-modal AI platform for image, video, audio, and AI influencer creation.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

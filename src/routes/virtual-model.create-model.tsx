@@ -11,10 +11,10 @@ export const Route = createFileRoute("/virtual-model/create-model")({
   head: () =>
     pageHead({
       path: "/virtual-model/create-model",
-      title: "Create an AI Character \u2014 AI Model Builder | Hyper Copilot",
+      title: "Create an AI Character \u2014 AI Model Builder | Hyper Cluster",
       description:
         "Build a reusable AI character with age, height, body type, render style, skin tone, eyes, hair and face traits for consistent AI influencer images.",
-      ogTitle: "Create an AI Character \u2014 Hyper Copilot Model Builder",
+      ogTitle: "Create an AI Character \u2014 Hyper Cluster Model Builder",
       keywords: [
         "create AI character",
         "AI character builder",

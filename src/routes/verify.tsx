@@ -11,12 +11,12 @@ export const Route = createFileRoute("/verify")({
   head: () =>
     pageHead({
       path: "/verify",
-      title: "Confirm Your Email \u2014 Hyper Copilot",
+      title: "Confirm Your Email \u2014 Hyper Cluster",
       description:
-        "Confirm your email address to activate your Hyper Copilot account and start generating.",
+        "Confirm your email address to activate your Hyper Cluster account and start generating.",
       noindex: true,
       keywords: [
-        "Hyper Copilot email verification",
+        "Hyper Cluster email verification",
         "activate AI account",
       ],
     }),
