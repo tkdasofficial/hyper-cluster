@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { CreditCard, FileText, Settings, ShieldCheck, LogOut, LogIn, User } from "lucide-react";
+import { CreditCard, FileText, HelpCircle, Settings, ShieldCheck, LogOut, LogIn, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useSession";
 import {
@@ -15,6 +15,7 @@ import {
 const links = [
   { to: "/settings", label: "Settings", icon: Settings },
   { to: "/pricing", label: "Pricing", icon: CreditCard },
+  { to: "/faq", label: "Help & FAQ", icon: HelpCircle },
   { to: "/terms", label: "Terms of Service", icon: FileText },
   { to: "/privacy", label: "Privacy Policy", icon: ShieldCheck },
 ] as const;

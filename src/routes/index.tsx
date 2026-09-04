@@ -9,6 +9,7 @@ import {
   Eraser,
   Expand,
   Film,
+  HelpCircle,
   ImageIcon,
   Layers2,
   PenTool,
@@ -121,6 +122,12 @@ function Landing() {
               className="hidden rounded-full px-3 py-2 text-[13px] font-semibold text-muted-foreground transition-colors hover:text-foreground sm:block"
             >
               Pricing
+            </Link>
+            <Link
+              to="/faq"
+              className="hidden rounded-full px-3 py-2 text-[13px] font-semibold text-muted-foreground transition-colors hover:text-foreground md:block"
+            >
+              FAQ
             </Link>
             <Link
               to="/auth"
