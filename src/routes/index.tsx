@@ -9,6 +9,7 @@ import {
   Eraser,
   Expand,
   Film,
+  HelpCircle,
   ImageIcon,
   Layers2,
   PenTool,
@@ -121,6 +122,12 @@ function Landing() {
               className="hidden rounded-full px-3 py-2 text-[13px] font-semibold text-muted-foreground transition-colors hover:text-foreground sm:block"
             >
               Pricing
+            </Link>
+            <Link
+              to="/faq"
+              className="hidden rounded-full px-3 py-2 text-[13px] font-semibold text-muted-foreground transition-colors hover:text-foreground md:block"
+            >
+              FAQ
             </Link>
             <Link
               to="/auth"
@@ -286,6 +293,24 @@ function Landing() {
             Get started
             <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
           </Link>
+        </section>
+
+        <section className="mt-16 text-center sm:mt-20">
+          <div className="mx-auto max-w-xl rounded-2xl border border-border bg-surface p-6 sm:p-8">
+            <h2 className="text-xl font-extrabold tracking-[-0.02em] sm:text-2xl">
+              Questions? We have answers.
+            </h2>
+            <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-muted-foreground">
+              Browse our FAQ for quick help on credits, generation modes, privacy, and more.
+            </p>
+            <Link
+              to="/faq"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2.5 text-[13px] font-bold transition-colors hover:border-border-strong"
+            >
+              <HelpCircle className="h-4 w-4" strokeWidth={2} />
+              Open FAQ
+            </Link>
+          </div>
         </section>
 
       </main>
