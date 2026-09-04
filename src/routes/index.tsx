@@ -299,6 +299,9 @@ function Landing() {
             <Link to="/pricing" className="hover:text-foreground">
               Pricing
             </Link>
+            <Link to="/faq" className="hover:text-foreground">
+              FAQ
+            </Link>
             <Link to="/terms" className="hover:text-foreground">
               Terms
             </Link>
