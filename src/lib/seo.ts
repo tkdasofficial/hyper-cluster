@@ -44,6 +44,21 @@ export const BASE_KEYWORDS = [
   "text to video AI generator for reels and shorts",
   "AI headshot and full body model generator",
   "Hyper Cluster by Tushar Kanti Das AI platform",
+  // Additional descriptive terms
+  "AI image editor",
+  "image to video AI",
+  "AI upscaler online",
+  "generative fill tool",
+  "AI avatar generator",
+  "AI product photography",
+  "AI thumbnail maker",
+  "AI storyboard generator",
+  "AI content studio for marketers",
+  "consistent character AI generator",
+  "AI background remover and replacer",
+  "AI voiceover for videos online",
+  "how to generate AI images from text",
+  "AI tools for social media content creation",
 ];
 
 
