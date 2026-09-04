@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AudioRouteImport } from './routes/audio'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ImageRouteImport } from './routes/image'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -45,6 +46,11 @@ const AudioRoute = AudioRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImageRoute = ImageRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audio': typeof AudioRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/image': typeof ImageRoute
   '/library': typeof LibraryRoute
   '/pricing': typeof PricingRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audio': typeof AudioRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/image': typeof ImageRoute
   '/library': typeof LibraryRoute
   '/pricing': typeof PricingRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/audio': typeof AudioRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/image': typeof ImageRoute
   '/library': typeof LibraryRoute
   '/pricing': typeof PricingRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audio'
     | '/auth'
+    | '/faq'
     | '/image'
     | '/library'
     | '/pricing'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audio'
     | '/auth'
+    | '/faq'
     | '/image'
     | '/library'
     | '/pricing'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/audio'
     | '/auth'
+    | '/faq'
     | '/image'
     | '/library'
     | '/pricing'
@@ -244,6 +256,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AudioRoute: typeof AudioRoute
   AuthRoute: typeof AuthRoute
+  FaqRoute: typeof FaqRoute
   ImageRoute: typeof ImageRoute
   LibraryRoute: typeof LibraryRoute
   PricingRoute: typeof PricingRoute
@@ -286,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/image': {
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AudioRoute: AudioRoute,
   AuthRoute: AuthRoute,
+  FaqRoute: FaqRoute,
   ImageRoute: ImageRoute,
   LibraryRoute: LibraryRoute,
   PricingRoute: PricingRoute,
